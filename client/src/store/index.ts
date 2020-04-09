@@ -2,7 +2,11 @@ import { MakeStore } from 'next-redux-wrapper';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-const rootReducer = combineReducers({});
+import { countReducer } from './counter/reducer';
+
+const rootReducer = combineReducers({
+  counter: countReducer,
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
 

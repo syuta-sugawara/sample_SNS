@@ -1,6 +1,13 @@
-import * as React from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { NextPage } from 'next';
 
-const Index: NextPage = () => <h1>Hello world!</h1>;
+import { RootState } from '../store';
+
+const Index: NextPage = () => {
+  const currentCount = useSelector((state: RootState) => state.counter);
+  console.log(currentCount);
+  return <h1>Hello world!</h1>;
+};
 
 export default Index;

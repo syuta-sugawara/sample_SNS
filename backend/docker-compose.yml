@@ -11,5 +11,6 @@ services:
 
   api:
     build: ./api-server
+    command: go run main.go
     ports:
       - 1323:8000

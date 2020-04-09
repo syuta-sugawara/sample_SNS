@@ -25,5 +25,5 @@ func main() {
 	e.GET("/hello", handler.MainPage())
 
 	// サーバー起動
-	e.Start(":" + port) //ポート番号指定してね
+	e.Logger.Fatal(e.Start(":" + port)) //ポート番号指定してね
 }

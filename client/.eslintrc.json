@@ -4,11 +4,13 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   "plugins": [
-    "@typescript-eslint"
+    "prettier",
+    "@typescript-eslint",
+    "react"
   ],
   "env": { "node": true, "es6": true },
   "parser": "@typescript-eslint/parser",
@@ -24,7 +26,8 @@
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true
+        "singleQuote": true,
+        "arrowParens": "avoid"
       }
     ]
   },

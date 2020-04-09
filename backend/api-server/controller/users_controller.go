@@ -9,7 +9,7 @@ import (
 )
 
 type UsersController struct {
-	tweetModel model.TweetModel
+	userModel model.UserModel
 }
 
 func NewUserController(db *dynamo.DB) UsersController {

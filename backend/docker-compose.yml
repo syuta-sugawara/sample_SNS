@@ -4,16 +4,20 @@ services:
   db:
     image: amazon/dynamodb-local
     ports:
+      - 8000:8080
       - 8000:8000
     # デフォルトでは，imMemoryのオプションが付与されてしまう
     # コンテナを落としても，テーブル定義のデータを残すため
     command: -jar DynamoDBLocal.jar -dbPath ./data
 
   api:
+    build: ./api-server
+    #image: golang
+    ports:
+      - 1323:8000
     build: .
     command: go run main.go
     volumes:
       - .:/app
     ports:
       - 1323:8000
-

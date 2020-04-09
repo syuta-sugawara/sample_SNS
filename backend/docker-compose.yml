@@ -7,7 +7,9 @@ services:
       - 8000:8000
     # デフォルトでは，imMemoryのオプションが付与されてしまう
     # コンテナを落としても，テーブル定義のデータを残すため
-    command: -jar DynamoDBLocal.jar -dbPath ./data
+    volumes:
+     - ./dynamodb:/data
+    command: -jar DynamoDBLocal.jar -dbPath /data
 
   api:
     build: ./api-server

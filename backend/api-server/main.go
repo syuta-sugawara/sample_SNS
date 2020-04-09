@@ -1,7 +1,7 @@
 package main
 
 import (
-	"20fresh_o/backend/handler"
+	"20fresh_o/backend/controller"
 	"os"
 
 	"github.com/labstack/echo"
@@ -21,9 +21,13 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	db := "dbのインスタンス"
+
+	tweetController := controller.NewTweetController(db)
+
 	// ルーティング
-	e.GET("/hello", handler.MainPage())
+	e.GET("/tweets", tweetController.Index)
 
 	// サーバー起動
-	e.Start(":" + port) //ポート番号指定してね
+	e.Logger.Fatal(e.Start(":" + port)) //ポート番号指定してね
 }

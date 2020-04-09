@@ -11,6 +11,5 @@ services:
 
   api:
     build: ./api-server
-    #image: golang
     ports:
       - 1323:8000

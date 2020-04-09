@@ -2,13 +2,15 @@ package model
 
 import (
 	"20fresh_o/backend/domain/entity"
+
+	"github.com/guregu/dynamo"
 )
 
 type TweetModel struct {
-	db string
+	db *dynamo.DB
 }
 
-func NewTweetModel(db string) TweetModel {
+func NewTweetModel(db *dynamo.DB) TweetModel {
 	return TweetModel{
 		db: db,
 	}

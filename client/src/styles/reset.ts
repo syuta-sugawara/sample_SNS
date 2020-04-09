@@ -7,11 +7,6 @@ const reset = css`
   *::after {
     box-sizing: border-box;
   }
-  /* Remove default padding */
-  ul,
-  ol {
-    padding: 0;
-  }
   /* Remove default margin */
   body,
   h1,
@@ -39,6 +34,7 @@ const reset = css`
   /* Remove list styles on ul, ol elements with a class attribute */
   ul,
   ol {
+    padding: 0;
     list-style: none;
   }
   /* A elements that don't have a class get default styles */
@@ -47,8 +43,8 @@ const reset = css`
   }
   /* Make images easier to work with */
   img {
-    max-width: 100%;
     display: block;
+    max-width: 100%;
   }
   /* Natural flow and rhythm in articles by default */
   article > * + * {
@@ -61,21 +57,21 @@ const reset = css`
   select {
     font: inherit;
   }
-  /* */
+  /* Button reset */
   button {
+    padding: 0;
+    cursor: pointer;
     background-color: transparent;
     border: none;
-    cursor: pointer;
     outline: none;
-    padding: 0;
     appearance: none;
   }
   /* Remove all animations and transitions for people that prefer not to see them */
   @media (prefers-reduced-motion: reduce) {
     * {
+      transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }

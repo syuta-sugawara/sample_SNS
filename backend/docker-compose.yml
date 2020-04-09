@@ -10,19 +10,15 @@ services:
     volumes:
      - ./dynamodb:/data
     command: -jar DynamoDBLocal.jar -dbPath /data -sharedDb
-    networks:
-      private-subnet: {}
 
   api:
     build: ./api-server
     command: go run main.go
     volumes:
-      - .:/app
+      - ./api-server:/api-server
     ports:
       - 1323:8000
     env_file: .env
-    networks:
-      private-subnet: {}
   
   dynamodb-admin:
     build: ./dynamodb-admin
@@ -31,9 +27,4 @@ services:
       - 8001:8001
     environment:
       - DYNAMO_ENDPOINT=http://db:8000
-    networks:
-      - private-subnet
-
-networks:
-  private-subnet: {}
 

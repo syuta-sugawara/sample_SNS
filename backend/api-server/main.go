@@ -1,7 +1,7 @@
 package main
 
 import (
-	"20fresh_o/backend/controller"
+	"backend/api-server/controller"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"

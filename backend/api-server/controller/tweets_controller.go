@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"20fresh_o/backend/model"
+	"backend/api-server/model"
 	"net/http"
 
 	"github.com/guregu/dynamo"

@@ -28,6 +28,8 @@ func (tm *TweetModel) All() *[]entity.Tweet {
 
 func (tm *TweetModel) Get(id string) *entity.Tweet {
 	tweet := new(entity.Tweet)
-	tm.tweetTable.Get("id", id).One(tweet)
+	if err := tm.tweetTable.Get("id", id).One(tweet); err != nil {
+		fmt.Println(err)
+	}
 	return tweet
 }

@@ -25,3 +25,9 @@ func (tm *TweetModel) All() *[]entity.Tweet {
 
 	return tweet
 }
+
+func (tm *TweetModel) Get(id string) *entity.Tweet {
+	tweet := new(entity.Tweet)
+	tm.tweetTable.Get("id", id).One(tweet)
+	return tweet
+}

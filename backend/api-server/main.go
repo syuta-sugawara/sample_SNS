@@ -48,13 +48,13 @@ func main() {
 
     // ルーティング
     // Users
-    e.GET("/users/:user_id", userController.UserIndex)
-    e.GET("/users/:user_id/follows", userController.FollowsIndex)
-    e.GET("/users/:user_id/followers", userController.FollowersIndex)
-    e.PUT("/users/:user_id", userController.UpdateUser)
-    e.POST("/users/:user_id", userController.RegisterUser)
-    e.POST("/users/:user_id/follow", userController.Follow)
-	e.DELETE("/users/:user_id/follow", userController.Unfollow)
+    e.GET("/users/:userName", userController.UserIndex)
+    e.GET("/users/:userName/follows", userController.FollowsIndex)
+    e.GET("/users/:userName/followers", userController.FollowersIndex)
+    e.PUT("/users/:userName", userController.UpdateUser)
+    e.POST("/users/:userName", userController.RegisterUser)
+    e.POST("/users/:userName/follow", userController.Follow)
+	e.DELETE("/users/:userName/follow", userController.Unfollow)
 	
     // Tweets
     e.GET("/tweets", tweetController.TweetsIndex)

@@ -57,6 +57,14 @@ const reset = css`
   select {
     font: inherit;
   }
+  /* text inputをリセットする（問題なさそうだったら影響範囲広げていく） */
+  input[type='text'] {
+    appearance: none;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    outline: none;
+  }
   /* Button reset */
   button {
     padding: 0;

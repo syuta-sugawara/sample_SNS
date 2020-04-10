@@ -5,6 +5,7 @@ const COLOR = {
   BLACK: '#14171a',
   GRAY: '#657786',
   LIGHT_GRAY: '#e6ecf0',
+  OFF_WHITE: '#f6f8fa',
   WHITE: '#fff',
 } as const;
 

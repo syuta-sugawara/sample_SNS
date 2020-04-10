@@ -5,8 +5,10 @@ import STYLES from '../styles/const';
 
 type Props = {
   label: string;
+  placeholder: string;
   value: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  limit?: number;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const InputText: React.FC<Props> = props => {
@@ -27,23 +29,41 @@ const InputText: React.FC<Props> = props => {
           <span>{props.label}</span>
         </Label>
         <Input>
-          <input
-            type="text"
-            value={props.value}
-            placeholder={`${props.label}を追加`}
-            onChange={props.onChange}
-            onFocus={handleFocusOn}
-            onBlur={handleFocusOff}
-          />
+          {!props.limit ? (
+            <input
+              type="text"
+              value={props.value}
+              placeholder={props.placeholder}
+              onChange={props.onChange}
+              onFocus={handleFocusOn}
+              onBlur={handleFocusOff}
+            />
+          ) : (
+            <input
+              type="text"
+              value={props.value}
+              placeholder={props.placeholder}
+              maxLength={props.limit}
+              onChange={props.onChange}
+              onFocus={handleFocusOn}
+              onBlur={handleFocusOff}
+            />
+          )}
         </Input>
       </Head>
-      <Tail></Tail>
+      <Tail isDisplay={!props.limit ? false : true}>
+        <span>{`${props.value.length}/${props.limit}`}</span>
+      </Tail>
     </>
   );
 };
 
 type FocusEventProps = {
   isFocus: boolean;
+};
+
+type TailProps = {
+  isDisplay: boolean;
 };
 
 const Head = styled.div`
@@ -73,6 +93,16 @@ const Label = styled.div`
   }
 `;
 
-const Tail = styled.div``;
+const Tail = styled.div`
+  display: ${(props: TailProps): string =>
+    props.isDisplay ? 'block' : 'none'};
+  padding: 0 10px;
+  text-align: right;
+  span {
+    font-size: 15px;
+    font-weight: 400;
+    color: ${STYLES.COLOR.GRAY};
+  }
+`;
 
 export default InputText;

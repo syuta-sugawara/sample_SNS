@@ -41,7 +41,7 @@ func (tc *TweetsController) Post(c echo.Context) error {
 func (tc *TweetsController) Like(c echo.Context) error {
     id := c.Param("id")
     tc.tweetModel.All()
-    return c.String(http.StatusOK, "Favorite")
+    return c.String(http.StatusOK, "Like")
 }
 
 // リツイート

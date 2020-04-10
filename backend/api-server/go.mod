@@ -1,4 +1,4 @@
-module 20fresh_o/backend
+module backend/api-server
 
 go 1.14
 

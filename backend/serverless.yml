@@ -1,0 +1,19 @@
+service: api-server
+
+provider:
+ name: aws
+ runtime: go1.x
+
+functions:
+  api-server:
+    events:
+     - deploy 
+   #handler: api-server/main
+
+    #functions:
+    #  hello:
+    #    handler: bin/hello
+    #      - http:
+    #          path: hello
+    #          method: get
+

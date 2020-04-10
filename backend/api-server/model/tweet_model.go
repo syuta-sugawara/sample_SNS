@@ -19,7 +19,7 @@ func NewTweetModel(db *dynamo.DB) TweetModel {
 
 func (tm *TweetModel) All() *[]entity.Tweet {
 	tweet := new([]entity.Tweet)
-	if err := tm.tweetTable.Get("id", "hogehoge").One(); err != nil {
+	if err := tm.tweetTable.Scan().All(tweet); err != nil {
 		fmt.Println(err)
 	}
 

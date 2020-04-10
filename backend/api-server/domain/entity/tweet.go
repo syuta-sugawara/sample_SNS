@@ -1,15 +1,13 @@
 package entity
 
-import "time"
-
 type Tweet struct {
-	id         string
-	content    string
-	tweetType  int
-	userID     string
-	refTweetID string
-	createdAt  time.Time
-	likes      []string
+	ID        string `dynamo:"id,hash" json:"id"`
+	Content   string `dynamo:"content" json:"content"`
+	TweetType string `dynamo:"tweetType" json:"tweetType"`
+	// userID     string
+	// refTweetID string
+	// createdAt  time.Time
+	// likes      []string
 }
 
 type PostTweet struct {

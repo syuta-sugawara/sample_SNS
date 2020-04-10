@@ -1,14 +1,14 @@
 {
   "AttributeDefinitions": [
     {
-      "AttributeName": "id",
-      "AttributeType": "N"
+      "AttributeName": "table",
+      "AttributeType": "S"
     }
   ],
-  "TableName": "Tweets",
+  "TableName": "Sequences",
   "KeySchema": [
     {
-      "AttributeName": "id",
+      "AttributeName": "table",
       "KeyType": "HASH"
     }
   ],

@@ -1,7 +1,7 @@
 package entity
 
 type Tweet struct {
-	ID        string `dynamo:"id,hash" json:"id"`
+	ID        int    `dynamo:"id,hash" json:"id"`
 	Content   string `dynamo:"content" json:"content"`
 	TweetType string `dynamo:"tweetType" json:"tweetType"`
 	// userID     string
@@ -11,8 +11,8 @@ type Tweet struct {
 }
 
 type PostTweet struct {
-	content    string
-	tweetType  int
-	userID     string
-	refTweetID string
+	Content   string `json:"content"`
+	TweetType string `json:"tweetType"`
+	// UserID     string `json:"userID"`
+	// RefTweetID string `json:"RefTweetID"`
 }

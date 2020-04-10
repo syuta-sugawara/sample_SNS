@@ -1,7 +1,7 @@
 package model
 
 import (
-	"20fresh_o/backend/domain/entity"
+	"backend/api-server/domain/entity"
 
 	"github.com/guregu/dynamo"
 )

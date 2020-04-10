@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"20fresh_o/backend/model"
+	"backend/api-server/model"
 	"net/http"
 
 	"github.com/guregu/dynamo"
@@ -14,7 +14,7 @@ type UsersController struct {
 
 func NewUserController(db *dynamo.DB) UsersController {
 	return UsersController{
-		userModel: model.NewUsersModel(db),
+		userModel: model.NewUserModel(db),
 	}
 }
 

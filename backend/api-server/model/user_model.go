@@ -7,15 +7,19 @@ import (
 )
 
 type UserModel struct {
-	db *dynamo.DB
+	userTable dynamo.Table
 }
 
 func NewUserModel(db *dynamo.DB) UserModel {
 	return UserModel{
-		db: db,
+		userTable: db.Table("Users"),
 	}
 }
 
 func (um *UserModel) All() *[]entity.User {
 	return nil
+}
+
+func (tm *TweetModel) Create(tw entity.PostTweet) {
+
 }

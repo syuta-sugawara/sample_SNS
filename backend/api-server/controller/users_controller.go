@@ -38,3 +38,30 @@ func (uc *UsersController) FollowersIndex(c echo.Context) error {
     uc.userModel.All()
     return c.String(http.StatusOK, "GetFollowers" + user_id)
 }
+
+// ユーザー情報更新
+func (uc *UsersController) UpdateUser(c echo.Context) error {
+    user_id := c.Param("userName")
+    uc.userModel.All()
+    return c.String(http.StatusOK, "GetFollowers" + user_id)
+}
+
+// ユーザー登録
+func (uc *UsersController) RegisterUser(c echo.Context) error {
+    uc.userModel.All()
+    return c.String(http.StatusOK, "RegisterUser")
+}
+
+// フォロー処理
+func (uc *UsersController) Follow(c echo.Context) error {
+    user_id := c.Param("userName")
+    uc.userModel.All()
+    return c.String(http.StatusOK, "Follow" + user_id)
+}
+
+// アンフォロー処理
+func (uc *UsersController) Unfollow(c echo.Context) error {
+    user_id := c.Param("userName")
+    uc.userModel.All()
+    return c.String(http.StatusOK, "Unfollow" + user_id)
+}

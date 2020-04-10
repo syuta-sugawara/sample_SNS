@@ -44,6 +44,24 @@ func main() {
 	e.Use(middleware.Recover())
 
 	tweetController := controller.NewTweetController(db)
+	userController := controller.NewUserController(db)
+
+    // ルーティング
+    // Users
+    e.GET("/users/:user_id", userController.UserIndex)
+    e.GET("/users/:user_id/follows", userController.FollowsIndex)
+    e.GET("/users/:user_id/followers", userController.FollowersIndex)
+    e.PUT("/users/:user_id", userController.UserIndex)
+    e.POST("/users/:user_id", userController.UserIndex)
+    e.POST("/users/:user_id/follow", userController.UserIndex)
+	e.DELETE("/users/:user_id/follow", userController.UserIndex)
+	
+    // Tweets
+    e.GET("/tweets", tweetController.TweetsIndex)
+    e.POST("/tweets", tweetController.TweetsPost)
+    e.GET("/tweets/:id", tweetController.Index)
+    e.POST("/tweets/:id/favorites", tweetController.Favorite)
+    e.POST("/tweets/:id/retweets", tweetController.Retweet)
 
 	// ルーティング
 	e.GET("/tweets", tweetController.Index)

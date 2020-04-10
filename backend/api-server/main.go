@@ -58,9 +58,9 @@ func main() {
 	
     // Tweets
     e.GET("/tweets", tweetController.TweetsIndex)
-    e.POST("/tweets", tweetController.TweetsPost)
+    e.POST("/tweets", tweetController.Post)
     e.GET("/tweets/:id", tweetController.Index)
-    e.POST("/tweets/:id/favorites", tweetController.Favorite)
+    e.POST("/tweets/:id/likes", tweetController.Like)
     e.POST("/tweets/:id/retweets", tweetController.Retweet)
 
 	// ルーティング

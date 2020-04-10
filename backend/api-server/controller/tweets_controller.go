@@ -32,14 +32,13 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 }
 
 // ツイート投稿
-func (tc *TweetsController) TweetPost(c echo.Context) error {
-    id := c.Param("id")
+func (tc *TweetsController) Post(c echo.Context) error {
     tc.tweetModel.All()
     return c.String(http.StatusOK, "TweetPost")
 }
 
 // いいね
-func (tc *TweetsController) Favorite(c echo.Context) error {
+func (tc *TweetsController) Like(c echo.Context) error {
     id := c.Param("id")
     tc.tweetModel.All()
     return c.String(http.StatusOK, "Favorite")

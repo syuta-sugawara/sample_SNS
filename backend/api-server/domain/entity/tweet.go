@@ -11,3 +11,10 @@ type Tweet struct {
 	createdAt  time.Time
 	likes      []string
 }
+
+type PostTweet struct {
+	content    string
+	tweetType  int
+	userID     string
+	refTweetID string
+}

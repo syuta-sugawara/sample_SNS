@@ -2,20 +2,26 @@ package model
 
 import (
 	"backend/api-server/domain/entity"
+	"fmt"
 
 	"github.com/guregu/dynamo"
 )
 
 type TweetModel struct {
-	db *dynamo.DB
+	tweetTable dynamo.Table
 }
 
 func NewTweetModel(db *dynamo.DB) TweetModel {
 	return TweetModel{
-		db: db,
+		tweetTable: db.Table("Tweets"),
 	}
 }
 
 func (tm *TweetModel) All() *[]entity.Tweet {
-	return nil
+	tweet := new([]entity.Tweet)
+	if err := tm.tweetTable.Get("id", "hogehoge").One(); err != nil {
+		fmt.Println(err)
+	}
+
+	return tweet
 }

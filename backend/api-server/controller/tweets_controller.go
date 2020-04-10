@@ -21,8 +21,8 @@ func NewTweetController(db *dynamo.DB) TweetsController {
 // ツイート取得
 func (tc *TweetsController) Index(c echo.Context) error {
 	id := c.Param("id")
-	tc.tweetModel.All()
-	return c.String(http.StatusOK, "GetTweetInfo"+id)
+	tweet := tc.tweetModel.Get(id)
+	return c.JSON(http.StatusOK, tweet)
 }
 
 // ツイート一覧取得

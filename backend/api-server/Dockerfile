@@ -1,3 +1,3 @@
 FROM golang:latest
-WORKDIR /app
-ADD . /app
+WORKDIR /api-server
+RUN go get -u -t ...

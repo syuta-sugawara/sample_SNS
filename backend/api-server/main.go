@@ -1,7 +1,7 @@
 package main
 
 import (
-	"20fresh_o/backend/controller"
+	"backend/api-server/controller"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -26,7 +26,7 @@ func main() {
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String("ap-northeast-1"),
-		Endpoint:    aws.String("http://localhost:8000"),
+		Endpoint:    aws.String(os.Getenv("DYNAMO_URL")),
 		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
 	})
 	if err != nil {

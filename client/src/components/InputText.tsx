@@ -3,10 +3,13 @@ import styled from 'styled-components';
 
 import STYLES from '../styles/const';
 
-type Props = {};
+type Props = {
+  label: string;
+  value: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
-const InputText: React.FC = (): React.ReactElement => {
-  const [value, setValue] = useState<string>('');
+const InputText: React.FC<Props> = props => {
   const [isFocus, setFocus] = useState<boolean>(false);
 
   const handleFocusOn = (): void => {
@@ -21,12 +24,14 @@ const InputText: React.FC = (): React.ReactElement => {
     <>
       <Head isFocus={isFocus}>
         <Label isFocus={isFocus}>
-          <span>ユーザID</span>
+          <span>{props.label}</span>
         </Label>
         <Input>
           <input
             type="text"
-            placeholder="ユーザIDを追加"
+            value={props.value}
+            placeholder={`${props.label}を追加`}
+            onChange={props.onChange}
             onFocus={handleFocusOn}
             onBlur={handleFocusOff}
           />

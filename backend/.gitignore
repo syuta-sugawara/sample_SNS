@@ -1,3 +1,4 @@
+.env
 dynamodb/data
+.env
 dynamodb/*.db
-api-server/env

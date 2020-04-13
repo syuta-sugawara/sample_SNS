@@ -2,13 +2,14 @@ package main
 
 import (
 	"backend/api-server/controller"
+	"fmt"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -16,9 +17,9 @@ import (
 func main() {
 	// 環境変数の取得
 	err := godotenv.Load(fmt.Sprintf("../%s.env", os.Getenv("GO_ENV")))
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
 	// 環境変数から値を取得する
 	port := os.Getenv("PORT")

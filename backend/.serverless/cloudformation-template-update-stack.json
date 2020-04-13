@@ -56,10 +56,10 @@
         }
       }
     },
-    "ApiDashserverLogGroup": {
+    "ExecUnderscoreechoLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/api-server-dev-api-server"
+        "LogGroupName": "/aws/lambda/backend-dev-exec_echo"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "api-server-dev",
+                  "backend-dev",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/api-server-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/backend-dev*:*"
                     }
                   ]
                 },
@@ -114,8 +114,17 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/api-server-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/backend-dev*:*:*"
                     }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": [
+                    "s3"
+                  ],
+                  "Action": [
+                    "s3:CreateBucket"
                   ]
                 }
               ]
@@ -127,7 +136,7 @@
           "Fn::Join": [
             "-",
             [
-              "api-server-dev",
+              "backend-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -137,17 +146,17 @@
         }
       }
     },
-    "ApiDashserverLambdaFunction": {
+    "ExecUnderscoreechoLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/api-server/dev/1586499868603-2020-04-10T06:24:28.603Z/api-server.zip"
+          "S3Key": "serverless/backend/dev/1586758664833-2020-04-13T06:17:44.833Z/backend.zip"
         },
-        "FunctionName": "api-server-dev-api-server",
-        "Handler": "api-server/main",
+        "FunctionName": "backend-dev-exec_echo",
+        "Handler": "api-server/main.main",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -159,18 +168,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "ApiDashserverLogGroup",
+        "ExecUnderscoreechoLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "ApiDashserverLambdaVersionU4eOsU9qTuN29EiFixi27R0z5vFTdARVYuPqCxVmw": {
+    "ExecUnderscoreechoLambdaVersionqtdni5EcdjwIMD6jvrwM9Yf6bFsrrHMLJH3WcCHuvBM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "ApiDashserverLambdaFunction"
+          "Ref": "ExecUnderscoreechoLambdaFunction"
         },
-        "CodeSha256": "lnZPdKwe2MUSobiuBfnq7i6N9SmbOUoh1mY/qq813Gw="
+        "CodeSha256": "46VYmzWRTd9c0G1gle5LAWUQF4JVFyqSJ+XpsJDWjJI="
       }
     }
   },
@@ -180,10 +189,10 @@
         "Ref": "ServerlessDeploymentBucket"
       }
     },
-    "ApiDashserverLambdaFunctionQualifiedArn": {
+    "ExecUnderscoreechoLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiDashserverLambdaVersionU4eOsU9qTuN29EiFixi27R0z5vFTdARVYuPqCxVmw"
+        "Ref": "ExecUnderscoreechoLambdaVersionqtdni5EcdjwIMD6jvrwM9Yf6bFsrrHMLJH3WcCHuvBM"
       }
     }
   }

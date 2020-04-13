@@ -3,6 +3,7 @@ package model
 import (
 	"backend/api-server/domain/entity"
 	"fmt"
+	"time"
 
 	"github.com/guregu/dynamo"
 )
@@ -42,7 +43,11 @@ func (tm *TweetModel) Create(t *entity.PostTweet) {
 		ID:        cid,
 		Content:   t.Content,
 		TweetType: t.TweetType,
+		UserID:    t.UserID,
+		CreatedAt: time.Now().Unix(),
 	}
+
+	fmt.Println(tweet)
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)

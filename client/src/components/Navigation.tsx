@@ -1,44 +1,70 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Button, { Variant } from './Button';
-import TwitterIcon from './icons/TwitterIcon';
 import styled from 'styled-components';
 
-const StyledNav = styled.div`
+import STYLES from '../styles/const';
+import HomeIcon from './icons/HomeIcon';
+import TwitterIcon from './icons/TwitterIcon';
+import Button, { Variant } from './Button';
+
+const Navigation: React.FC = () => {
+  const handleClick = (): void => {
+    console.log('display modal window');
+  };
+
+  return (
+    <Wrapper>
+      <Logo>
+        <TwitterIcon />
+      </Logo>
+      <ul>
+        <li>
+          <Button
+            text="ホーム"
+            variant={Variant.TEXT}
+            onClick={handleClick}
+            icon={<HomeIcon />}
+          />
+        </li>
+        <li>
+          <Button
+            text="プロフィール"
+            variant={Variant.TEXT}
+            onClick={handleClick}
+            icon={
+              <img
+                src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
+                alt="aaa"
+              />
+            }
+          />
+        </li>
+      </ul>
+      <ButtonContainer>
+        <Button
+          text="ツイートする"
+          variant={Variant.CONTAINED}
+          onClick={handleClick}
+        />
+      </ButtonContainer>
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.div`
   max-width: 200px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const Logo = styled.div`
+  padding-left: 10px;
+  fill: ${STYLES.COLOR.PRIMARY};
+  svg {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const ButtonContainer = styled.div`
   padding: 10px;
 `;
-
-const Icon = styled(TwitterIcon)`
-  width: 50px;
-  height: 50px;
-  fill: #fff;
-  stroke: #000;
-`;
-
-const Navigation: React.FC = () => {
-  return (
-    <StyledNav>
-      <Icon />
-      <List>
-        <ListItem button>
-          <ListItemText>ホーム</ListItemText>
-        </ListItem>
-        <ListItem button>
-          <ListItemText>プロフィール</ListItemText>
-        </ListItem>
-      </List>
-      <ButtonContainer>
-        <Button text="ツイートする" variant={Variant.CONTAINED} />
-      </ButtonContainer>
-    </StyledNav>
-  );
-};
 
 export default Navigation;

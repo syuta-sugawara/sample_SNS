@@ -9,7 +9,7 @@ $ docker-compose up
 
 ## `.env`
 
-docker用
+golang用
 
 ```
 DYNAMO_URL=http://db:8000

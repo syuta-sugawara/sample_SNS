@@ -4,6 +4,7 @@ import (
 	"backend/api-server/controller"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -13,6 +14,12 @@ import (
 )
 
 func main() {
+	// 環境変数の取得
+	err := godotenv.Load()
+    if err != nil {
+        panic(err)
+    }
+
 	// 環境変数から値を取得する
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -8,7 +8,8 @@ const COLOR = {
   BLACK: '#14171a',
   GRAY: '#657786',
   GRAY_LIGHTER_10: 'rgb(204, 214, 221)',
-  GRAY_LIGHTER_20: '#e6ecf0',
+  GRAY_LIGHTER_20: 'rgb(230, 236, 240)',
+  GRAY_LIGHTER_30: 'rgb(230, 236, 240, 0.7)',
   OFF_WHITE: '#f6f8fa',
   WHITE: '#fff',
 } as const;

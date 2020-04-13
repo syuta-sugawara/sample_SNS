@@ -14,7 +14,6 @@ import (
 )
 
 func main() {
-	// 環境変数の取得
 	godotenv.Load()
 
 	// 環境変数から値を取得する

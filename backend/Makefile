@@ -13,4 +13,4 @@ create/tables:
 	make create/sequence
 
 create/env:
-	echo DYNAMO_URL=http://db:8000 > ./api-server/.env
+	echo DYNAMO_ENDPOINT=http://localhost:8000 > ./api-server/.env

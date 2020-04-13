@@ -15,10 +15,7 @@ import (
 
 func main() {
 	// 環境変数の取得
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	godotenv.Load()
 
 	// 環境変数から値を取得する
 	port := os.Getenv("PORT")
@@ -28,7 +25,7 @@ func main() {
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String("ap-northeast-1"),
-		Endpoint:    aws.String(os.Getenv("DYNAMO_URL")),
+		Endpoint:    aws.String(os.Getenv("DYNAMO_ENDPOINT")),
 		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
 	})
 

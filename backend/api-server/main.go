@@ -2,7 +2,6 @@ package main
 
 import (
 	"backend/api-server/controller"
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"

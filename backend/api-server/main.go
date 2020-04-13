@@ -27,6 +27,9 @@ func initEcho() *echo.Echo {
 	db := dynamo.New(sess)
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+	}))
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

@@ -58,12 +58,16 @@ const reset = css`
     font: inherit;
   }
   /* text inputをリセットする（問題なさそうだったら影響範囲広げていく） */
-  input[type='text'] {
+  input[type='text'],
+  textarea {
     appearance: none;
     background: transparent;
     border: none;
     border-radius: 0;
     outline: none;
+  }
+  textarea {
+    resize: none;
   }
   /* Button reset */
   button {

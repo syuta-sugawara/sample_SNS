@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/api-server/router"
+	"net/http"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -27,6 +28,10 @@ func initEcho() *echo.Echo {
 	db := dynamo.New(sess)
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete, http.MethodOptions},
+	}))
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

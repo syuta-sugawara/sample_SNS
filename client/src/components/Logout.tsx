@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import STYLES from '../styles/const';
 
-const Logout = () => {
+const Logout:React.FC = () => {
   return (
     <StyledContainer>
-      <Title>Log out of twitter？</Title>
+      <Title>Twitterをログアウトしますか？</Title>
       <ButtonContainer>
-        <CancelButton>Cancel</CancelButton>
-        <LogoutButton>Log out</LogoutButton>
+        <CancelButton>キャンセル</CancelButton>
+        <LogoutButton>ログアウト</LogoutButton>
       </ButtonContainer>
     </StyledContainer>
   );
@@ -33,18 +33,20 @@ const ButtonContainer = styled.div`
   margin: 10px;
 `;
 
-const CancelButton = styled.button`
+
+const Button = styled.button`
   padding: 5px 20px;
-  color: ${STYLES.COLOR.BLACK};
-  background-color: ${STYLES.COLOR.LIGHT_GRAY};
   border-radius: 25px;
 `;
 
-const LogoutButton = styled.button`
-  padding: 5px 20px;
+const CancelButton = styled(Button)`
+  color: ${STYLES.COLOR.BLACK};
+  background-color: ${STYLES.COLOR.LIGHT_GRAY};
+`;
+
+const LogoutButton = styled(Button)`
   color: ${STYLES.COLOR.WHITE};
   background-color: ${STYLES.COLOR.PRIMARY};
-  border-radius: 25px;
 `;
 
 export default Logout;

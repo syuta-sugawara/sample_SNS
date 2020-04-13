@@ -17,7 +17,7 @@ services:
     volumes:
       - ./api-server:/api-server
     ports:
-      - 1323:8000
+      - 1323:8080
     environment:
       - DYNAMO_ENDPOINT=http://db:8000
   

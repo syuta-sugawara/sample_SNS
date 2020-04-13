@@ -19,7 +19,7 @@ func main() {
 	// 環境変数から値を取得する
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 
 	sess, err := session.NewSession(&aws.Config{

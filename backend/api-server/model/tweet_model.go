@@ -47,8 +47,6 @@ func (tm *TweetModel) Create(t *entity.PostTweet) {
 		CreatedAt: time.Now().Unix(),
 	}
 
-	fmt.Println(tweet)
-
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 	}

@@ -1,20 +1,23 @@
-import { ActionTypes } from '../actionTypes';
-import { Count, CounterActionTypes } from './types';
+import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
-const initialState: Count = {
+import counterAction from './acitons';
+
+export type CountType = {
+  value: number;
+};
+
+const initialState: CountType = {
   value: 0,
 };
 
-export const countReducer = (
-  state = initialState,
-  action: CounterActionTypes
-): Count => {
-  switch (action.type) {
-    case ActionTypes.increment:
-      return { value: state.value + 1 };
-    case ActionTypes.decrement:
-      return { value: state.value === 0 ? 0 : state.value - 1 };
-    default:
-      return state;
-  }
-};
+const countReducer = reducerWithInitialState(initialState)
+  .case(counterAction.increment, (state, payload) => ({
+    ...state,
+    value: state.value + payload.count,
+  }))
+  .case(counterAction.decrement, (state, payload) => ({
+    ...state,
+    value: state.value - payload.count,
+  }));
+
+export default countReducer;

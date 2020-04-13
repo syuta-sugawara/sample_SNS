@@ -2,8 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NextPage } from 'next';
 
-import { incrementAction } from '../store/counter/acitons';
-import { CounterActionTypes } from '../store/counter/types';
+import counterAction from '../store/counter/acitons';
 import { RootState } from '../store';
 
 const Index: NextPage = () => {
@@ -11,7 +10,7 @@ const Index: NextPage = () => {
   const currentCount = useSelector((state: RootState) => state.counter);
   console.log(currentCount);
 
-  const handleIncrement = (): CounterActionTypes => dispatch(incrementAction());
+  const handleIncrement = () => dispatch(counterAction.increment({ count: 1 }));
 
   return (
     <>

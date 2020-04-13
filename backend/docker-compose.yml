@@ -17,8 +17,9 @@ services:
     volumes:
       - ./api-server:/api-server
     ports:
-      - 1323:8000
-    env_file: .env
+      - 1323:8080
+    environment:
+      - DYNAMO_ENDPOINT=http://db:8000
   
   dynamodb-admin:
     build: ./dynamodb-admin

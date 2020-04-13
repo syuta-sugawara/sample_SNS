@@ -8,20 +8,23 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+	godotenv.Load()
+
 	// 環境変数から値を取得する
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String("ap-northeast-1"),
-		Endpoint:    aws.String(os.Getenv("DYNAMO_URL")),
+		Endpoint:    aws.String(os.Getenv("DYNAMO_ENDPOINT")),
 		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
 	})
 

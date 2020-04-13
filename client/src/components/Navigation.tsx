@@ -1,7 +1,4 @@
-import React from "react";
-import styled from "styled-components";
-
-import STYLES from "../styles/const";
+import React from 'react';
 
 const Navigation = () => {
   return <div>hello world</div>;

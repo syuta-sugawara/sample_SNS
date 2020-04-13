@@ -14,6 +14,7 @@ type Props = {
   variant: Variant;
   disabled?: boolean;
   icon?: JSX.Element;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 type PaletteType = {
@@ -133,7 +134,11 @@ const Button: React.FC<Props> = props => {
   );
 
   return (
-    <StyledButton colorPalette={colorPalette} disabled={props.disabled}>
+    <StyledButton
+      colorPalette={colorPalette}
+      disabled={props.disabled}
+      onClick={props.onClick}
+    >
       {!props.icon ? null : (
         <Icon colorPalette={colorPalette}>{props.icon}</Icon>
       )}

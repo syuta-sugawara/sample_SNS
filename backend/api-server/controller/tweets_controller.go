@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"backend/api-server/domain/entity"
 	"backend/api-server/model"
 	"net/http"
 
@@ -33,7 +34,10 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 
 // ツイート投稿
 func (tc *TweetsController) Post(c echo.Context) error {
-	tc.tweetModel.All()
+	t := new(entity.PostTweet)
+	c.Bind(t)
+
+	tc.tweetModel.Create(t)
 	return c.String(http.StatusOK, "TweetPost")
 }
 

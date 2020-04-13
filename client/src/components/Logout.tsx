@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import STYLES from '../styles/const';
 
-const Logout:React.FC = () => {
+const Logout: React.FC = () => {
   return (
     <StyledContainer>
-      <Title>Twitterをログアウトしますか？</Title>
+      <Title>ログアウトしますか？</Title>
       <ButtonContainer>
-        <CancelButton>キャンセル</CancelButton>
-        <LogoutButton>ログアウト</LogoutButton>
+        <CancelButton>いいえ</CancelButton>
+        <LogoutButton>はい</LogoutButton>
       </ButtonContainer>
     </StyledContainer>
   );
@@ -32,7 +32,6 @@ const ButtonContainer = styled.div`
   justify-content: space-around;
   margin: 10px;
 `;
-
 
 const Button = styled.button`
   padding: 5px 20px;

@@ -14,7 +14,7 @@ const Navigation: React.FC = () => {
         <ListItemText>プロフィール</ListItemText>
       </ListItem>
       <ListItem button>
-        <Button text="ツイートする" variant={Variant.CONTAINED} disabled />
+        <Button text="ツイートする" variant={Variant.CONTAINED} />
       </ListItem>
     </List>
   );

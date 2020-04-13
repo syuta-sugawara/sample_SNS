@@ -7,10 +7,7 @@ $ export DYNAMO_URL=http://localhost:8000
 $ docker-compose up
 ```
 
-## `.env`
-
-golang用
-
+## golang用.envファイルの作成
 ```
-DYNAMO_URL=http://db:8000
+make create/env
 ```

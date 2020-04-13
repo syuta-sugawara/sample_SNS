@@ -12,6 +12,9 @@ create/tables:
 	make create/user
 	make create/sequence
 
+create/env:
+	echo DYNAMO_URL=http://db:8000 > ./api-server/.env
+
 add-tweet:
 	aws dynamodb put-item --table-name Tweets \
 	--item '{"id": {"N": "1"}, "content": {"S": "ツイート"}, "tweetType": {"S": "tweet"}}' \

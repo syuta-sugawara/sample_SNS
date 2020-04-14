@@ -19,25 +19,25 @@ const Navigation: React.FC = () => {
       </Logo>
       <ul>
         <li>
-          <SpDiv>
+          <ResponsiveDiv isMobile>
             <Button
               text=""
               variant={Variant.TEXT}
               onClick={handleClick}
               icon={<HomeIcon />}
             />
-          </SpDiv>
-          <Div>
+          </ResponsiveDiv>
+          <ResponsiveDiv>
             <Button
               text="ホーム"
               variant={Variant.TEXT}
               onClick={handleClick}
               icon={<HomeIcon />}
             />
-          </Div>
+          </ResponsiveDiv>
         </li>
         <li>
-          <SpDiv>
+          <ResponsiveDiv isMobile>
             <Button
               text=""
               variant={Variant.TEXT}
@@ -49,8 +49,8 @@ const Navigation: React.FC = () => {
                 />
               }
             />
-          </SpDiv>
-          <Div>
+          </ResponsiveDiv>
+          <ResponsiveDiv>
             <Button
               text="プロフィール"
               variant={Variant.TEXT}
@@ -62,22 +62,22 @@ const Navigation: React.FC = () => {
                 />
               }
             />
-          </Div>
+          </ResponsiveDiv>
         </li>
       </ul>
       <ButtonContainer>
-        <SpDiv>
+        <ResponsiveDiv isMobile>
           <TweetSmallButton>
             <TweetBtnIcon />
           </TweetSmallButton>
-        </SpDiv>
-        <Div>
+        </ResponsiveDiv>
+        <ResponsiveDiv>
           <Button
             text="ツイートする"
             variant={Variant.CONTAINED}
             onClick={handleClick}
           />
-        </Div>
+        </ResponsiveDiv>
       </ButtonContainer>
     </Wrapper>
   );
@@ -96,19 +96,6 @@ const Logo = styled.div`
   }
 `;
 
-const SpDiv = styled.div`
-  @media ${STYLES.DEVICE.LAPTOP} {
-    display: none;
-  }
-`;
-
-const Div = styled.div`
-  display: none;
-  @media ${STYLES.DEVICE.LAPTOP} {
-    display: block;
-  }
-`;
-
 const ButtonContainer = styled.div`
   padding: 10px;
 `;
@@ -118,6 +105,13 @@ const TweetSmallButton = styled.div`
   svg {
     width: 40px;
     height: 40px;
+  }
+`;
+
+const ResponsiveDiv = styled.div`
+  display: ${props => (props.isMobile ? 'block' : 'none')};
+  @media ${STYLES.DEVICE.LAPTOP} {
+    display: ${props => (props.isMobile ? 'none' : 'block')};
   }
 `;
 

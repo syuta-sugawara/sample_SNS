@@ -3,3 +3,4 @@ dynamodb/data
 dynamodb/*.db
 .serverless
 node_modules
+bin/

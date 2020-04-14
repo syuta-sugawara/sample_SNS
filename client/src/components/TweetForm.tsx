@@ -26,7 +26,7 @@ const TweetForm: React.FC<Props> = props => {
       </Head>
       <Body>
         <User>
-          <img src={props.user.iconURL} alt={props.user.screenName} />
+          <img src={props.user.iconUrl} alt={props.user.screenName} />
         </User>
         <Form>
           <FormHead>
@@ -52,9 +52,8 @@ const TweetForm: React.FC<Props> = props => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 100%;
   height: 295px;
-  border: solid 1px #999;
   border-radius: 14px;
 `;
 

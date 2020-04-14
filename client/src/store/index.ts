@@ -2,10 +2,10 @@ import { MakeStore } from 'next-redux-wrapper';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import countReducer from './counter/reducer';
+import tweetReducer from './tweet/reducer';
 
 const rootReducer = combineReducers({
-  counter: countReducer,
+  tweet: tweetReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,13 +1,13 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import CloseIcon from '../components/icons/CloseIcon';
-import HomeIcon from '../components/icons/HomeIcon';
-import LikeIcon from '../components/icons/LikeIcon';
-import NoticeIcon from '../components/icons/NoticeIcon';
-import RetweetIcon from '../components/icons/RetweetIcon';
-import TweetBtnIcon from '../components/icons/TweetBtnIcon';
-import TwitterIcon from '../components/icons/TwitterIcon';
+import CloseIcon from '../../src/components/icons/CloseIcon';
+import HomeIcon from '../../src/components/icons/HomeIcon';
+import LikeIcon from '../../src/components/icons/LikeIcon';
+import NoticeIcon from '../../src/components/icons/NoticeIcon';
+import RetweetIcon from '../../src/components/icons/RetweetIcon';
+import TweetBtnIcon from '../../src/components/icons/TweetBtnIcon';
+import TwitterIcon from '../../src/components/icons/TwitterIcon';
 
 storiesOf('Icon', module)
   .add('close', () => {

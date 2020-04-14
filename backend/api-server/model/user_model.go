@@ -2,10 +2,7 @@ package model
 
 import (
 	"backend/api-server/domain/entity"
-	"crypto/rand"
-	"encoding/binary"
 	"fmt"
-	"strconv"
 
 	"github.com/guregu/dynamo"
 )
@@ -60,10 +57,4 @@ func (um *UserModel) Regist(u *entity.User) {
 		fmt.Println(err)
 	}
 	return
-}
-
-func CreateDummyUser() string {
-	var n uint64
-	binary.Read(rand.Reader, binary.LittleEndian, &n)
-	return strconv.FormatUint(n, 36)
 }

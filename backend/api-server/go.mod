@@ -3,7 +3,9 @@ module backend/api-server
 go 1.14
 
 require (
+	github.com/aws/aws-lambda-go v1.16.0 // indirect
 	github.com/aws/aws-sdk-go v1.30.7
+	github.com/awslabs/aws-lambda-go-api-proxy v0.6.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/guregu/dynamo v1.7.0
 	github.com/joho/godotenv v1.3.0 // indirect

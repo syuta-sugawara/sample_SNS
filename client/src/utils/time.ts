@@ -1,8 +1,12 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ja';
+
+dayjs.locale('ja');
+dayjs.extend(relativeTime);
 
 const fromNow = (timestamp: number): string => {
-  const date = moment(timestamp);
-  date.locale('ja');
+  const date = dayjs.unix(timestamp);
   return date.fromNow();
 };
 

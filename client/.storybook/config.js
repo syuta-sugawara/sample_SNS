@@ -7,5 +7,5 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
 `;
 
-configure(require.context('../src/stories', true, /\.stories\.tsx?$/), module);
+configure(require.context('./stories', true, /\.stories\.tsx?$/), module);
 addDecorator(s => <><GlobalStyle />{s()}</>);

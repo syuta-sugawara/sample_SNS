@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 
-import TweetForm from '../components/TweetForm';
-import { UserType } from '../types/user';
+import TweetForm from '../../src/components/TweetForm';
+import { UserType } from '../../src/types/user';
 
 storiesOf('TweetForm', module).add('plain', () => {
   const [value, setValue] = useState<string>('');

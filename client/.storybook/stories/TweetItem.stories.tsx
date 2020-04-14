@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import TweetItem from '../components/TweetItem';
-import { TweetType } from '../types/tweet';
+import TweetItem from '../../src/components/TweetItem';
+import { TweetType } from '../../src/types/tweet';
 
 storiesOf('TweetItem', module).add('plain', () => {
   const tweet: TweetType = {

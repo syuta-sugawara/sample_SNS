@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 
-import InputText from '../components/InputText';
+import InputText from '../../src/components/InputText';
 
 storiesOf('InputText', module)
   .add('plain', () => {

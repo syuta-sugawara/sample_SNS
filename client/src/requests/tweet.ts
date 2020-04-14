@@ -2,6 +2,6 @@ import fetch from 'isomorphic-unfetch';
 
 export default class TweetAPI {
   getAllTweets = (): Promise<Response> => {
-    return fetch('http://localhost:1323/tweets/9');
+    return fetch(`${process.env.API_URL}/tweets`);
   };
 }

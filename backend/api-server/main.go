@@ -2,17 +2,23 @@ package main
 
 import (
 	"backend/api-server/router"
+	"context"
 	"net/http"
 	"os"
 
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	echolamda "github.com/awslabs/aws-lambda-go-api-proxy/echo"
 	"github.com/guregu/dynamo"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
+
+var echoLambda *echolamda.EchoLambda
 
 func initEcho() *echo.Echo {
 	sess, err := session.NewSession(&aws.Config{
@@ -41,6 +47,19 @@ func initEcho() *echo.Echo {
 	router.TweetRouter(e, db)
 
 	return e
+}
+
+func init() {
+	e := initEcho()
+	echoLambda = echolamda.New(e)
+}
+
+func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return echoLambda.ProxyWithContext(ctx, req)
+}
+
+func Start() {
+	lambda.Start(Handler)
 }
 
 func main() {

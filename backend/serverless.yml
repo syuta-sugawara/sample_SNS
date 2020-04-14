@@ -1,0 +1,65 @@
+service: backend
+
+frameworkVersion: '>=1.28.0 <2.0.0'
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: dev             # Set the default stage used. Default is dev
+  region: ap-northeast-1 # Overwrite the default region used. Default is us-east-1
+  profile: test
+  #  iamRoleStatements:
+  #    - Effect: "Allow"
+  #      Resource:
+  #        - "s3"
+  #      Action:
+  #        - "s3:CreateBucket"
+#        - "ec2:CreateSnapshot"
+#        - "ec2:DeleteSnapshot"
+#        - "ec2:DescribeSnapshots"
+#        - "ec2:DescribeInstances"
+#        - "ec2:DescribeVolumes"
+
+package:
+#  exclude:
+#    - ./**
+  include:
+    - api-server/main.go
+#    - bin/**
+#    - dynamodb/**
+
+functions:
+  exec_echo:
+   handler: api-server/main.main
+#   events:
+#     - deploy
+
+   #Resources:
+   #    S3Bucket:
+   #      Type: "AWS::S3::Bucket"
+   #      Properties:
+   #        BucketName: "api-bucket"
+
+# The "Resources" your "Functions" use.  Raw AWS CloudFormation goes in here.
+#resources:
+#  Resources:
+#    usersTable:
+#      Type: AWS::DynamoDB::Table
+#      Properties:
+#        TableName: usersTable
+#        AttributeDefinitions:
+#          - AttributeName: email
+#            AttributeType: S
+#        KeySchema:
+#          - AttributeName: email
+#            KeyType: HASH
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 1
+#          WriteCapacityUnits: 1
+
+   # events:
+   #    events:
+   #         - cognitoUserPool:
+   #          pool: MyUserPool
+   #          trigger: PreSignUp
+

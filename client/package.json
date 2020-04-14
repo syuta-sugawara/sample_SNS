@@ -25,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "isomorphic-unfetch": "^3.0.0",
+    "dayjs": "^1.8.24",
     "next": "^9.3.4",
     "next-redux-wrapper": "^5.0.0",
     "react": "^16.13.1",

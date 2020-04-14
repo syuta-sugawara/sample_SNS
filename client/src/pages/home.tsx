@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import Navigation from '../components/Navigation';
+import withLayout from '../components/Layout';
 import TweetItem from '../components/TweetItem';
 import { fetchTweetList } from '../store/tweet/actions';
 import { RootState } from '../store';
@@ -13,40 +14,28 @@ import { TweetType } from '../types/tweet';
 const Home: NextPage = () => {
   const tweetList = useSelector((state: RootState) => state.tweet.results);
   return (
-    <Wrapper>
+    <>
+      <Head>
+        <title>ホーム / teamO Twitter</title>
+      </Head>
       <Header>
-        <Navigation />
+        <h2>ホーム</h2>
       </Header>
-      <Main>
-        <MainHeader>
-          <h2>ホーム</h2>
-        </MainHeader>
-        <MainBody>
-          <ul>
-            {tweetList.map((item: TweetType) => (
-              <li key={item.id}>
-                <TweetItem tweet={item} />
-              </li>
-            ))}
-          </ul>
-        </MainBody>
-      </Main>
-    </Wrapper>
+      <Separator />
+      <Body>
+        <ul>
+          {tweetList.map((item: TweetType) => (
+            <li key={item.id}>
+              <TweetItem tweet={item} />
+            </li>
+          ))}
+        </ul>
+      </Body>
+    </>
   );
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const Header = styled.header``;
-
-const Main = styled.main`
-  width: 600px;
-`;
-
-const MainHeader = styled.div`
+const Header = styled.div`
   display: flex;
   align-items: center;
   height: 53px;
@@ -58,10 +47,22 @@ const MainHeader = styled.div`
   }
 `;
 
-const MainBody = styled.div``;
+const Separator = styled.div`
+  width: 100%;
+  height: 10px;
+  background-color: ${STYLES.COLOR.GRAY_LIGHTER_20};
+`;
+
+const Body = styled.div`
+  ul {
+    li {
+      border-bottom: solid 1px ${STYLES.COLOR.GRAY_LIGHTER_20};
+    }
+  }
+`;
 
 Home.getInitialProps = async ({ store }): Promise<any> => {
   await store.dispatch(fetchTweetList());
 };
 
-export default Home;
+export default withLayout(Home);

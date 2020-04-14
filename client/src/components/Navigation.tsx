@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import STYLES from '../styles/const';
 import HomeIcon from './icons/HomeIcon';
+import TweetBtnIcon from './icons/TweetBtnIcon';
 import TwitterIcon from './icons/TwitterIcon';
 import Button, { Variant } from './Button';
 
@@ -40,11 +41,14 @@ const Navigation: React.FC = () => {
         </li>
       </ul>
       <ButtonContainer>
-        <Button
+        <TweetButton
           text="ツイートする"
           variant={Variant.CONTAINED}
           onClick={handleClick}
         />
+        <TweetSmallButton>
+          <TweetBtnIcon />
+        </TweetSmallButton>
       </ButtonContainer>
     </Wrapper>
   );
@@ -64,7 +68,27 @@ const Logo = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  display: none;
   padding: 10px;
+`;
+
+const TweetSmallButton = styled.div`
+  padding-left: 10px;
+  fill: ${STYLES.COLOR.PRIMARY};
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+  @media ${STYLES.device.laptop} {
+    display: none;
+  }
+`;
+
+const TweetButton = styled(Button)`
+  display: none;
+  @media ${STYLES.device.laptop} {
+    display: block;
+  }
 `;
 
 export default Navigation;

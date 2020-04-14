@@ -40,7 +40,7 @@ const Button = styled.button`
 
 const CancelButton = styled(Button)`
   color: ${STYLES.COLOR.BLACK};
-  background-color: ${STYLES.COLOR.LIGHT_GRAY};
+  background-color: ${STYLES.COLOR.GRAY_LIGHTER_10};
 `;
 
 const LogoutButton = styled(Button)`

@@ -41,7 +41,6 @@ func (tm *TweetModel) Get(id string) *entity.Tweet {
 
 func (tm *TweetModel) Create(t *entity.PostTweet) {
 	cid := tm.seqModel.NextID("tweets")
-	fmt.Println("0")
 	userID := tm.userModel.GetOrCreateDummyUser()
 	tweet := entity.Tweet{
 		ID:        cid,

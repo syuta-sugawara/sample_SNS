@@ -13,7 +13,7 @@ storiesOf('TweetItem', module).add('plain', () => {
     user: {
       id: 'junkisai',
       screenName: 'じゅんきち',
-      iconURL:
+      iconUrl:
         'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
     },
     createdAt: 1586758432,

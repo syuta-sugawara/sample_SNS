@@ -9,7 +9,7 @@ storiesOf('TweetForm', module).add('plain', () => {
   const user: UserType = {
     id: 'xxxxx',
     screenName: 'hoge',
-    iconURL:
+    iconUrl:
       'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
   };
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {

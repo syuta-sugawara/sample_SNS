@@ -26,7 +26,7 @@ const TweetForm: React.FC<Props> = props => {
       </Head>
       <Body>
         <User>
-          <img src={props.user.iconURL} alt={props.user.screenName} />
+          <img src={props.user.iconUrl} alt={props.user.screenName} />
         </User>
         <Form>
           <FormHead>

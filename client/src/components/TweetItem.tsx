@@ -23,7 +23,7 @@ const TweetItem: React.FC<Props> = props => {
       <Label></Label>
       <Body>
         <UserIcon>
-          <img src={user.iconURL} alt={user.screenName} />
+          <img src={user.iconUrl} alt={user.screenName} />
         </UserIcon>
         <Content>
           <ContentHead>

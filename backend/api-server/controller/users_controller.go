@@ -4,6 +4,7 @@ import (
 	"backend/api-server/model"
 	"net/http"
 
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -12,9 +13,9 @@ type UsersController struct {
 	userModel model.UserModel
 }
 
-func NewUserController(db *dynamo.DB) UsersController {
+func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
 	return UsersController{
-		userModel: model.NewUserModel(db),
+		userModel: model.NewUserModel(db, auth),
 	}
 }
 

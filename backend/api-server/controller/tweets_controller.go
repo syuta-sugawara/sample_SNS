@@ -5,6 +5,7 @@ import (
 	"backend/api-server/model"
 	"net/http"
 
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -13,9 +14,9 @@ type TweetsController struct {
 	tweetModel model.TweetModel
 }
 
-func NewTweetController(db *dynamo.DB) TweetsController {
+func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
 	return TweetsController{
-		tweetModel: model.NewTweetModel(db),
+		tweetModel: model.NewTweetModel(db, auth),
 	}
 }
 

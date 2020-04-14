@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -24,6 +25,7 @@ func InitEcho() *echo.Echo {
 	}
 
 	db := dynamo.New(sess)
+	auth := cognitoidentityprovider.New(session.New(), &aws.Config{Region: aws.String("ap-northeast-1")})
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -39,8 +41,8 @@ func InitEcho() *echo.Echo {
 	e.Use(middleware.Recover())
 
 	// Users
-	UserRouter(e, db)
-	TweetRouter(e, db)
+	UserRouter(e, db, auth)
+	TweetRouter(e, db, auth)
 
 	return e
 }

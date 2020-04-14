@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
 )
 
@@ -14,11 +15,11 @@ type TweetModel struct {
 	userModel  UserModel
 }
 
-func NewTweetModel(db *dynamo.DB) TweetModel {
+func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetModel {
 	return TweetModel{
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
-		userModel:  NewUserModel(db),
+		userModel:  NewUserModel(db, auth),
 	}
 }
 

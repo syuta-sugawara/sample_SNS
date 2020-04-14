@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NextPage } from 'next';
 
-import counterAction from '../store/counter/acitons';
+import counterAction, { fetchDocs } from '../store/counter/acitons';
 import { RootState } from '../store';
 
 const Index: NextPage = () => {
@@ -10,7 +10,9 @@ const Index: NextPage = () => {
   const currentCount = useSelector((state: RootState) => state.counter);
   console.log(currentCount);
 
-  const handleIncrement = () => dispatch(counterAction.increment({ count: 1 }));
+  const handleIncrement = (): any => {
+    dispatch(counterAction.increment({ count: 1 }));
+  };
 
   return (
     <>
@@ -18,6 +20,10 @@ const Index: NextPage = () => {
       <button onClick={handleIncrement}>+1</button>
     </>
   );
+};
+
+Index.getInitialProps = async ({ store }): Promise<any> => {
+  await store.dispatch(fetchDocs());
 };
 
 export default Index;

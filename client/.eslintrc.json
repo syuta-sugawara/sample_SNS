@@ -22,7 +22,8 @@
         "singleQuote": true,
         "arrowParens": "avoid"
       }
-    ]
+    ],
+    "@typescript-eslint/no-explicit-any": 0
   },
   "overrides": [
     {

@@ -7,10 +7,16 @@ $ export DYNAMO_URL=http://localhost:8000
 $ docker-compose up
 ```
 
-## `.env`
+[localshot:1323](localshot:1323)で API が立ち上がる。
 
-docker用
+## db の作成
 
+```shell
+$ make create/tables
 ```
-DYNAMO_URL=http://db:8000
+
+## golang 用.env ファイルの作成（サーバー開発用）
+
+```shell
+$ make create/env
 ```

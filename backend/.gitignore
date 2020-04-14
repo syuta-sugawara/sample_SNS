@@ -1,6 +1,5 @@
 .env
 dynamodb/data
-.env
 dynamodb/*.db
 .serverless
 node_modules

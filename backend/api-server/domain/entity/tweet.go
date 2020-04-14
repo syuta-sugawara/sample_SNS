@@ -1,18 +1,18 @@
 package entity
 
 type Tweet struct {
-	ID        string `dynamo:"id,hash" json:"id"`
+	ID        int    `dynamo:"id,hash" json:"id"`
 	Content   string `dynamo:"content" json:"content"`
 	TweetType string `dynamo:"tweetType" json:"tweetType"`
-	// userID     string
+	UserID    string `dynamo:"userID" json:"userID"`
+	CreatedAt int64  `dynamo:"createdAt" json:"createdAt"`
 	// refTweetID string
-	// createdAt  time.Time
 	// likes      []string
 }
 
 type PostTweet struct {
-	content    string
-	tweetType  int
-	userID     string
-	refTweetID string
+	Content   string `json:"content"`
+	TweetType string `json:"tweetType"`
+	UserID    string `json:"userID"`
+	// RefTweetID string `json:"RefTweetID"`
 }

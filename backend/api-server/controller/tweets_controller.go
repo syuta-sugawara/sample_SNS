@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"backend/api-server/domain/entity"
 	"backend/api-server/model"
 	"net/http"
 
@@ -27,14 +28,17 @@ func (tc *TweetsController) Index(c echo.Context) error {
 
 // ツイート一覧取得
 func (tc *TweetsController) TweetsIndex(c echo.Context) error {
-	tweet := tc.tweetModel.All()
-	return c.JSON(http.StatusOK, tweet)
+	tweets := tc.tweetModel.All()
+	return c.JSON(http.StatusOK, tweets)
 }
 
 // ツイート投稿
 func (tc *TweetsController) Post(c echo.Context) error {
-	tc.tweetModel.All()
-	return c.String(http.StatusOK, "TweetPost")
+	t := new(entity.PostTweet)
+	c.Bind(t)
+
+	tc.tweetModel.Create(t)
+	return c.JSON(http.StatusOK, "POST success")
 }
 
 // いいね

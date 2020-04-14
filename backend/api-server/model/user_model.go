@@ -19,7 +19,3 @@ func NewUserModel(db *dynamo.DB) UserModel {
 func (um *UserModel) All() *[]entity.User {
 	return nil
 }
-
-func (tm *TweetModel) Create(tw entity.PostTweet) {
-
-}

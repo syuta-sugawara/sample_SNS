@@ -2,27 +2,14 @@ package router
 
 import (
 	"net/http"
-	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-func InitEcho() *echo.Echo {
-	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String("ap-northeast-1"),
-		Endpoint:    aws.String(os.Getenv("DYNAMO_ENDPOINT")),
-		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
-	})
-
-	if err != nil {
-		panic(err)
-	}
-
+func InitEcho(sess *session.Session) *echo.Echo {
 	db := dynamo.New(sess)
 
 	e := echo.New()

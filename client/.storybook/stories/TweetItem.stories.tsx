@@ -11,13 +11,10 @@ storiesOf('TweetItem', module).add('plain', () => {
       'ついっとついっとついっとついっとついっとついっとついっとついっとついっと',
     tweetType: 'tweet',
     user: {
-      userID: 'junkisai',
-      birthday: new Date('1995/01/22'),
+      id: 'junkisai',
       screenName: 'じゅんきち',
       iconURL:
         'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
-      followCount: 0,
-      followedCount: 0,
     },
     createdAt: 1586758432,
   };

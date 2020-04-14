@@ -28,14 +28,12 @@ const TweetItem: React.FC<Props> = props => {
         <Content>
           <ContentHead>
             <User>
-              <Link href={`/users/${user.userID}`}>
+              <Link href={`/users/${user.id}`}>
                 <a>
                   <Text variant={TextVariant.PRIMARY} bold>
                     {user.screenName}
                   </Text>
-                  <Text variant={TextVariant.SECONDARY}>
-                    {`@${user.userID}`}
-                  </Text>
+                  <Text variant={TextVariant.SECONDARY}>{`@${user.id}`}</Text>
                 </a>
               </Link>
             </User>

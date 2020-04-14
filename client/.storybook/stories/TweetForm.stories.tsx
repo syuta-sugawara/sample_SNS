@@ -7,13 +7,10 @@ import { UserType } from '../../src/types/user';
 storiesOf('TweetForm', module).add('plain', () => {
   const [value, setValue] = useState<string>('');
   const user: UserType = {
-    userID: 'xxxxx',
-    birthday: new Date('1995/01/22'),
+    id: 'xxxxx',
     screenName: 'hoge',
     iconURL:
       'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
-    followCount: 0,
-    followedCount: 0,
   };
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setValue(e.target.value);

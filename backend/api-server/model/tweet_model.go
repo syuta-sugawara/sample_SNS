@@ -11,12 +11,14 @@ import (
 type TweetModel struct {
 	tweetTable dynamo.Table
 	seqModel   SequenceModel
+	userModel  UserModel
 }
 
 func NewTweetModel(db *dynamo.DB) TweetModel {
 	return TweetModel{
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
+		userModel:  NewUserModel(db),
 	}
 }
 
@@ -39,11 +41,13 @@ func (tm *TweetModel) Get(id string) *entity.Tweet {
 
 func (tm *TweetModel) Create(t *entity.PostTweet) {
 	cid := tm.seqModel.NextID("tweets")
+	fmt.Println("0")
+	userID := tm.userModel.GetOrCreateDummyUser()
 	tweet := entity.Tweet{
 		ID:        cid,
 		Content:   t.Content,
 		TweetType: t.TweetType,
-		UserID:    t.UserID,
+		UserID:    userID,
 		CreatedAt: time.Now().Unix(),
 	}
 

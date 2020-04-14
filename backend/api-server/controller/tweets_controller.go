@@ -11,13 +11,11 @@ import (
 
 type TweetsController struct {
 	tweetModel model.TweetModel
-	userModel  model.UserModel
 }
 
 func NewTweetController(db *dynamo.DB) TweetsController {
 	return TweetsController{
 		tweetModel: model.NewTweetModel(db),
-		userModel:  model.NewUserModel(db),
 	}
 }
 
@@ -38,7 +36,6 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 func (tc *TweetsController) Post(c echo.Context) error {
 	t := new(entity.PostTweet)
 	c.Bind(t)
-	tc.userModel.Get(t.UserID)
 	tc.tweetModel.Create(t)
 	return c.JSON(http.StatusOK, "POST success")
 }

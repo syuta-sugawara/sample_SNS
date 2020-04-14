@@ -1,7 +1,7 @@
 import COLOR from './color';
-import device from './device';
+import DEVICE from './device';
 
 export default {
   COLOR,
-  device,
+  DEVICE,
 };

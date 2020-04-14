@@ -19,36 +19,65 @@ const Navigation: React.FC = () => {
       </Logo>
       <ul>
         <li>
-          <Button
-            text="ホーム"
-            variant={Variant.TEXT}
-            onClick={handleClick}
-            icon={<HomeIcon />}
-          />
+          <SpDiv>
+            <Button
+              text=""
+              variant={Variant.TEXT}
+              onClick={handleClick}
+              icon={<HomeIcon />}
+            />
+          </SpDiv>
+          <Div>
+            <Button
+              text="ホーム"
+              variant={Variant.TEXT}
+              onClick={handleClick}
+              icon={<HomeIcon />}
+            />
+          </Div>
         </li>
         <li>
-          <Button
-            text="プロフィール"
-            variant={Variant.TEXT}
-            onClick={handleClick}
-            icon={
-              <img
-                src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
-                alt="aaa"
-              />
-            }
-          />
+          <SpDiv>
+            <Button
+              text=""
+              variant={Variant.TEXT}
+              onClick={handleClick}
+              icon={
+                <img
+                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
+                  alt="aaa"
+                />
+              }
+            />
+          </SpDiv>
+          <Div>
+            <Button
+              text="プロフィール"
+              variant={Variant.TEXT}
+              onClick={handleClick}
+              icon={
+                <img
+                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
+                  alt="aaa"
+                />
+              }
+            />
+          </Div>
         </li>
       </ul>
       <ButtonContainer>
-        <TweetButton
-          text="ツイートする"
-          variant={Variant.CONTAINED}
-          onClick={handleClick}
-        />
-        <TweetSmallButton>
-          <TweetBtnIcon />
-        </TweetSmallButton>
+        <SpDiv>
+          <TweetSmallButton>
+            <TweetBtnIcon />
+          </TweetSmallButton>
+        </SpDiv>
+        <Div>
+          <Button
+            text="ツイートする"
+            variant={Variant.CONTAINED}
+            onClick={handleClick}
+          />
+        </Div>
       </ButtonContainer>
     </Wrapper>
   );
@@ -67,27 +96,28 @@ const Logo = styled.div`
   }
 `;
 
-const ButtonContainer = styled.div`
-  display: none;
-  padding: 10px;
-`;
-
-const TweetSmallButton = styled.div`
-  padding-left: 10px;
-  fill: ${STYLES.COLOR.PRIMARY};
-  svg {
-    width: 40px;
-    height: 40px;
-  }
-  @media ${STYLES.device.laptop} {
+const SpDiv = styled.div`
+  @media ${STYLES.DEVICE.LAPTOP} {
     display: none;
   }
 `;
 
-const TweetButton = styled(Button)`
+const Div = styled.div`
   display: none;
-  @media ${STYLES.device.laptop} {
+  @media ${STYLES.DEVICE.LAPTOP} {
     display: block;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  padding: 10px;
+`;
+
+const TweetSmallButton = styled.div`
+  fill: ${STYLES.COLOR.PRIMARY};
+  svg {
+    width: 40px;
+    height: 40px;
   }
 `;
 

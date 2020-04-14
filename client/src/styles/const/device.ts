@@ -1,9 +1,9 @@
-const size = {
-  laptop: '1024px',
+const SIZE = {
+  LAPTOP: '1024px',
 };
 
-const device = {
-  laptop: `(min-width: ${size.laptop})`,
+const DEVICE = {
+  LAPTOP: `(min-width: ${SIZE.LAPTOP})`,
 };
 
-export default device;
+export default DEVICE;

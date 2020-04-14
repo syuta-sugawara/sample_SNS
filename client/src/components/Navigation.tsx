@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import STYLES from '../styles/const';
 import HomeIcon from './icons/HomeIcon';
 import TweetBtnIcon from './icons/TweetBtnIcon';

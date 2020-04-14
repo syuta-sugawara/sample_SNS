@@ -22,13 +22,30 @@ func NewTweetModel(db *dynamo.DB) TweetModel {
 	}
 }
 
-func (tm *TweetModel) All() *[]entity.Tweet {
-	tweet := new([]entity.Tweet)
-	if err := tm.tweetTable.Scan().All(tweet); err != nil {
+func (tm *TweetModel) All() []entity.TweetResp {
+	tweets := []entity.Tweet{}
+	tweetsResp := []entity.TweetResp{}
+	if err := tm.tweetTable.Scan().All(&tweets); err != nil {
 		fmt.Println(err)
 	}
+	for i := 0; i < len(tweets); i++ {
+		tweet := tweets[i]
+		user := entity.User{}
+		if err := tm.userModel.userTable.Get("id", tweet.UserID).One(&user); err != nil {
+			fmt.Println(err)
+		}
 
-	return tweet
+		tweetResp := entity.TweetResp{
+			ID:        tweet.ID,
+			Content:   tweet.Content,
+			TweetType: tweet.TweetType,
+			CreatedAt: tweet.CreatedAt,
+			User:      user,
+		}
+		tweetsResp = append(tweetsResp, tweetResp)
+	}
+
+	return tweetsResp
 }
 
 func (tm *TweetModel) Get(id string) *entity.Tweet {

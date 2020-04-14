@@ -18,7 +18,6 @@ export const fetchTweetList = (): any => {
       tweetAPI
         .getAllTweets()
         .then(res => {
-          console.log(res);
           return res.json().then(json => {
             if (res.ok) {
               dispatch(

@@ -7,11 +7,7 @@
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "prettier",
-    "@typescript-eslint",
-    "react"
-  ],
+  "plugins": ["prettier", "@typescript-eslint", "react"],
   "env": { "node": true, "es6": true },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -19,24 +15,22 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "quotes": [
-      "error",
-      "single"
-    ],
+    "quotes": ["error", "single"],
     "prettier/prettier": [
       "error",
       {
         "singleQuote": true,
         "arrowParens": "avoid"
       }
-    ]
+    ],
+    "@typescript-eslint/no-explicit-any": 0
   },
   "overrides": [
     {
-        "files": ["**/*.ts?(x)"],
-        "rules": {
-            "react/prop-types": "off"
-        }
+      "files": ["**/*.ts?(x)"],
+      "rules": {
+        "react/prop-types": "off"
+      }
     }
   ],
   "settings": {

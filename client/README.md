@@ -3,6 +3,9 @@
 ## how to use 
 
 - Node.jsとnpmを準備する
+- `.env`ファイルを作成して以下を記述
+  - `API_URL_DEV=http://localhost:1323`
+  - `API_URL_PROD=`
 - 依存パッケージをインストールする
   - `$ npm install`
 - 開発用サーバを起動する

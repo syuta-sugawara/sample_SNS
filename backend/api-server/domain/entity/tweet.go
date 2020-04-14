@@ -13,6 +13,13 @@ type Tweet struct {
 type PostTweet struct {
 	Content   string `json:"content"`
 	TweetType string `json:"tweetType"`
-	UserID    string `json:"userID"`
 	// RefTweetID string `json:"RefTweetID"`
+}
+
+type TweetResp struct {
+	ID        int    `json:"id"`
+	Content   string `json:"content"`
+	TweetType string `json:"tweetType"`
+	CreatedAt int64  `json:"createdAt"`
+	User      User   `json:"user"`
 }

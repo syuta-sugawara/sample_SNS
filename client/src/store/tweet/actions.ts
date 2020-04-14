@@ -6,17 +6,14 @@ import { ActionTypes } from '../actionTypes';
 
 const actionCreator = actionCreatorFactory();
 
-const counterAction = {
-  increment: actionCreator<{ count: number }>(ActionTypes.increment),
-  decrement: actionCreator<{ count: number }>(ActionTypes.decrement),
-  reset: actionCreator(ActionTypes.countReset),
-  getAllDocs: actionCreator.async<{}, {}, {}>(ActionTypes.getAllDocs),
+const tweetAction = {
+  getTweetList: actionCreator.async<{}, [], {}>(ActionTypes.getTweetList),
 };
 
-export const fetchDocs = (): any => {
+export const fetchTweetList = (): any => {
   return (dispatch: Dispatch): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
-      dispatch(counterAction.getAllDocs.started({ params: {} }));
+      dispatch(tweetAction.getTweetList.started({ params: {} }));
       const tweetAPI = new TweetAPI();
       tweetAPI
         .getAllTweets()
@@ -25,23 +22,23 @@ export const fetchDocs = (): any => {
           return res.json().then(json => {
             if (res.ok) {
               dispatch(
-                counterAction.getAllDocs.done({ result: json, params: {} })
+                tweetAction.getTweetList.done({ result: json, params: {} })
               );
               resolve(json);
             } else {
               dispatch(
-                counterAction.getAllDocs.failed({ error: json, params: {} })
+                tweetAction.getTweetList.failed({ error: json, params: {} })
               );
               reject(json);
             }
           });
         })
         .catch(error => {
-          dispatch(counterAction.getAllDocs.failed({ error, params: {} }));
+          dispatch(tweetAction.getTweetList.failed({ error, params: {} }));
           reject(error);
         });
     });
   };
 };
 
-export default counterAction;
+export default tweetAction;

@@ -1,14 +1,10 @@
 package entity
 
-import "time"
-
 type User struct {
-	id          string
-	uid         string
-	screenName  string
-	mail        string
-	iconUrl     string
-	birthday    time.Time
-	followIDs   []string
-	followedIDs []string
+	ID         string `dynamo:"id" json:"id"`
+	ScreenName string `dynamo:"screenName" json:"screenName"`
+	IconUrl    string `dynamo:"iconUrl" json:"iconUrl"`
+	//birthday    time.Time
+	//followIDs   []string
+	//followedIDs []string
 }

@@ -107,10 +107,16 @@ const TweetSmallButton = styled.div`
   }
 `;
 
+type ResponsiveDivProps = {
+  isMobile?: boolean;
+};
+
 const ResponsiveDiv = styled.div`
-  display: ${props => (props.isMobile ? 'block' : 'none')};
+  display: ${(props: ResponsiveDivProps): string =>
+    props.isMobile ? 'block' : 'none'};
   @media ${STYLES.DEVICE.LAPTOP} {
-    display: ${props => (props.isMobile ? 'none' : 'block')};
+    display: ${(props: ResponsiveDivProps): string =>
+      props.isMobile ? 'none' : 'block'};
   }
 `;
 

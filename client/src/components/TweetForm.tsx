@@ -54,6 +54,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 295px;
+  background-color: ${STYLES.COLOR.WHITE};
   border-radius: 14px;
 `;
 

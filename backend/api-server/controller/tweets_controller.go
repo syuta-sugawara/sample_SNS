@@ -51,7 +51,8 @@ func (tc *TweetsController) Post(c echo.Context) error {
 	tc.tweetModel.Create(t)
 
 	// TODO: 作成されたtweetを返すようにしたい
-	return c.String(http.StatusOK, "POST success")
+	resp := CreateErrorMessage("POST success")
+	return c.JSON(http.StatusOK, resp)
 }
 
 // いいね

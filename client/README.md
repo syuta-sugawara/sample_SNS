@@ -5,7 +5,7 @@
 - Node.jsとnpmを準備する
 - `.env`ファイルを作成して以下を記述
   - `API_URL_DEV=http://localhost:1323`
-  - `API_URL_PROD=`
+  - `API_URL_PROD=https://ztgvzmy5r1.execute-api.ap-northeast-1.amazonaws.com/dev`
 - 依存パッケージをインストールする
   - `$ npm install`
 - 開発用サーバを起動する

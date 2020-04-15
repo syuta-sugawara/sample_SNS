@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import withLayout from '../components/Layout';
@@ -13,6 +13,12 @@ import { TweetType } from '../types/tweet';
 
 const Home: NextPage = () => {
   const tweetList = useSelector((state: RootState) => state.tweet.results);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTweetList());
+  }, []);
+
   return (
     <>
       <Head>
@@ -60,9 +66,5 @@ const Body = styled.div`
     }
   }
 `;
-
-Home.getInitialProps = async ({ store }): Promise<void> => {
-  await store.dispatch(fetchTweetList() as any);
-};
 
 export default withLayout(Home);

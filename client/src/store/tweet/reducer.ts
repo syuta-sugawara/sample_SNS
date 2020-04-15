@@ -7,13 +7,12 @@ import { TweetType } from '../../types/tweet';
 export type stateType = {
   results: TweetType[];
   loading: boolean;
-  error: any;
+  error?: Error;
 };
 
 const initialState: stateType = {
   results: [],
   loading: false,
-  error: null,
 };
 
 const tweetReducer = reducerWithInitialState(initialState)
@@ -21,13 +20,13 @@ const tweetReducer = reducerWithInitialState(initialState)
     ...state,
     results: [],
     loading: true,
-    error: null,
+    error: undefined,
   }))
   .case(tweetAction.getTweetList.done, (state, payload) => ({
     ...state,
     results: payload.result,
     loading: false,
-    error: null,
+    error: undefined,
   }))
   .case(tweetAction.getTweetList.failed, (state, payload) => ({
     ...state,

@@ -15,19 +15,21 @@ export const withLayout = (WrappedComponent: any): any =>
 
     render(): JSX.Element {
       return (
-        <Wrapper>
-          <Header>
-            <Navigation />
-          </Header>
-          <Main>
-            <WrappedComponent {...this.props} />
-          </Main>
-        </Wrapper>
+        <>
+          <App>
+            <Header>
+              <Navigation />
+            </Header>
+            <Main>
+              <WrappedComponent {...this.props} />
+            </Main>
+          </App>
+        </>
       );
     }
   };
 
-const Wrapper = styled.div`
+const App = styled.div`
   display: flex;
   justify-content: center;
 `;

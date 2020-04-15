@@ -28,7 +28,7 @@ const TweetItem: React.FC<Props> = props => {
         <Content>
           <ContentHead>
             <User>
-              <Link href={`/users/${user.id}`}>
+              <Link href="/users/[uid]" as={`/users/${user.id}`}>
                 <a>
                   <Text variant={TextVariant.PRIMARY} bold>
                     {user.screenName}
@@ -40,11 +40,11 @@ const TweetItem: React.FC<Props> = props => {
             <Separator>
               <Text variant={TextVariant.SECONDARY}>·</Text>
             </Separator>
-            <div>
+            <Time>
               <Text variant={TextVariant.SECONDARY}>
                 {fromNow(props.tweet.createdAt)}
               </Text>
-            </div>
+            </Time>
           </ContentHead>
           <ContentBody>
             <Tweet>
@@ -59,10 +59,9 @@ const TweetItem: React.FC<Props> = props => {
 };
 
 const Wrapper = styled.article`
-  width: 598px;
+  width: 100%;
   padding: 10px 15px;
   cursor: pointer;
-  border: solid 1px ${STYLES.COLOR.GRAY_LIGHTER_20};
   &:hover {
     background-color: ${STYLES.COLOR.OFF_WHITE};
   }
@@ -112,7 +111,18 @@ const User = styled.div`
 `;
 
 const Separator = styled.div`
+  display: none;
   padding: 0 5px;
+  @media ${STYLES.DEVICE.MOBILE} {
+    display: block;
+  }
+`;
+
+const Time = styled.div`
+  display: none;
+  @media ${STYLES.DEVICE.MOBILE} {
+    display: block;
+  }
 `;
 
 const ContentBody = styled.div``;

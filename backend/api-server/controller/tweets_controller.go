@@ -39,16 +39,15 @@ func (tc *TweetsController) Post(c echo.Context) error {
 	c.Bind(t)
 	content := strings.TrimSpace(t.Content)
 	if content == "" {
-		resp := model.Message("Content is Required")
+		resp := CreateErrorMessage("Content is Required")
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 	if len(t.Content) > 420 {
-		resp := model.Message("Content is over 140")
+		resp := CreateErrorMessage("Content is over 140")
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 	tc.tweetModel.Create(t)
-	resp := model.Message("POST success")
-	return c.JSON(http.StatusOK, resp)
+	return c.String(http.StatusOK, "POST success")
 }
 
 // いいね

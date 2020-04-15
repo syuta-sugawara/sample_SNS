@@ -41,6 +41,9 @@ func (tc *TweetsController) Post(c echo.Context) error {
 	if content == "" {
 		return c.JSON(http.StatusBadRequest, "Content is Required")
 	}
+	if len(t.Content) > 140{
+		return c.JSON(http.StatusBadRequest, "Content is over 140")
+	}
 	tc.tweetModel.Create(t)
 	return c.JSON(http.StatusOK, "POST success")
 }

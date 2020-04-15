@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import TweetForm from '../components/TweetForm';
 import modalAction from '../store/modal/actions';
+import { fetchPostTweet } from '../store/tweet/actions';
 import { RootState } from '../store';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
@@ -11,8 +12,8 @@ import { UserType } from '../types/user';
 // TODO: 決め打ちでTweetForm表示しているがJSX.Elementに対応できるようにする
 const Modal: React.FC = () => {
   const user: UserType = {
-    id: 'xxxxx',
-    screenName: 'hoge',
+    id: 'junkisai',
+    screenName: 'じゅんきち',
     iconUrl:
       'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
   };
@@ -21,16 +22,16 @@ const Modal: React.FC = () => {
   const dispatch = useDispatch();
   const isDisplay = useSelector((state: RootState) => state.modal.isDisplay);
 
+  const handleClose = () => {
+    dispatch(modalAction.setIsDisplay({ isDisplay: false }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   const handleSubmit = () => {
-    alert(`${value}とツイートする`);
-  };
-
-  const handleClose = () => {
-    dispatch(modalAction.setIsDisplay({ isDisplay: false }));
+    dispatch(fetchPostTweet({ content: value, tweetType: 'tweet' }));
   };
 
   const handleClickOutside = (event: any) => {

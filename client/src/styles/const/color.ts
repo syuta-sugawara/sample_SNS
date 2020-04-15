@@ -6,6 +6,7 @@ const COLOR = {
   PRIMARY_DARKER_10: '#1a92dc',
   PRIMARY_DARKER_20: '#1781c2',
   BLACK: '#14171a',
+  BLACK_LIGHTER_30: 'rgba(50, 50, 50, 0.7)',
   GRAY: '#657786',
   GRAY_LIGHTER_10: 'rgb(204, 214, 221)',
   GRAY_LIGHTER_20: 'rgb(230, 236, 240)',

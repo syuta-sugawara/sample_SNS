@@ -62,7 +62,7 @@ const Body = styled.div`
 `;
 
 Home.getInitialProps = async ({ store }): Promise<void> => {
-  await store.dispatch(fetchTweetList());
+  await store.dispatch(fetchTweetList() as any);
 };
 
 export default withLayout(Home);

@@ -32,6 +32,21 @@ const tweetReducer = reducerWithInitialState(initialState)
     ...state,
     loading: false,
     error: payload.error,
+  }))
+  .case(tweetAction.postTweet.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(tweetAction.postTweet.done, state => ({
+    ...state,
+    loading: false,
+    error: undefined,
+  }))
+  .case(tweetAction.postTweet.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
   }));
 
 export default tweetReducer;

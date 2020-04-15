@@ -4,6 +4,7 @@ import (
 	"backend/api-server/domain/entity"
 	"backend/api-server/model"
 	"net/http"
+	"strings"
 
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
@@ -36,6 +37,10 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 func (tc *TweetsController) Post(c echo.Context) error {
 	t := new(entity.PostTweet)
 	c.Bind(t)
+	content := strings.TrimSpace(t.Content)
+	if content == "" {
+		return c.JSON(http.StatusNotFound, "POST failure")
+	}
 	tc.tweetModel.Create(t)
 	return c.JSON(http.StatusOK, "POST success")
 }

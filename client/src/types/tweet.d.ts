@@ -7,3 +7,8 @@ export type TweetType = {
   createdAt: number;
   user: UserType;
 };
+
+export type PostTweetType = {
+  content: string;
+  tweetType: string;
+};

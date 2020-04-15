@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Modal from '../components/Modal';
 import STYLES from '../styles/const';
 import Navigation from './Navigation';
 
@@ -16,6 +17,7 @@ export const withLayout = (WrappedComponent: any): any =>
     render(): JSX.Element {
       return (
         <>
+          <Modal />
           <App>
             <Header>
               <Navigation />
@@ -37,11 +39,11 @@ const App = styled.div`
 const Header = styled.header``;
 
 const Main = styled.main`
-  width: 600px;
+  width: 100%;
   border-right: solid 1px ${STYLES.COLOR.GRAY_LIGHTER_20};
   border-left: solid 1px ${STYLES.COLOR.GRAY_LIGHTER_20};
   @media ${STYLES.DEVICE.MOBILE} {
-    width: 100%;
+    width: 600px;
   }
 `;
 

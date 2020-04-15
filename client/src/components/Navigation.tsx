@@ -1,5 +1,9 @@
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+
+import modalAction from '../store/modal/actions';
 import STYLES from '../styles/const';
 import HomeIcon from './icons/HomeIcon';
 import TweetBtnIcon from './icons/TweetBtnIcon';
@@ -7,8 +11,15 @@ import TwitterIcon from './icons/TwitterIcon';
 import Button, { Variant } from './Button';
 
 const Navigation: React.FC = () => {
-  const handleClick = (): void => {
-    console.log('display modal window');
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    path: string
+  ): void => {
+    e.preventDefault();
+    router.push(path);
   };
 
   return (
@@ -22,7 +33,9 @@ const Navigation: React.FC = () => {
             <Button
               text=""
               variant={Variant.TEXT}
-              onClick={handleClick}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                handleClick(e, '/home')
+              }
               icon={<HomeIcon />}
             />
           </ResponsiveDiv>
@@ -30,7 +43,9 @@ const Navigation: React.FC = () => {
             <Button
               text="ホーム"
               variant={Variant.TEXT}
-              onClick={handleClick}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                handleClick(e, '/home')
+              }
               icon={<HomeIcon />}
             />
           </ResponsiveDiv>
@@ -40,7 +55,9 @@ const Navigation: React.FC = () => {
             <Button
               text=""
               variant={Variant.TEXT}
-              onClick={handleClick}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                handleClick(e, '/users/hoge')
+              }
               icon={
                 <img
                   src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
@@ -53,7 +70,9 @@ const Navigation: React.FC = () => {
             <Button
               text="プロフィール"
               variant={Variant.TEXT}
-              onClick={handleClick}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                handleClick(e, '/users/hoge')
+              }
               icon={
                 <img
                   src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
@@ -66,7 +85,11 @@ const Navigation: React.FC = () => {
       </ul>
       <ButtonContainer>
         <ResponsiveDiv isMobile>
-          <TweetSmallButton>
+          <TweetSmallButton
+            onClick={() =>
+              dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+            }
+          >
             <TweetBtnIcon />
           </TweetSmallButton>
         </ResponsiveDiv>
@@ -74,7 +97,9 @@ const Navigation: React.FC = () => {
           <Button
             text="ツイートする"
             variant={Variant.CONTAINED}
-            onClick={handleClick}
+            onClick={() =>
+              dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+            }
           />
         </ResponsiveDiv>
       </ButtonContainer>
@@ -99,7 +124,7 @@ const ButtonContainer = styled.div`
   padding: 10px;
 `;
 
-const TweetSmallButton = styled.div`
+const TweetSmallButton = styled.button`
   fill: ${STYLES.COLOR.PRIMARY};
   svg {
     width: 40px;

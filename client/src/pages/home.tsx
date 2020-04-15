@@ -61,7 +61,7 @@ const Body = styled.div`
   }
 `;
 
-Home.getInitialProps = async ({ store }): Promise<any> => {
+Home.getInitialProps = async ({ store }): Promise<void> => {
   await store.dispatch(fetchTweetList());
 };
 

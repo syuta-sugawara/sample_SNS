@@ -6,13 +6,21 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	echolamda "github.com/awslabs/aws-lambda-go-api-proxy/echo"
 )
 
 var echoLambda *echolamda.EchoLambda
 
 func init() {
-	e := router.InitEcho()
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("ap-northeast-1"),
+	})
+	if err != nil {
+		panic(err)
+	}
+	e := router.InitEcho(sess)
 	echoLambda = echolamda.New(e)
 }
 

@@ -38,6 +38,8 @@ func (tc *TweetsController) Post(c echo.Context) error {
 	t := new(entity.PostTweet)
 	c.Bind(t)
 	content := strings.TrimSpace(t.Content)
+
+	// TODO: エラーハンドリングの分離
 	if content == "" {
 		resp := CreateErrorMessage("Content is Required")
 		return c.JSON(http.StatusBadRequest, resp)
@@ -47,6 +49,8 @@ func (tc *TweetsController) Post(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 	tc.tweetModel.Create(t)
+
+	// TODO: 作成されたtweetを返すようにしたい
 	return c.String(http.StatusOK, "POST success")
 }
 

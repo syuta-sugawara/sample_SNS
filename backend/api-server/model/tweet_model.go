@@ -3,6 +3,7 @@ package model
 import (
 	"backend/api-server/domain/entity"
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/guregu/dynamo"
@@ -44,6 +45,7 @@ func (tm *TweetModel) All() []entity.TweetResp {
 		}
 		tweetsResp = append(tweetsResp, tweetResp)
 	}
+	sort.Slice(tweetsResp, func(i, j int) bool { return tweetsResp[i].CreatedAt > tweetsResp[j].CreatedAt })
 
 	return tweetsResp
 }

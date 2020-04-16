@@ -13,13 +13,14 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	userController := controller.NewUserController(db, auth)
 
 	// 認証なしのrouting
-	router := e.Group("/users")
-	router.POST("", userController.RegisterUser)
-	router.POST("/signin", userController.Signin)
+	authRouter := e.Group("/auth")
+	authRouter.POST("/signup", userController.RegisterUser)
+	authRouter.POST("/signin", userController.Signin)
 
 	// 認証ありのrouting
-	router.Use(middleware.AuthMiddleware(auth))
-	router.GET("", userController.Get)
+	userRouter := e.Group("/user")
+	userRouter.Use(middleware.AuthMiddleware(auth))
+	userRouter.GET("", userController.Get)
 	// r.GET("/:userName", userController.UserIndex)
 	// r.GET("/:userName/follows", userController.FollowsIndex)
 	// r.GET("/:userName/followers", userController.FollowersIndex)

@@ -25,6 +25,13 @@ $ export DYNAMO_URL=http://localhost:8000
 $ docker-compose up --build
 ```
 
+4. create db
+
+```shell
+$ cd backend
+$ make create/tables
+```
+
 ## ports
 
 | Item        | port           |

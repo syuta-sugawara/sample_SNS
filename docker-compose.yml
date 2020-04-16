@@ -22,7 +22,8 @@ services:
       - DYNAMO_ENDPOINT=http://db:8000
   
   dynamodb-admin:
-    build: ./backend/dynamodb-admin
+    build:
+      context: ./backend/dynamodb-admin
     command: dynamodb-admin
     ports:
       - 8001:8001

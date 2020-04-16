@@ -15,3 +15,8 @@ type SignUpUser struct {
 	Mail       string `json:"mail"`
 	PassWord   string `json:"password"`
 }
+
+type SignInUser struct {
+	ID       string `json:"id"`
+	PassWord string `json:"password"`
+}

@@ -5,6 +5,7 @@ import (
 	"backend/api-server/domain/services"
 	"backend/api-server/model"
 	"net/http"
+	"time"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
@@ -77,4 +78,24 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 	userID := c.Param("userName")
 	uc.userModel.All()
 	return c.String(http.StatusOK, "Unfollow"+userID)
+}
+
+// サインイン処理
+func (uc *UsersController) Signin(c echo.Context) error {
+	u := new(entity.SignInUser)
+	c.Bind(u)
+	accessToken, err := uc.userService.GetUserFromCognito(u)
+
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
+	}
+
+	cookie := new(http.Cookie)
+	cookie.Name = "token"
+	cookie.Value = *accessToken
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	cookie.HttpOnly = true
+	c.SetCookie(cookie)
+
+	return c.JSON(http.StatusOK, CreateErrorMessage("success"))
 }

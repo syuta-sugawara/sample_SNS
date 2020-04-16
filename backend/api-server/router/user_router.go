@@ -12,6 +12,7 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	userController := controller.NewUserController(db, auth)
 	r := e.Group("/users")
 	r.POST("", userController.RegisterUser)
+	r.POST("/signin", userController.Signin)
 	// r.GET("/:userName", userController.UserIndex)
 	// r.GET("/:userName/follows", userController.FollowsIndex)
 	// r.GET("/:userName/followers", userController.FollowersIndex)

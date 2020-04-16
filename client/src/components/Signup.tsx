@@ -7,6 +7,7 @@ import InputText, { Validation } from './InputText';
 
 const Signup: React.FC = () => {
   const [userId, setUserId] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const [mail, setMail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -14,6 +15,10 @@ const Signup: React.FC = () => {
 
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
 
   const handleMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +60,14 @@ const Signup: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
+              label="ユーザ名"
+              placeholder=""
+              value={name}
+              onChange={handleNameChange}
+            />
+          </FormItem>
+          <FormItem>
+            <InputText
               label="メールアドレス"
               placeholder=""
               value={mail}
@@ -65,20 +78,20 @@ const Signup: React.FC = () => {
           <FormItem>
             <InputText
               label="パスワード"
-              placeholder="半角英数字で入力"
+              placeholder="8文字以上の半角英数字で入力"
               value={password}
               password
-              validation={Validation.HALF_WIDTH}
+              validation={Validation.PASSWORD}
               onChange={handlePassword}
             />
           </FormItem>
           <FormItem>
             <InputText
               label="パスワード（確認用）"
-              placeholder="半角英数字で入力"
+              placeholder="8文字以上の半角英数字で入力"
               value={confirmPassword}
               password
-              validation={Validation.HALF_WIDTH}
+              validation={Validation.PASSWORD}
               onChange={handleConfirmPassword}
             />
             {!isMisMatch ? null : (

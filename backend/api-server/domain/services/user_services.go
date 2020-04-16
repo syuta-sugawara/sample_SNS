@@ -1,6 +1,7 @@
 package services
 
 import (
+	"backend/api-server/domain/entity"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,26 +18,26 @@ func NewUserServices(auth *cognito.CognitoIdentityProvider) UserServices {
 	}
 }
 
-func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string) error {
+func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 	signInParams := &cognito.SignUpInput{
-		Username:       aws.String(id),
-		Password:       aws.String(pass),
+		Username:       aws.String(u.ID),
+		Password:       aws.String(u.PassWord),
 		ClientId:       aws.String(os.Getenv("CLIENT_ID")),
-		UserAttributes: []*cognito.AttributeType{{Name: aws.String("email"), Value: aws.String(mail)}},
+		UserAttributes: []*cognito.AttributeType{{Name: aws.String("email"), Value: aws.String(u.Mail)}},
 	}
 
 	if _, err := us.auth.SignUp(signInParams); err != nil {
 		return err
 	}
+	// ローカルでは認証が失敗するけど本番行けそう
+	// confirmPrams := &cognito.AdminConfirmSignUpInput{
+	// 	Username:   aws.String(u.ID),
+	// 	UserPoolId: aws.String(os.Getenv("POOL_ID")),
+	// }
 
-	confirmPrams := &cognito.AdminConfirmSignUpInput{
-		Username:   aws.String(id),
-		UserPoolId: aws.String(os.Getenv("POOL_ID")),
-	}
-
-	if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
-		return err
-	}
+	// if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
+	// 	return err
+	// }
 	return nil
 }
 

@@ -8,3 +8,7 @@ export const isMailAddress = (str: string) => {
   if (str.match(regex)) return true;
   return false;
 };
+
+export const isMoreLeastCharacter = (str: string, least: number) => {
+  return str.length >= least;
+};

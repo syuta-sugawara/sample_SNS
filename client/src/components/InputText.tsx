@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import STYLES from '../styles/const';
-import { isHalfWidth, isMailAddress } from '../utils/validation';
+import {
+  isHalfWidth,
+  isMailAddress,
+  isMoreLeastCharacter,
+} from '../utils/validation';
 
 export enum Validation {
   EMAIL = 'email',
   HALF_WIDTH = 'half_width',
+  PASSWORD = 'password',
 }
 
 type Props = {
@@ -48,6 +53,14 @@ const InputText: React.FC<Props> = props => {
             setErrorMessage('');
           }
           break;
+        case Validation.PASSWORD:
+          if (!isMoreLeastCharacter(e.target.value, 8)) {
+            setErrorMessage('8文字以上入力してください');
+          } else if (!isHalfWidth(e.target.value)) {
+            setErrorMessage('半角英数字以外の文字が含まれています');
+          } else {
+            setErrorMessage('');
+          }
       }
     }
     props.onChange(e);

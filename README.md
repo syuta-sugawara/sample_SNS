@@ -1,22 +1,26 @@
 # 20fresh_o
 
-## 起動方法
+## getting started(client and backend)
+ 
+### befor you start
 
-```shell
+1. set environment variables for client in ./client/.env
+
+```
+
+API_URL_DEV=http://localhost:1323
+API_URL_PROD=https://ztgvzmy5r1.execute-api.ap-northeast-1.amazonaws.com/dev
+
+```
+
+2. set environment variables for backend
+
+```
 $ export DYNAMO_URL=http://localhost:8000
-$ docker-compose up
 ```
 
-[localshot:1323](localshot:1323)で API が立ち上がる。
+3. start container
 
-## db の作成
-
-```shell
-$ make create/tables
 ```
-
-## golang 用.env ファイルの作成（サーバー開発用）
-
-```shell
-$ make create/env
+$ docker-compose up --build
 ```

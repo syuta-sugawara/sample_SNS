@@ -8,6 +8,7 @@ type Props = {
   placeholder: string;
   value: string;
   limit?: number;
+  password?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -31,7 +32,7 @@ const InputText: React.FC<Props> = props => {
         <Input>
           {!props.limit ? (
             <input
-              type="text"
+              type={!props.password ? 'text' : 'password'}
               value={props.value}
               placeholder={props.placeholder}
               onChange={props.onChange}
@@ -40,7 +41,7 @@ const InputText: React.FC<Props> = props => {
             />
           ) : (
             <input
-              type="text"
+              type={!props.password ? 'text' : 'password'}
               value={props.value}
               placeholder={props.placeholder}
               maxLength={props.limit}

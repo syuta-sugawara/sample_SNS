@@ -4,16 +4,19 @@ import (
 	"backend/api-server/domain/entity"
 	"fmt"
 
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
 )
 
 type UserModel struct {
 	userTable dynamo.Table
+	auth      *cognito.CognitoIdentityProvider
 }
 
-func NewUserModel(db *dynamo.DB) UserModel {
+func NewUserModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UserModel {
 	return UserModel{
 		userTable: db.Table("Users"),
+		auth:      auth,
 	}
 }
 
@@ -47,14 +50,13 @@ func (um *UserModel) GetOrCreateDummyUser() string {
 	return dummyID
 }
 
-func (um *UserModel) Regist(u *entity.User) {
+func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 	user := entity.User{
 		ID:         u.ID,
 		ScreenName: u.ScreenName,
-		IconUrl:    u.IconUrl,
 	}
 	if err := um.userTable.Put(user).Run(); err != nil {
 		fmt.Println(err)
 	}
-	return
+	return user
 }

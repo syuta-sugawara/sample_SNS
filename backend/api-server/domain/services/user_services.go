@@ -41,12 +41,12 @@ func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 	return nil
 }
 
-func (us *UserServices) GetUserFromCognito(id string, pass string) (*string, error) {
+func (us *UserServices) GetUserFromCognito(u *entity.SignInUser) (*string, error) {
 	params := &cognito.InitiateAuthInput{
 		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
 		AuthParameters: map[string]*string{
-			"USERNAME": aws.String(id),
-			"PASSWORD": aws.String(pass),
+			"USERNAME": aws.String(u.ID),
+			"PASSWORD": aws.String(u.PassWord),
 		},
 		ClientId: aws.String(os.Getenv("CLIENT_ID")),
 	}

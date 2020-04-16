@@ -2,9 +2,9 @@
 
 ## getting started(client and backend)
  
-### befor you start
+### before you start
 
-1. set environment variables for client in ./client/.env
+1. set environment variables for client in `./client/.env`
 
 ```
 
@@ -24,3 +24,11 @@ $ export DYNAMO_URL=http://localhost:8000
 ```
 $ docker-compose up --build
 ```
+
+## ports
+
+| Item        | port           |
+| ------------- |:-------------:| 
+| client      | 3000| 
+| Api server      | 1323      | 
+| DB | 8000      |  

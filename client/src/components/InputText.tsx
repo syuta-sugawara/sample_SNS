@@ -70,6 +70,7 @@ const Head = styled.div`
   border-bottom: solid 2px
     ${(props: FocusEventProps): string =>
       props.isFocus ? STYLES.COLOR.PRIMARY : STYLES.COLOR.GRAY};
+  user-select: none;
 `;
 
 const Input = styled.div`

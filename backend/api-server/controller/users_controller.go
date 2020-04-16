@@ -60,9 +60,9 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, CreateErrorMessage(err.Error()))
 	}
 
-	uc.userModel.Regist(u)
+	resp := uc.userModel.Regist(u)
 
-	return c.String(http.StatusOK, "RegisterUser")
+	return c.JSON(http.StatusCreated, resp)
 }
 
 // フォロー処理

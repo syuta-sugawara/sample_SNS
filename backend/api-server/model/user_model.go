@@ -50,7 +50,7 @@ func (um *UserModel) GetOrCreateDummyUser() string {
 	return dummyID
 }
 
-func (um *UserModel) Regist(u *entity.SignUpUser) {
+func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 	user := entity.User{
 		ID:         u.ID,
 		ScreenName: u.ScreenName,
@@ -58,5 +58,5 @@ func (um *UserModel) Regist(u *entity.SignUpUser) {
 	if err := um.userTable.Put(user).Run(); err != nil {
 		fmt.Println(err)
 	}
-	return
+	return user
 }

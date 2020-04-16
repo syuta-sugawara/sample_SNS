@@ -2,7 +2,6 @@ package services
 
 import (
 	"backend/api-server/domain/entity"
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -28,7 +27,6 @@ func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 	}
 
 	if _, err := us.auth.SignUp(signInParams); err != nil {
-		fmt.Println("SignUp")
 		return err
 	}
 	// ローカルでは認証が失敗するけど本番行けそう
@@ -38,7 +36,6 @@ func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 	// }
 
 	// if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
-	// 	fmt.Println("confirm")
 	// 	return err
 	// }
 	return nil

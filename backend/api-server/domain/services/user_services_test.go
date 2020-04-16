@@ -35,7 +35,7 @@ func TestVerifyUserOnCognito(t *testing.T) {
 	auth := cognitoidentityprovider.New(session.New(), &aws.Config{Region: aws.String("ap-northeast-1")})
 	us := NewUserServices(auth)
 
-	accessToken := us.GetUserFromCognito("DragonTaro", "hogehoge1")
+	accessToken, _ := us.GetUserFromCognito("DragonTaro", "hogehoge1")
 	us.VerifyUserOnCognito(*accessToken)
 	t.Fail()
 }

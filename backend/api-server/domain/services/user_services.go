@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -26,28 +25,22 @@ func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string)
 		UserAttributes: []*cognito.AttributeType{{Name: aws.String("email"), Value: aws.String(mail)}},
 	}
 
-	signInResp, err := us.auth.SignUp(signInParams)
-	if err != nil {
-		fmt.Println(err.Error())
+	if _, err := us.auth.SignUp(signInParams); err != nil {
 		return err
 	}
-	fmt.Println(signInResp)
 
 	confirmPrams := &cognito.AdminConfirmSignUpInput{
 		Username:   aws.String(id),
 		UserPoolId: aws.String(os.Getenv("POOL_ID")),
 	}
 
-	confirmResp, err := us.auth.AdminConfirmSignUp(confirmPrams)
-	if err != nil {
-		fmt.Println(err.Error())
+	if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
 		return err
 	}
-	fmt.Println(confirmResp)
 	return nil
 }
 
-func (us *UserServices) GetUserFromCognito(id string, pass string) *string {
+func (us *UserServices) GetUserFromCognito(id string, pass string) (*string, error) {
 	params := &cognito.InitiateAuthInput{
 		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
 		AuthParameters: map[string]*string{
@@ -59,24 +52,20 @@ func (us *UserServices) GetUserFromCognito(id string, pass string) *string {
 
 	resp, err := us.auth.InitiateAuth(params)
 	if err != nil {
-		fmt.Println(err.Error())
-		return nil
+		return nil, err
 	}
-	fmt.Println(resp)
 
-	return resp.AuthenticationResult.AccessToken
+	return resp.AuthenticationResult.AccessToken, nil
 }
 
-func (us *UserServices) VerifyUserOnCognito(accessToken string) error {
+func (us *UserServices) VerifyUserOnCognito(accessToken string) (*string, error) {
 	params := &cognito.GetUserInput{
 		AccessToken: aws.String(accessToken),
 	}
 
 	resp, err := us.auth.GetUser(params)
 	if err != nil {
-		fmt.Println(err.Error())
-		return err
+		return nil, err
 	}
-	fmt.Println(resp)
-	return nil
+	return resp.Username, err
 }

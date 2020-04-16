@@ -13,6 +13,7 @@ const COLOR = {
   GRAY_LIGHTER_30: 'rgb(230, 236, 240, 0.7)',
   OFF_WHITE: '#f6f8fa',
   WHITE: '#fff',
+  RED: '#ff0000',
 } as const;
 
 export default COLOR;

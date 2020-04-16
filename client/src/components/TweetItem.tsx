@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
 import { fromNow } from '../utils/time';
+import Button, { Variant } from './Button';
+import RetweetIcon from './icons/RetweetIcon';
+import LikeIcon from './icons/LikeIcon';
 
 enum TextVariant {
   PRIMARY,
@@ -50,7 +53,32 @@ const TweetItem: React.FC<Props> = props => {
             <Tweet>
               <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
             </Tweet>
-            <Reaction></Reaction>
+            <Reaction>
+              <table>
+                <tr>
+                  <td>
+                    <Button
+                      text=""
+                      variant={Variant.TEXT}
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                        handleClick(e, '/home')
+                      }
+                      icon={<RetweetIcon />}
+                    />
+                  </td>
+                  <td>
+                    <Button
+                      text=""
+                      variant={Variant.TEXT}
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                        handleClick(e, '/home')
+                      }
+                      icon={<LikeIcon />}
+                    />
+                  </td>
+                </tr>
+              </table>
+            </Reaction>
           </ContentBody>
         </Content>
       </Body>
@@ -129,9 +157,7 @@ const ContentBody = styled.div``;
 
 const Tweet = styled.div``;
 
-const Reaction = styled.div`
-  /* todo: reply, retweet, like */
-`;
+const Reaction = styled.div``;
 
 type TextProps = {
   variant: TextVariant;

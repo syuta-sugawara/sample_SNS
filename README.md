@@ -20,3 +20,11 @@ $ make create/tables
 ```shell
 $ make create/env
 ```
+
+```
+DYNAMO_ENDPOINT=http://localhost:8000
+CLIENT_ID=XXXXXXXXX
+POOL_ID=XXXXXXXXX
+```
+
+`CLIENT_ID`を AWS の Cognito の User Pool より取得

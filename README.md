@@ -39,3 +39,11 @@ $ make create/tables
 | client      | 3000| 
 | Api server      | 1323      | 
 | DB | 8000      |  
+
+## Serverless Frameworkを用いたデプロイ方法
+1. 一時的セキュリティ認証情報(AWS STS)をTerminalに登録
+ * [Perman Federation](https://federation.perman.jp/#/)から認証情報を取得
+ * Terminal上でスクリプトを実行
+2. Makefileを用いて認証情報をTerminalの環境変数に登録
+ `$ make`
+

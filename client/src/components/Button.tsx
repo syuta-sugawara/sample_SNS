@@ -142,7 +142,7 @@ const Button: React.FC<Props> = props => {
       {!props.icon ? null : (
         <Icon colorPalette={colorPalette}>{props.icon}</Icon>
       )}
-      <span>{props.text}</span>
+      {props.text === '' ? null : <span>{props.text}</span>}
     </StyledButton>
   );
 };
@@ -167,8 +167,9 @@ const Icon = styled.span`
 const StyledButton = styled.button`
   display: flex;
   align-items: center;
-  height: 37px;
-  padding: 0 15px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   line-height: 1;
   color: ${(props: StyledBtnProps): string => props.colorPalette.color};
   cursor: ${(props: StyledBtnProps): string =>

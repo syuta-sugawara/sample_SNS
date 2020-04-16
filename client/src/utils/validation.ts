@@ -4,12 +4,7 @@ export const isHalfWidth = (str: string) => {
 };
 
 export const isMailAddress = (str: string) => {
-  if (
-    str.match(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    )
-  ) {
-    return true;
-  }
+  const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  if (str.match(regex)) return true;
   return false;
 };

@@ -8,3 +8,15 @@ type User struct {
 	//followIDs   []string
 	//followedIDs []string
 }
+
+type SignUpUser struct {
+	ID         string `json:"id"`
+	ScreenName string `json:"screenName"`
+	Mail       string `json:"mail"`
+	PassWord   string `json:"password"`
+}
+
+type SignInUser struct {
+	ID       string `json:"id"`
+	PassWord string `json:"password"`
+}

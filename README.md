@@ -34,7 +34,7 @@ $ make create/tables
 
 ## ports
 
-| Item        | port           |
+| Container        | Port           |
 | ------------- |:-------------:| 
 | client      | 3000| 
 | Api server      | 1323      | 

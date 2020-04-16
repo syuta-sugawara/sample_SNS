@@ -18,7 +18,7 @@ func NewUserServices(auth *cognito.CognitoIdentityProvider) UserServices {
 	}
 }
 
-func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string) {
+func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string) error {
 	signInParams := &cognito.SignUpInput{
 		Username:       aws.String(id),
 		Password:       aws.String(pass),
@@ -29,7 +29,7 @@ func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string)
 	signInResp, err := us.auth.SignUp(signInParams)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		return err
 	}
 	fmt.Println(signInResp)
 
@@ -41,9 +41,10 @@ func (us *UserServices) CreateUserOnCognito(id string, mail string, pass string)
 	confirmResp, err := us.auth.AdminConfirmSignUp(confirmPrams)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		return err
 	}
 	fmt.Println(confirmResp)
+	return nil
 }
 
 func (us *UserServices) GetUserFromCognito(id string, pass string) *string {
@@ -66,7 +67,7 @@ func (us *UserServices) GetUserFromCognito(id string, pass string) *string {
 	return resp.AuthenticationResult.AccessToken
 }
 
-func (us *UserServices) VerifyUserOnCognito(accessToken string) {
+func (us *UserServices) VerifyUserOnCognito(accessToken string) error {
 	params := &cognito.GetUserInput{
 		AccessToken: aws.String(accessToken),
 	}
@@ -74,7 +75,8 @@ func (us *UserServices) VerifyUserOnCognito(accessToken string) {
 	resp, err := us.auth.GetUser(params)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		return err
 	}
 	fmt.Println(resp)
+	return nil
 }

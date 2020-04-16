@@ -25,9 +25,10 @@ func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) Use
 }
 
 // ユーザー情報の取得
-func (uc *UsersController) UserIndex(c echo.Context) error {
-	userID := c.Param("userName")
+func (uc *UsersController) Get(c echo.Context) error {
+	userID := c.Get("userID").(string)
 	user, _ := uc.userModel.Get(userID)
+
 	return c.JSON(http.StatusOK, user)
 }
 

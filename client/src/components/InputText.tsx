@@ -52,19 +52,17 @@ const InputText: React.FC<Props> = props => {
           )}
         </Input>
       </Head>
-      <Tail isDisplay={!props.limit ? false : true}>
-        <span>{`${props.value.length}/${props.limit}`}</span>
-      </Tail>
+      {!props.limit ? null : (
+        <Tail>
+          <span>{`${props.value.length}/${props.limit}`}</span>
+        </Tail>
+      )}
     </>
   );
 };
 
 type FocusEventProps = {
   isFocus: boolean;
-};
-
-type TailProps = {
-  isDisplay: boolean;
 };
 
 const Head = styled.div`
@@ -95,8 +93,6 @@ const Label = styled.div`
 `;
 
 const Tail = styled.div`
-  display: ${(props: TailProps): string =>
-    props.isDisplay ? 'block' : 'none'};
   padding: 0 10px;
   text-align: right;
   span {

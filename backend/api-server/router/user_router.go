@@ -11,11 +11,11 @@ import (
 func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvider) {
 	userController := controller.NewUserController(db, auth)
 	r := e.Group("/users")
-	r.GET("/:userName", userController.UserIndex)
-	r.GET("/:userName/follows", userController.FollowsIndex)
-	r.GET("/:userName/followers", userController.FollowersIndex)
-	r.PUT("/:userName", userController.UpdateUser)
-	r.POST("/:userName", userController.RegisterUser)
-	r.POST("/:userName/follow", userController.Follow)
-	r.DELETE("/:userName/follow", userController.Unfollow)
+	r.POST("", userController.RegisterUser)
+	// r.GET("/:userName", userController.UserIndex)
+	// r.GET("/:userName/follows", userController.FollowsIndex)
+	// r.GET("/:userName/followers", userController.FollowersIndex)
+	// r.PUT("/:userName", userController.UpdateUser)
+	// r.POST("/:userName/follow", userController.Follow)
+	// r.DELETE("/:userName/follow", userController.Unfollow)
 }

@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"backend/api-server/domain/entity"
+	"backend/api-server/domain/services"
 	"backend/api-server/model"
 	"net/http"
 
@@ -10,12 +12,14 @@ import (
 )
 
 type UsersController struct {
-	userModel model.UserModel
+	userModel   model.UserModel
+	userService services.UserServices
 }
 
 func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
 	return UsersController{
-		userModel: model.NewUserModel(db, auth),
+		userModel:   model.NewUserModel(db, auth),
+		userService: services.NewUserServices(auth),
 	}
 }
 
@@ -49,7 +53,15 @@ func (uc *UsersController) UpdateUser(c echo.Context) error {
 
 // ユーザー登録
 func (uc *UsersController) RegisterUser(c echo.Context) error {
-	uc.userModel.All()
+	u := new(entity.SignUpUser)
+	c.Bind(u)
+
+	if err := uc.userService.CreateUserOnCognito(u); err != nil {
+		return c.JSON(http.StatusBadRequest, CreateErrorMessage(err.Error()))
+	}
+
+	uc.userModel.Regist(u)
+
 	return c.String(http.StatusOK, "RegisterUser")
 }
 

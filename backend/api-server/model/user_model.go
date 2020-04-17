@@ -33,6 +33,13 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
+func (um *UserModel) Update(t *entity.User) {
+	if err := um.userTable.Put(t).Run(); err != nil {
+		fmt.Println(err)
+	}
+	return
+}
+
 func (um *UserModel) GetOrCreateDummyUser() string {
 	dummyID := "dummy"
 	user, err := um.Get(dummyID)
@@ -59,4 +66,43 @@ func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 		fmt.Println(err)
 	}
 	return user
+}
+
+func (um *UserModel) Follow(userID string, followedID string) (*entity.User, *entity.User) {
+	userInfo := new(entity.User)
+	followedUserInfo := new(entity.User)
+	if err := um.userTable.Get("id", userID).One(&userInfo); err != nil {
+		fmt.Println(err)
+	}
+	if err := um.userTable.Get("id", followedID).One(&followedUserInfo); err != nil {
+		fmt.Println(err)
+	}
+	userInfo.FollowIDs = append(userInfo.FollowIDs, followedID)
+	followedUserInfo.FollowedIDs = append(followedUserInfo.FollowedIDs, userID)
+	return userInfo, followedUserInfo
+}
+
+func (um *UserModel) UnFollow(userID string, followedID string) (*entity.User, *entity.User) {
+	userInfo := new(entity.User)
+	followedUserInfo := new(entity.User)
+	if err := um.userTable.Get("id", userID).One(&userInfo); err != nil {
+		fmt.Println(err)
+	}
+	if err := um.userTable.Get("id", followedID).One(&followedUserInfo); err != nil {
+		fmt.Println(err)
+	}
+	userInfo.FollowIDs = RemoveUser(userInfo.FollowIDs, followedID)
+	followedUserInfo.FollowedIDs = RemoveUser(followedUserInfo.FollowedIDs, userID)
+	return userInfo, followedUserInfo
+}
+
+func RemoveUser(userIDList []string, userID string) []string {
+	list := []string{}
+	for _, v := range userIDList {
+		if v == userID {
+			continue
+		}
+		list = append(list, v)
+	}
+	return list
 }

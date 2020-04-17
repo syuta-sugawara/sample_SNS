@@ -5,8 +5,8 @@ type User struct {
 	ScreenName string `dynamo:"screenName" json:"screenName"`
 	IconUrl    string `dynamo:"iconUrl" json:"iconUrl"`
 	//birthday    time.Time
-	//followIDs   []string
-	//followedIDs []string
+	FollowIDs   []string `dynamo:"followIDs" json:"followIDs"`
+	FollowedIDs []string `dynamo:"followedIDs" json:"followedIDs"`
 }
 
 type SignUpUser struct {
@@ -19,4 +19,10 @@ type SignUpUser struct {
 type SignInUser struct {
 	ID       string `json:"id"`
 	PassWord string `json:"password"`
+}
+
+type DisplayUser struct {
+	ID         string `json:"id"`
+	ScreenName string `json:"screenName"`
+	IconUrl    string `json:"iconUrl"`
 }

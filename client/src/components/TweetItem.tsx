@@ -54,9 +54,6 @@ const TweetItem: React.FC<Props> = props => {
               <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
             </Tweet>
             <Reaction>
-              <table>
-                <tr>
-                  <td>
                     <Button
                       text=""
                       variant={Variant.TEXT}
@@ -65,8 +62,6 @@ const TweetItem: React.FC<Props> = props => {
                       }
                       icon={<RetweetIcon />}
                     />
-                  </td>
-                  <td>
                     <Button
                       text=""
                       variant={Variant.TEXT}
@@ -75,9 +70,6 @@ const TweetItem: React.FC<Props> = props => {
                       }
                       icon={<LikeIcon />}
                     />
-                  </td>
-                </tr>
-              </table>
             </Reaction>
           </ContentBody>
         </Content>
@@ -157,7 +149,10 @@ const ContentBody = styled.div``;
 
 const Tweet = styled.div``;
 
-const Reaction = styled.div``;
+const Reaction = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 type TextProps = {
   variant: TextVariant;

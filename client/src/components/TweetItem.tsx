@@ -54,27 +54,31 @@ const TweetItem: React.FC<Props> = props => {
               <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
             </Tweet>
             <Reaction>
-              <Button
-                text=""
-                variant={Variant.TEXT}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                  handleClick(e, '/home')
-                }
-                icon={<RetweetIcon />}
-              />
-              <Button
-                text=""
-                variant={Variant.TEXT}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                  handleClick(e, '/home')
-                }
-                icon={<LikeIcon />}
-              />
+              <ButtonWrapper>
+                <Button
+                  text=""
+                  variant={Variant.TEXT}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                    handleClick(e, '/home')
+                  }
+                  icon={<RetweetIcon />}
+                />
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button
+                  text=""
+                  variant={Variant.TEXT}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                    handleClick(e, '/home')
+                  }
+                  icon={<LikeIcon />}
+                />
+              </ButtonWrapper>
             </Reaction>
           </ContentBody>
         </Content>
       </Body>
-    </Wrapper>
+    </Wrapper> 
   );
 };
 
@@ -152,6 +156,11 @@ const Tweet = styled.div``;
 const Reaction = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const ButtonWrapper = styled.div`
+  width: 150px;
+  height: 40px;
 `;
 
 type TextProps = {

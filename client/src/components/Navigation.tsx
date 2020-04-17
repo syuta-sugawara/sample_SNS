@@ -27,8 +27,8 @@ const Navigation: React.FC = () => {
       <Logo>
         <TwitterIcon />
       </Logo>
-      <ul>
-        <li>
+      <Menu>
+        <MenuItem>
           <ResponsiveDiv isMobile>
             <Button
               text=""
@@ -49,8 +49,8 @@ const Navigation: React.FC = () => {
               icon={<HomeIcon />}
             />
           </ResponsiveDiv>
-        </li>
-        <li>
+        </MenuItem>
+        <MenuItem>
           <ResponsiveDiv isMobile>
             <Button
               text=""
@@ -81,47 +81,60 @@ const Navigation: React.FC = () => {
               }
             />
           </ResponsiveDiv>
-        </li>
-      </ul>
-      <ButtonContainer>
-        <ResponsiveDiv isMobile>
-          <TweetSmallButton
-            onClick={() =>
-              dispatch(modalAction.setIsDisplay({ isDisplay: true }))
-            }
-          >
-            <TweetBtnIcon />
-          </TweetSmallButton>
-        </ResponsiveDiv>
-        <ResponsiveDiv>
-          <Button
-            text="ツイートする"
-            variant={Variant.CONTAINED}
-            onClick={() =>
-              dispatch(modalAction.setIsDisplay({ isDisplay: true }))
-            }
-          />
-        </ResponsiveDiv>
-      </ButtonContainer>
+        </MenuItem>
+        <MenuItem>
+          <ResponsiveDiv isMobile>
+            <TweetSmallButton
+              onClick={() =>
+                dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+              }
+            >
+              <TweetBtnIcon />
+            </TweetSmallButton>
+          </ResponsiveDiv>
+          <ResponsiveDiv>
+            <Button
+              text="ツイートする"
+              variant={Variant.CONTAINED}
+              onClick={() =>
+                dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+              }
+            />
+          </ResponsiveDiv>
+        </MenuItem>
+      </Menu>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  max-width: 200px;
+  width: 100px;
+  padding: 10px 10px 0;
+  @media ${STYLES.DEVICE.LAPTOP} {
+    width: 200px;
+  }
+`;
+
+const Menu = styled.ul`
+  width: 100%;
+`;
+
+const MenuItem = styled.li`
+  height: 45px;
+  margin: 7px 0;
 `;
 
 const Logo = styled.div`
-  padding-left: 10px;
+  display: flex;
+  justify-content: center;
   fill: ${STYLES.COLOR.PRIMARY};
+  @media ${STYLES.DEVICE.LAPTOP} {
+    justify-content: left;
+  }
   svg {
     width: 40px;
     height: 40px;
   }
-`;
-
-const ButtonContainer = styled.div`
-  padding: 10px;
 `;
 
 const TweetSmallButton = styled.button`
@@ -138,7 +151,9 @@ type ResponsiveDivProps = {
 
 const ResponsiveDiv = styled.div`
   display: ${(props: ResponsiveDivProps): string =>
-    props.isMobile ? 'block' : 'none'};
+    props.isMobile ? 'flex' : 'none'};
+  justify-content: center;
+  height: 100%;
   @media ${STYLES.DEVICE.LAPTOP} {
     display: ${(props: ResponsiveDivProps): string =>
       props.isMobile ? 'none' : 'block'};

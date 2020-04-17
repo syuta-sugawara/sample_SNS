@@ -4,6 +4,7 @@ import (
 	"backend/api-server/domain/entity"
 	"backend/api-server/model"
 	"net/http"
+	"strconv"
 	"strings"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -23,7 +24,7 @@ func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) Tw
 
 // ツイート取得
 func (tc *TweetsController) Index(c echo.Context) error {
-	id := c.Param("id")
+	id := c.Get("userID").(string)
 	tweet := tc.tweetModel.Get(id)
 	return c.JSON(http.StatusOK, tweet)
 }
@@ -64,6 +65,9 @@ func (tc *TweetsController) Like(c echo.Context) error {
 
 // リツイート
 func (tc *TweetsController) Retweet(c echo.Context) error {
-	tc.tweetModel.All()
+	id := c.Get("userID").(string)
+	tweetID := c.Param("id")
+	t, _ := strconv.Atoi(tweetID)
+	tc.tweetModel.Retweet(t, id)
 	return c.String(http.StatusOK, "Retweet")
 }

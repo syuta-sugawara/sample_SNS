@@ -36,12 +36,14 @@ const TweetForm: React.FC<Props> = props => {
             />
           </FormHead>
           <FormTail>
-            <Button
-              text="ツイートする"
-              variant={Variant.CONTAINED}
-              disabled={!props.value ? true : false}
-              onClick={props.onSubmit}
-            />
+            <ButtonWrapper>
+              <Button
+                text="ツイートする"
+                variant={Variant.CONTAINED}
+                disabled={!props.value ? true : false}
+                onClick={props.onSubmit}
+              />
+            </ButtonWrapper>
           </FormTail>
         </Form>
       </Body>
@@ -127,6 +129,11 @@ const FormTail = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   height: 50px;
+`;
+
+const ButtonWrapper = styled.div`
+  width: 150px;
+  height: 40px;
 `;
 
 export default TweetForm;

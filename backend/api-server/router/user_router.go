@@ -27,4 +27,5 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	// r.PUT("/:userName", userController.UpdateUser)
 	// r.POST("/:userName/follow", userController.Follow)
 	// r.DELETE("/:userName/follow", userController.Unfollow)
+	userRouter.POST("/signout", userController.Signout)
 }

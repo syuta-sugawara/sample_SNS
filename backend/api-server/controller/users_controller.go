@@ -104,6 +104,17 @@ func createCookie(token string) *http.Cookie {
 	return cookie
 }
 
+func deleteCookie() *http.Cookie {
+	cookie := new(http.Cookie)
+	cookie.Name = "token"
+	cookie.Path = "/"
+	cookie.Value = ""
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	cookie.HttpOnly = true
+	cookie.MaxAge = -1
+	return cookie
+}
+
 // サインイン処理
 func (uc *UsersController) Signin(c echo.Context) error {
 	u := new(entity.SignInUser)
@@ -116,4 +127,10 @@ func (uc *UsersController) Signin(c echo.Context) error {
 
 	c.SetCookie(createCookie(*accessToken))
 	return c.JSON(http.StatusOK, CreateErrorMessage("success"))
+}
+
+// サインアウト処理
+func (uc *UsersController) Signout(c echo.Context) error {
+	c.SetCookie(deleteCookie())
+	return c.JSON(http.StatusOK, CreateErrorMessage("signout"))
 }

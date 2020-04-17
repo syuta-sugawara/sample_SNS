@@ -54,22 +54,22 @@ const TweetItem: React.FC<Props> = props => {
               <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
             </Tweet>
             <Reaction>
-                    <Button
-                      text=""
-                      variant={Variant.TEXT}
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                        handleClick(e, '/home')
-                      }
-                      icon={<RetweetIcon />}
-                    />
-                    <Button
-                      text=""
-                      variant={Variant.TEXT}
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                        handleClick(e, '/home')
-                      }
-                      icon={<LikeIcon />}
-                    />
+              <Button
+                text=""
+                variant={Variant.TEXT}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                  handleClick(e, '/home')
+                }
+                icon={<RetweetIcon />}
+              />
+              <Button
+                text=""
+                variant={Variant.TEXT}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+                  handleClick(e, '/home')
+                }
+                icon={<LikeIcon />}
+              />
             </Reaction>
           </ContentBody>
         </Content>

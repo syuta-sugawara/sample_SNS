@@ -8,6 +8,7 @@ import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
+import TweetAPI from '../requests/tweet';
 
 enum TextVariant {
   PRIMARY,
@@ -20,6 +21,7 @@ type Props = {
 
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
+  const ApiRequest = new TweetAPI(props);
 
   return (
     <Wrapper>
@@ -59,7 +61,7 @@ const TweetItem: React.FC<Props> = props => {
                   text=""
                   variant={Variant.TEXT}
                   onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                    handleClick(e, '/home')
+                    ApiRequest.putRetweets()
                   }
                   icon={<RetweetIcon />}
                 />
@@ -69,7 +71,7 @@ const TweetItem: React.FC<Props> = props => {
                   text=""
                   variant={Variant.TEXT}
                   onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                    handleClick(e, '/home')
+                    ApiRequest.postLike()
                   }
                   icon={<LikeIcon />}
                 />
@@ -78,7 +80,7 @@ const TweetItem: React.FC<Props> = props => {
           </ContentBody>
         </Content>
       </Body>
-    </Wrapper> 
+    </Wrapper>
   );
 };
 

@@ -19,9 +19,21 @@ type Props = {
   tweet: TweetType;
 };
 
+const ApiRequest = new TweetAPI();
+
+const handlePostRetweets = () => {
+  const res = ApiRequest.putRetweets();
+  return res;
+};
+
+const handlePostLike = () => {
+  const res = ApiRequest.postLike();
+  return res;
+};
+
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
-  const ApiRequest = new TweetAPI();
+  // const ApiRequest = new TweetAPI();
 
   return (
     <Wrapper>
@@ -60,7 +72,7 @@ const TweetItem: React.FC<Props> = props => {
                 <Button
                   text=""
                   variant={Variant.TEXT}
-                  onClick={() => ApiRequest.putRetweets()}
+                  onClick={() => handlePostRetweets}
                   icon={<RetweetIcon />}
                 />
               </ButtonWrapper>
@@ -68,7 +80,7 @@ const TweetItem: React.FC<Props> = props => {
                 <Button
                   text=""
                   variant={Variant.TEXT}
-                  onClick={() => ApiRequest.postLike()}
+                  onClick={() => handlePostLike}
                   icon={<LikeIcon />}
                 />
               </ButtonWrapper>

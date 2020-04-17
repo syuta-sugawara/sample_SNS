@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
 
-const Profile: React.FC = () => {
+type Props = {
+  isMine?: boolean;
+};
+
+const Profile: React.FC<Props> = props => {
   const handleClick = () => {
     // TODO:
     console.log('hi');
@@ -28,8 +32,9 @@ const Profile: React.FC = () => {
             </ProfileImage>
           </ProfileImageWrapper>
           <ButtonWrapper>
+            {/* TODO: !isMineのときフォロー・アンフォローでさらに分岐させる必要あり */}
             <Button
-              text="プロフィールを編集"
+              text={props.isMine ? 'プロフィールを編集' : 'フォロー'}
               variant={Variant.OUTLINED}
               onClick={handleClick}
             />

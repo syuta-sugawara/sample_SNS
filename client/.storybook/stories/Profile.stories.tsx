@@ -10,10 +10,18 @@ const Wrapper = styled.div`
   border: solid 1px #ccc;
 `;
 
-storiesOf('Profile', module).add('plain', () => {
-  return (
-    <Wrapper>
-      <Profile />
-    </Wrapper>
-  );
+storiesOf('Profile', module)
+  .add('自分', () => {
+    return (
+      <Wrapper>
+        <Profile isMine />
+      </Wrapper>
+    );
+  })
+  .add('他人', () => {
+    return (
+      <Wrapper>
+        <Profile />
+      </Wrapper>
+    );
 });

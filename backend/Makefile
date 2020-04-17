@@ -20,3 +20,4 @@ build/lambda:
 
 deploy:
 	sls deploy --aws-profile test
+

@@ -84,10 +84,7 @@ func (uc *UsersController) Follow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
 	userInfo, followedUserInfo := uc.userModel.Follow(userID, followedUserID)
-	c.Bind(userInfo)
-	uc.userModel.Update(userInfo)
-	c.Bind(followedUserInfo)
-	uc.userModel.Update(followedUserInfo)
+	uc.userModel.Updates(c, userInfo, followedUserInfo)
 	return c.String(http.StatusOK, "Follow"+followedUserID)
 }
 
@@ -96,11 +93,8 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
 	userInfo, followedUserInfo := uc.userModel.UnFollow(userID, followedUserID)
-	c.Bind(userInfo)
-	uc.userModel.Update(userInfo)
-	c.Bind(followedUserInfo)
-	uc.userModel.Update(followedUserInfo)
-	return c.String(http.StatusOK, "Follow"+followedUserID)
+	uc.userModel.Updates(c, userInfo, followedUserInfo)
+	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 
 //cookie処理

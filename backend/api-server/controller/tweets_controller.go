@@ -37,6 +37,7 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 
 // ツイート投稿
 func (tc *TweetsController) Post(c echo.Context) error {
+	id := c.Get("userID").(string)
 	t := new(entity.PostTweet)
 	c.Bind(t)
 	content := strings.TrimSpace(t.Content)
@@ -50,7 +51,7 @@ func (tc *TweetsController) Post(c echo.Context) error {
 		resp := CreateErrorMessage("Content is over 140")
 		return c.JSON(http.StatusBadRequest, resp)
 	}
-	tc.tweetModel.Create(t)
+	tc.tweetModel.Create(t, id)
 
 	// TODO: 作成されたtweetを返すようにしたい
 	resp := CreateErrorMessage("POST success")

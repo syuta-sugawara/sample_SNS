@@ -1,30 +1,58 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
 
-const Logout: React.FC = () => {
+type Props = {
+  onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+};
+
+const Logout: React.FC<Props> = props => {
+  const handleLogout = () => {
+    // TODO: ログアウト処理
+  };
+
   return (
     <StyledContainer>
-      <Title>ログアウトしますか？</Title>
+      <Title>
+        <span>ログアウトしますか？</span>
+      </Title>
       <ButtonContainer>
-        <CancelButton>いいえ</CancelButton>
-        <LogoutButton>はい</LogoutButton>
+        <ButtonWrapper>
+          <Button
+            text="いいえ"
+            variant={Variant.OUTLINED}
+            onClick={props.onClose}
+          />
+        </ButtonWrapper>
+        <ButtonWrapper>
+          <Button
+            text="はい"
+            variant={Variant.CONTAINED}
+            onClick={handleLogout}
+          />
+        </ButtonWrapper>
       </ButtonContainer>
     </StyledContainer>
   );
 };
 
 const StyledContainer = styled.div`
-  width: 200px;
-  padding: 5px;
-  border-radius: 25px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 300px;
+  padding: 20px 5px;
+  background-color: ${STYLES.COLOR.WHITE};
+  border-radius: 12px;
   transition: 0.3s;
 `;
 
-const Title = styled.h4`
+const Title = styled.div`
+  margin-bottom: 15px;
   color: ${STYLES.COLOR.BLACK};
   text-align: center;
+  span {
+    font-size: 20px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -33,19 +61,9 @@ const ButtonContainer = styled.div`
   margin: 10px;
 `;
 
-const Button = styled.button`
-  padding: 5px 20px;
-  border-radius: 25px;
-`;
-
-const CancelButton = styled(Button)`
-  color: ${STYLES.COLOR.BLACK};
-  background-color: ${STYLES.COLOR.GRAY_LIGHTER_10};
-`;
-
-const LogoutButton = styled(Button)`
-  color: ${STYLES.COLOR.WHITE};
-  background-color: ${STYLES.COLOR.PRIMARY};
+const ButtonWrapper = styled.div`
+  width: 120px;
+  height: 37px;
 `;
 
 export default Logout;

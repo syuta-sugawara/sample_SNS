@@ -33,23 +33,6 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
-func (um *UserModel) GetOrCreateDummyUser() string {
-	dummyID := "dummy"
-	user, err := um.Get(dummyID)
-	if err == nil {
-		return user.ID
-	}
-	newUser := entity.User{
-		ID:         dummyID,
-		ScreenName: "anonymous",
-		IconUrl:    "https://pbs.twimg.com/profile_images/1136178449779810304/1e0ghs3t_400x400.jpg",
-	}
-	if err := um.userTable.Put(newUser).Run(); err != nil {
-		fmt.Println(err)
-	}
-	return dummyID
-}
-
 func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 	user := entity.User{
 		ID:         u.ID,

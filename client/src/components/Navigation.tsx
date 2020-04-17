@@ -5,14 +5,26 @@ import styled from 'styled-components';
 
 import modalAction from '../store/modal/actions';
 import STYLES from '../styles/const';
+import { UserType } from '../types/user';
 import HomeIcon from './icons/HomeIcon';
 import TweetBtnIcon from './icons/TweetBtnIcon';
 import TwitterIcon from './icons/TwitterIcon';
 import Button, { Variant } from './Button';
+import TweetForm from './TweetForm';
 
 const Navigation: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const user: UserType = {
+    id: 'junkisai',
+    screenName: 'じゅんきち',
+    iconUrl:
+      'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
+  };
+
+  const handleClose = () => {
+    dispatch(modalAction.hide());
+  };
 
   const handleClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -21,6 +33,8 @@ const Navigation: React.FC = () => {
     e.preventDefault();
     router.push(path);
   };
+
+  const tweetForm = <TweetForm user={user} onClose={handleClose} />;
 
   return (
     <Wrapper>
@@ -86,7 +100,7 @@ const Navigation: React.FC = () => {
           <ResponsiveDiv isMobile>
             <TweetSmallButton
               onClick={() =>
-                dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+                dispatch(modalAction.show({ children: tweetForm }))
               }
             >
               <TweetBtnIcon />
@@ -97,7 +111,7 @@ const Navigation: React.FC = () => {
               text="ツイートする"
               variant={Variant.CONTAINED}
               onClick={() =>
-                dispatch(modalAction.setIsDisplay({ isDisplay: true }))
+                dispatch(modalAction.show({ children: tweetForm }))
               }
             />
           </ResponsiveDiv>

@@ -157,7 +157,6 @@ const Icon = styled.span`
   height: 25px;
   margin-right: 5px;
   fill: ${(props: StyledBtnProps): string => props.colorPalette.color};
-
   svg {
     width: 100%;
     height: 100%;
@@ -179,18 +178,15 @@ const StyledButton = styled.button`
   border: solid 1px
     ${(props: StyledBtnProps): string => props.colorPalette.borderColor};
   border-radius: 9999px;
-
   &:hover {
     color: ${(props: StyledBtnProps): string => props.colorPalette.hover.color};
     background-color: ${(props: StyledBtnProps): string =>
       props.colorPalette.hover.bgColor};
-
     ${Icon} {
       fill: ${(props: StyledBtnProps): string =>
         props.colorPalette.hover.color};
     }
   }
-
   &:active {
     color: ${(props: StyledBtnProps): string =>
       props.colorPalette.active.color};

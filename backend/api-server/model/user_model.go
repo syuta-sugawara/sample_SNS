@@ -6,6 +6,7 @@ import (
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
+	"github.com/labstack/echo"
 )
 
 type UserModel struct {

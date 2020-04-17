@@ -97,6 +97,7 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 func createCookie(token string) *http.Cookie {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
+	cookie.Path = "/"
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.HttpOnly = true

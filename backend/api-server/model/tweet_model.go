@@ -36,6 +36,16 @@ func (tm *TweetModel) All() []entity.TweetResp {
 		if err := tm.userModel.userTable.Get("id", tweet.UserID).One(&user); err != nil {
 			fmt.Println(err)
 		}
+		reftweet := entity.Tweet{}
+		refuser := entity.User{}
+		if tweet.TweetType != "tweet" {
+			if err := tm.tweetTable.Get("id", tweet.RefTweetID).One(&reftweet); err != nil {
+				fmt.Println(err)
+			}
+			if err := tm.userModel.userTable.Get("id", reftweet.UserID).One(&refuser); err != nil {
+				fmt.Println(err)
+			}
+		}
 
 		tweetResp := entity.TweetResp{
 			ID:        tweet.ID,
@@ -43,6 +53,13 @@ func (tm *TweetModel) All() []entity.TweetResp {
 			TweetType: tweet.TweetType,
 			CreatedAt: tweet.CreatedAt,
 			User:      user,
+			Tweet: entity.RefTweet{
+				ID:        reftweet.ID,
+				Content:   reftweet.Content,
+				TweetType: reftweet.TweetType,
+				CreatedAt: reftweet.CreatedAt,
+				User:      refuser,
+			},
 		}
 		tweetsResp = append(tweetsResp, tweetResp)
 	}
@@ -68,6 +85,23 @@ func (tm *TweetModel) Create(t *entity.PostTweet) {
 		TweetType: t.TweetType,
 		UserID:    userID,
 		CreatedAt: time.Now().Unix(),
+	}
+
+	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	return
+}
+
+func (tm *TweetModel) Retweet(tweetID int, userID string) {
+	cid := tm.seqModel.NextID("tweets")
+	tweet := entity.Tweet{
+		ID:         cid,
+		TweetType:  "retweet",
+		UserID:     userID,
+		CreatedAt:  time.Now().Unix(),
+		RefTweetID: tweetID,
 	}
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {

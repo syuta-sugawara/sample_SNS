@@ -29,7 +29,7 @@ const reset = css`
     min-height: 100vh;
     scroll-behavior: smooth;
     text-rendering: optimizeSpeed;
-    line-height: 1.5;
+    line-height: normal;
   }
   /* Remove list styles on ul, ol elements with a class attribute */
   ul,

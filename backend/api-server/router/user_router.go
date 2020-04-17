@@ -25,6 +25,6 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	// r.GET("/:userName/follows", userController.FollowsIndex)
 	// r.GET("/:userName/followers", userController.FollowersIndex)
 	// r.PUT("/:userName", userController.UpdateUser)
-	userRouter.POST("/:userID/follow", userController.Follow)
-	userRouter.DELETE("/:userID/follow", userController.Unfollow)
+	userRouter.POST("/:followedUserID/follow", userController.Follow)
+	userRouter.DELETE("/:followedUserID/follow", userController.Unfollow)
 }

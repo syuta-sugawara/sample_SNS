@@ -81,7 +81,7 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 
 // フォロー処理
 func (uc *UsersController) Follow(c echo.Context) error {
-	followedUserID := c.Param("userID")
+	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
 	userInfo, followedUserInfo := uc.userModel.Follow(userID, followedUserID)
 	c.Bind(userInfo)
@@ -93,7 +93,7 @@ func (uc *UsersController) Follow(c echo.Context) error {
 
 // アンフォロー処理
 func (uc *UsersController) Unfollow(c echo.Context) error {
-	followedUserID := c.Param("userID")
+	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
 	userInfo, followedUserInfo := uc.userModel.UnFollow(userID, followedUserID)
 	c.Bind(userInfo)

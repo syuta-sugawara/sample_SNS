@@ -55,6 +55,7 @@ const reset = css`
   }
   /* text inputをリセットする（問題なさそうだったら影響範囲広げていく） */
   input[type='text'],
+  input[type='password'],
   textarea {
     appearance: none;
     background: transparent;

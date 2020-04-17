@@ -83,8 +83,7 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 func (uc *UsersController) Follow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	userInfo, followedUserInfo := uc.userModel.Follow(userID, followedUserID)
-	uc.userModel.Updates(c, userInfo, followedUserInfo)
+	uc.userModel.Follow(c, userID, followedUserID)
 	return c.String(http.StatusOK, "Follow"+followedUserID)
 }
 
@@ -92,8 +91,7 @@ func (uc *UsersController) Follow(c echo.Context) error {
 func (uc *UsersController) Unfollow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	userInfo, followedUserInfo := uc.userModel.UnFollow(userID, followedUserID)
-	uc.userModel.Updates(c, userInfo, followedUserInfo)
+	uc.userModel.UnFollow(c, userID, followedUserID)
 	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 

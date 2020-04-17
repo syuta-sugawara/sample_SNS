@@ -17,7 +17,7 @@ export default class TweetAPI {
     });
   };
 
-  postLike = async data => {
+  postLike = async () => {
     const response = await fetch(
       `${process.env.API_URL}/tweets/{tweetsID}/like`,
       {
@@ -25,13 +25,13 @@ export default class TweetAPI {
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
         },
-        body: JSON.stringify(data),
+        // body: JSON.stringify(data),
       }
     );
     return response;
   };
 
-  putRetweets = async data => {
+  putRetweets = async () => {
     const response = await fetch(
       `${process.env.API_URL}/tweets/{tweetsID}/retweet`,
       {
@@ -39,7 +39,7 @@ export default class TweetAPI {
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
         },
-        body: JSON.stringify(data),
+        // body: JSON.stringify(data),
       }
     );
     return response;

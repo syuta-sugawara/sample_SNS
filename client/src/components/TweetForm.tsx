@@ -62,10 +62,16 @@ const TweetForm: React.FC<Props> = props => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 600px;
-  height: 295px;
   background-color: ${STYLES.COLOR.WHITE};
   border-radius: 14px;
+  @media ${STYLES.DEVICE.LAPTOP} {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 295px;
+    background-color: ${STYLES.COLOR.WHITE};
+    border-radius: 14px;
+  }
 `;
 
 const Head = styled.div`

@@ -25,9 +25,10 @@ func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) Use
 }
 
 // ユーザー情報の取得
-func (uc *UsersController) UserIndex(c echo.Context) error {
-	userID := c.Param("userName")
+func (uc *UsersController) Get(c echo.Context) error {
+	userID := c.Get("userID").(string)
 	user, _ := uc.userModel.Get(userID)
+
 	return c.JSON(http.StatusOK, user)
 }
 
@@ -96,6 +97,7 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 func createCookie(token string) *http.Cookie {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
+	cookie.Path = "/"
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.HttpOnly = true

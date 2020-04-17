@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import actionCreatorFactory from 'typescript-fsa';
 
 import { ActionTypes } from '../actionTypes';
@@ -5,9 +6,8 @@ import { ActionTypes } from '../actionTypes';
 const actionCreator = actionCreatorFactory();
 
 const modalAction = {
-  setIsDisplay: actionCreator<{ isDisplay: boolean }>(
-    ActionTypes.setIsDisplayModal
-  ),
+  show: actionCreator<{ children: ReactNode }>(ActionTypes.showModal),
+  hide: actionCreator(ActionTypes.hideModal),
 };
 
 export default modalAction;

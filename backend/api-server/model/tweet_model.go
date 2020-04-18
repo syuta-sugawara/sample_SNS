@@ -3,7 +3,6 @@ package model
 import (
 	"backend/api-server/domain/entity"
 	"fmt"
-	"sort"
 	"time"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -24,54 +23,6 @@ func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetMo
 		userModel:  NewUserModel(db, auth),
 		tlModel:    NewTimelineModel(db),
 	}
-}
-
-func (tm *TweetModel) All() []entity.TweetResp {
-	tweets := []entity.Tweet{}
-	tweetsResp := []entity.TweetResp{}
-	if err := tm.tweetTable.Scan().All(&tweets); err != nil {
-		fmt.Println(err)
-	}
-	for i := 0; i < len(tweets); i++ {
-		tweet := tweets[i]
-		user := entity.User{}
-		if err := tm.userModel.userTable.Get("id", tweet.UserID).One(&user); err != nil {
-			fmt.Println(err)
-		}
-		reftweet := entity.Tweet{}
-		refuser := entity.User{}
-		if tweet.TweetType != "tweet" {
-			if err := tm.tweetTable.Get("id", tweet.RefTweetID).One(&reftweet); err != nil {
-				fmt.Println(err)
-			}
-			if err := tm.userModel.userTable.Get("id", reftweet.UserID).One(&refuser); err != nil {
-				fmt.Println(err)
-			}
-		}
-
-		tweetResp := entity.TweetResp{
-			ID:        tweet.ID,
-			Content:   tweet.Content,
-			TweetType: tweet.TweetType,
-			CreatedAt: tweet.CreatedAt,
-			User:      user,
-			Tweet: entity.RefTweet{
-				ID:        reftweet.ID,
-				Content:   reftweet.Content,
-				TweetType: reftweet.TweetType,
-				CreatedAt: reftweet.CreatedAt,
-				User:      refuser,
-				Likes:     reftweet.Likes,
-				Retweets:  reftweet.Retweets,
-			},
-			Likes:    tweet.Likes,
-			Retweets: tweet.Retweets,
-		}
-		tweetsResp = append(tweetsResp, tweetResp)
-	}
-	sort.Slice(tweetsResp, func(i, j int) bool { return tweetsResp[i].CreatedAt > tweetsResp[j].CreatedAt })
-
-	return tweetsResp
 }
 
 func (tm *TweetModel) Get(id string) *entity.Tweet {

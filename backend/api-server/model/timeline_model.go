@@ -17,8 +17,9 @@ func NewTimelineModel(db *dynamo.DB) TimelineModel {
 	}
 }
 
-func (tt *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
+func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 	followeIDs := u.FollowedIDs
+	followeIDs = append(followeIDs, u.ID)
 
 	if len(followeIDs) == 0 {
 		return
@@ -39,7 +40,16 @@ func (tt *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 		tweets = append(tweets, tweet)
 	}
 
-	if _, err := tt.timelineTable.Batch().Write().Put(tweets...).Run(); err != nil {
+	if _, err := tm.timelineTable.Batch().Write().Put(tweets...).Run(); err != nil {
 		fmt.Println(err.Error())
 	}
+}
+
+func (tm *TimelineModel) Get(userID string) (*[]entity.Timeline, error) {
+	tl := new([]entity.Timeline)
+	if err := tm.timelineTable.Get("userID", userID).Order(false).All(tl); err != nil {
+		return nil, err
+	}
+
+	return tl, nil
 }

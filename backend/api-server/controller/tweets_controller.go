@@ -15,12 +15,14 @@ import (
 type TweetsController struct {
 	tweetModel model.TweetModel
 	userModel  model.UserModel
+	tlModel    model.TimelineModel
 }
 
 func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
 	return TweetsController{
 		tweetModel: model.NewTweetModel(db, auth),
 		userModel:  model.NewUserModel(db, auth),
+		tlModel:    model.NewTimelineModel(db),
 	}
 }
 
@@ -33,7 +35,11 @@ func (tc *TweetsController) Index(c echo.Context) error {
 
 // ツイート一覧取得
 func (tc *TweetsController) TweetsIndex(c echo.Context) error {
-	tweets := tc.tweetModel.All()
+	userID := c.Get("userID").(string)
+	tweets, err := tc.tlModel.Get(userID)
+	if err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, tweets)
 }
 

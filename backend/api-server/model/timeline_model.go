@@ -47,20 +47,21 @@ func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 	}
 }
 
-func (tm *TimelineModel) Get(userID string) (*[]entity.Timeline, error) {
+func (tm *TimelineModel) Get(userID string, limit int) (*[]entity.Timeline, error) {
 	tl := new([]entity.Timeline)
-	if err := tm.timelineTable.Get("userID", userID).Order(false).All(tl); err != nil {
+	if err := tm.timelineTable.Get("userID", userID).Order(false).Limit(int64(limit)).All(tl); err != nil {
 		return nil, err
 	}
 
 	for i := range *tl {
-		(*tl)[i].Likes = tm.GetLikeCount((*tl)[i].ID)
+		(*tl)[i].Likes = tm.getLikeCount((*tl)[i].ID)
 	}
 
 	return tl, nil
 }
 
-func (tm *TimelineModel) GetLikeCount(id int) int {
+// クソコードですみません。。
+func (tm *TimelineModel) getLikeCount(id int) int {
 	// t := tm.Get(id)
 	// count := len(t.Likes)
 

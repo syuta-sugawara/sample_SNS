@@ -39,7 +39,12 @@ func (tc *TweetsController) Index(c echo.Context) error {
 // ツイート一覧取得
 func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 	userID := c.Get("userID").(string)
-	tweets, err := tc.tlModel.Get(userID)
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil {
+		limit = 20
+	}
+
+	tweets, err := tc.tlModel.Get(userID, limit)
 	if err != nil {
 		return err
 	}

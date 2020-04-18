@@ -14,6 +14,7 @@ type TweetModel struct {
 	tweetTable dynamo.Table
 	seqModel   SequenceModel
 	userModel  UserModel
+	tlModel    TimelineModel
 }
 
 func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetModel {
@@ -21,6 +22,7 @@ func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetMo
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
 		userModel:  NewUserModel(db, auth),
+		tlModel:    NewTimelineModel(db),
 	}
 }
 
@@ -80,7 +82,7 @@ func (tm *TweetModel) Get(id string) *entity.Tweet {
 	return tweet
 }
 
-func (tm *TweetModel) Create(t *entity.PostTweet, userID string) {
+func (tm *TweetModel) Create(t *entity.PostTweet, user *entity.User) {
 	cid := tm.seqModel.NextID("tweets")
 	tweet := entity.Tweet{
 		ID:         cid,
@@ -96,6 +98,8 @@ func (tm *TweetModel) Create(t *entity.PostTweet, userID string) {
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 	}
+
+	go tm.tlModel.Add(&tweet, user)
 
 	return
 }

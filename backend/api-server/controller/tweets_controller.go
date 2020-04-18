@@ -14,11 +14,13 @@ import (
 
 type TweetsController struct {
 	tweetModel model.TweetModel
+	userModel  model.UserModel
 }
 
 func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
 	return TweetsController{
 		tweetModel: model.NewTweetModel(db, auth),
+		userModel:  model.NewUserModel(db, auth),
 	}
 }
 
@@ -37,7 +39,12 @@ func (tc *TweetsController) TweetsIndex(c echo.Context) error {
 
 // ツイート投稿
 func (tc *TweetsController) Post(c echo.Context) error {
-	id := c.Get("userID").(string)
+	userID := c.Get("userID").(string)
+	currentUser, err := tc.userModel.Get(userID)
+	if err != nil {
+		return err
+	}
+
 	t := new(entity.PostTweet)
 	c.Bind(t)
 	content := strings.TrimSpace(t.Content)
@@ -51,7 +58,7 @@ func (tc *TweetsController) Post(c echo.Context) error {
 		resp := CreateErrorMessage("Content is over 140")
 		return c.JSON(http.StatusBadRequest, resp)
 	}
-	tc.tweetModel.Create(t, id)
+	tc.tweetModel.Create(t, currentUser)
 
 	// TODO: 作成されたtweetを返すようにしたい
 	resp := CreateErrorMessage("POST success")

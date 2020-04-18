@@ -25,7 +25,7 @@ func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetMo
 	}
 }
 
-func (tm *TweetModel) Get(id string) *entity.Tweet {
+func (tm *TweetModel) Get(id int) *entity.Tweet {
 	tweet := new(entity.Tweet)
 	if err := tm.tweetTable.Get("id", id).One(tweet); err != nil {
 		fmt.Println(err)

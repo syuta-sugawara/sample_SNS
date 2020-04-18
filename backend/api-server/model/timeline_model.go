@@ -9,6 +9,8 @@ import (
 
 type TimelineModel struct {
 	timelineTable dynamo.Table
+	// クソコードです。すみません。。
+	tweetTable dynamo.Table
 }
 
 func NewTimelineModel(db *dynamo.DB) TimelineModel {
@@ -51,5 +53,19 @@ func (tm *TimelineModel) Get(userID string) (*[]entity.Timeline, error) {
 		return nil, err
 	}
 
+	for i := range *tl {
+		(*tl)[i].Likes = tm.GetLikeCount((*tl)[i].ID)
+	}
+
 	return tl, nil
+}
+
+func (tm *TimelineModel) GetLikeCount(id int) int {
+	// t := tm.Get(id)
+	// count := len(t.Likes)
+
+	// return count
+
+	// TODO: Likeが完成したら実装
+	return 10
 }

@@ -28,7 +28,10 @@ func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) Tw
 
 // ツイート取得
 func (tc *TweetsController) Index(c echo.Context) error {
-	id := c.Get("userID").(string)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
 	tweet := tc.tweetModel.Get(id)
 	return c.JSON(http.StatusOK, tweet)
 }

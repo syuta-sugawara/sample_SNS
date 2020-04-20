@@ -9,8 +9,6 @@ import (
 
 type TimelineModel struct {
 	timelineTable dynamo.Table
-	// クソコードです。すみません。。
-	tweetTable dynamo.Table
 }
 
 func NewTimelineModel(db *dynamo.DB) TimelineModel {
@@ -20,22 +18,22 @@ func NewTimelineModel(db *dynamo.DB) TimelineModel {
 }
 
 func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
-	followeIDs := u.FollowedIDs
-	followeIDs = append(followeIDs, u.ID)
+	followedIDs := u.FollowedIDs
+	followedIDs = append(followedIDs, u.ID)
 
-	if len(followeIDs) == 0 {
+	if len(followedIDs) == 0 {
 		return
 	}
 
 	var tweets []interface{}
 
-	for i := range followeIDs {
+	for i := range followedIDs {
 		tweet := entity.TweetResp{
 			ID:         t.ID,
 			Content:    t.Content,
 			TweetType:  t.TweetType,
 			CreatedAt:  t.CreatedAt,
-			UserID:     followeIDs[i],
+			UserID:     followedIDs[i],
 			RefTweetID: t.RefTweetID,
 			RefTweet:   t.RefTweet,
 			User:       *u,
@@ -55,20 +53,5 @@ func (tm *TimelineModel) Get(userID string, limit int) (*[]entity.TweetResp, err
 		return nil, err
 	}
 
-	for i := range *tl {
-		(*tl)[i].LikeCount = tm.getLikeCount((*tl)[i].ID)
-	}
-
 	return tl, nil
-}
-
-// クソコードですみません。。
-func (tm *TimelineModel) getLikeCount(id int) int {
-	// t := tm.Get(id)
-	// count := len(t.Likes)
-
-	// return count
-
-	// TODO: Likeが完成したら実装
-	return 10
 }

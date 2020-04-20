@@ -34,6 +34,14 @@ func (uc *UsersController) GetCurrentUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+// ユーザー情報の取得
+func (uc *UsersController) Get(c echo.Context) error {
+	userID := c.Param("userID")
+	user, _ := uc.userModel.Get(userID)
+
+	return c.JSON(http.StatusOK, user)
+}
+
 func (uc *UsersController) GetUserTL(c echo.Context) error {
 	userID := c.Param("userID")
 	user, err := uc.userModel.Get(userID)

@@ -119,7 +119,7 @@ func (tm *TweetModel) Retweet(tweetID int, userID string) {
 			fmt.Println(err)
 		}
 	}
-	reftweet.Retweets = reftweet.Retweets + 1
+	reftweet.Retweets++
 	tm.Update(reftweet)
 
 	tweet := entity.Tweet{
@@ -149,7 +149,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 		}
 	}
 
-	reftweet.Likes = reftweet.Likes + 1
+	reftweet.Likes++
 	tm.Update(reftweet)
 
 	tweet := entity.Tweet{

@@ -7,13 +7,15 @@ type Tweet struct {
 	UserID     string `dynamo:"userID" json:"userID"`
 	CreatedAt  int64  `dynamo:"createdAt" json:"createdAt"`
 	RefTweetID int    `dynamo:"refTweetID" json:"refTweetID"`
-	// likes      []string
+	Likes      int    `dynamo:"likes" json:"likes"`
+	Retweets   int    `dynamo:"retweets" json:"retweets"`
 }
 
 type PostTweet struct {
 	Content   string `json:"content"`
 	TweetType string `json:"tweetType"`
 	// RefTweetID string `json:"RefTweetID"`
+	Likes int `json:"likes"`
 }
 
 type RefTweet struct {
@@ -22,6 +24,8 @@ type RefTweet struct {
 	TweetType string `json:"tweetType"`
 	CreatedAt int64  `json:"createdAt"`
 	User      User   `json:"user"`
+	Likes     int    `json:"likes"`
+	Retweets  int    `json:"retweets"`
 }
 
 type TweetResp struct {
@@ -31,4 +35,6 @@ type TweetResp struct {
 	CreatedAt int64    `json:"createdAt"`
 	User      User     `json:"user"`
 	Tweet     RefTweet `json:"refTweet"`
+	Likes     int      `json:"likes"`
+	Retweets  int      `json:"retweets"`
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import STYLES from '../styles/const';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
 
-const Signup: React.FC = () => {
+const Login: React.FC = () => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -67,6 +68,7 @@ const Wrapper = styled.div`
   position: relative;
   width: 600px;
   padding: 40px 0;
+  background-color: ${STYLES.COLOR.WHITE};
   border-radius: 12px;
 `;
 
@@ -98,4 +100,4 @@ const ButtonWrapper = styled.div`
   height: 40px;
 `;
 
-export default Signup;
+export default Login;

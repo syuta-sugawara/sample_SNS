@@ -117,6 +117,7 @@ const Wrapper = styled.div`
   position: relative;
   width: 600px;
   padding: 40px 0;
+  background-color: ${STYLES.COLOR.WHITE};
   border-radius: 12px;
 `;
 

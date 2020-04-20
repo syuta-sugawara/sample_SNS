@@ -90,9 +90,14 @@ func (tc *TweetsController) Like(c echo.Context) error {
 
 // リツイート
 func (tc *TweetsController) Retweet(c echo.Context) error {
-	id := c.Get("userID").(string)
+	userID := c.Get("userID").(string)
+	currentUser, err := tc.userModel.Get(userID)
+	if err != nil {
+		return err
+	}
+
 	tweetID := c.Param("id")
 	t, _ := strconv.Atoi(tweetID)
-	tc.tweetModel.Retweet(t, id)
+	tc.tweetModel.Retweet(t, currentUser)
 	return c.String(http.StatusOK, "Retweet")
 }

@@ -30,13 +30,15 @@ func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 	var tweets []interface{}
 
 	for i := range followeIDs {
-		tweet := entity.Timeline{
-			ID:        t.ID,
-			Content:   t.Content,
-			TweetType: t.TweetType,
-			CreatedAt: t.CreatedAt,
-			UserID:    followeIDs[i],
-			User:      *u,
+		tweet := entity.TweetResp{
+			ID:         t.ID,
+			Content:    t.Content,
+			TweetType:  t.TweetType,
+			CreatedAt:  t.CreatedAt,
+			UserID:     followeIDs[i],
+			RefTweetID: t.RefTweetID,
+			RefTweet:   t.RefTweet,
+			User:       *u,
 		}
 
 		tweets = append(tweets, tweet)
@@ -47,14 +49,14 @@ func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 	}
 }
 
-func (tm *TimelineModel) Get(userID string, limit int) (*[]entity.Timeline, error) {
-	tl := new([]entity.Timeline)
+func (tm *TimelineModel) Get(userID string, limit int) (*[]entity.TweetResp, error) {
+	tl := new([]entity.TweetResp)
 	if err := tm.timelineTable.Get("userID", userID).Order(false).Limit(int64(limit)).All(tl); err != nil {
 		return nil, err
 	}
 
 	for i := range *tl {
-		(*tl)[i].Likes = tm.getLikeCount((*tl)[i].ID)
+		(*tl)[i].LikeCount = tm.getLikeCount((*tl)[i].ID)
 	}
 
 	return tl, nil

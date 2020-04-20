@@ -2,8 +2,8 @@ package model
 
 import (
 	"backend/api-server/domain/entity"
+	"backend/api-server/utils"
 	"fmt"
-	"time"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
@@ -33,24 +33,21 @@ func (tm *TweetModel) Get(id int) *entity.Tweet {
 	return tweet
 }
 
-func (tm *TweetModel) Create(t *entity.PostTweet, user *entity.User) {
+func (tm *TweetModel) Create(t *entity.PostTweet, u *entity.User) {
 	cid := tm.seqModel.NextID("tweets")
 	tweet := entity.Tweet{
-		ID:         cid,
-		Content:    t.Content,
-		TweetType:  t.TweetType,
-		UserID:     userID,
-		CreatedAt:  time.Now().Unix(),
-		RefTweetID: 0,
-		Likes:      0,
-		Retweets:   0,
+		ID:        cid,
+		Content:   t.Content,
+		TweetType: t.TweetType,
+		UserID:    u.ID,
+		CreatedAt: utils.GetNowMillsec(),
 	}
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 	}
 
-	go tm.tlModel.Add(&tweet, user)
+	go tm.tlModel.Add(&tweet, u)
 
 	return
 }
@@ -62,57 +59,62 @@ func (tm *TweetModel) Update(t *entity.Tweet) {
 	return
 }
 
-func (tm *TweetModel) Retweet(tweetID int, userID string) {
+func (tm *TweetModel) Retweet(tweetID int, u *entity.User) {
 	cid := tm.seqModel.NextID("tweets")
-	reftweet := new(entity.Tweet)
-	if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
+	refTweet := new(entity.Tweet)
+	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
 	}
-	if reftweet.TweetType == "retweet" || reftweet.TweetType == "like" {
-		tweetID = reftweet.RefTweetID
-		if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
+	reftweetID := &tweetID
+	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
+		reftweetID = refTweet.RefTweetID
+		if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 			fmt.Println(err)
 		}
 	}
-	reftweet.Retweets++
-	tm.Update(reftweet)
+	refTweet.RetweetCount++
+	tm.Update(refTweet)
 
 	tweet := entity.Tweet{
 		ID:         cid,
 		TweetType:  "retweet",
-		UserID:     userID,
-		CreatedAt:  time.Now().Unix(),
-		RefTweetID: tweetID,
+		UserID:     u.ID,
+		CreatedAt:  utils.GetNowMillsec(),
+		RefTweetID: reftweetID,
+		RefTweet:   refTweet,
 	}
 
-	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
+	if err := tm.tweetTable.Put(&tweet).Run(); err != nil {
 		fmt.Println(err)
 	}
+
+	go tm.tlModel.Add(&tweet, u)
+
 	return
 }
 
 func (tm *TweetModel) Like(tweetID int, userID string) {
 	cid := tm.seqModel.NextID("tweets")
-	reftweet := new(entity.Tweet)
-	if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
+	refTweet := new(entity.Tweet)
+	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
 	}
-	reftweetID := tweetID
-	if reftweet.TweetType == "retweet" || reftweet.TweetType == "like" {
-		reftweetID = reftweet.RefTweetID
-		if err := tm.tweetTable.Get("id", reftweetID).One(reftweet); err != nil {
+	reftweetID := &tweetID
+	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
+		reftweetID = refTweet.RefTweetID
+		if err := tm.tweetTable.Get("id", reftweetID).One(refTweet); err != nil {
 			fmt.Println(err)
 		}
 	}
 
-	reftweet.Likes++
-	tm.Update(reftweet)
+	refTweet.LikeCount++
+	tm.Update(refTweet)
 
 	tweet := entity.Tweet{
 		ID:         cid,
 		TweetType:  "like",
 		UserID:     userID,
-		CreatedAt:  time.Now().Unix(),
+		CreatedAt:  utils.GetNowMillsec(),
 		RefTweetID: reftweetID,
 	}
 

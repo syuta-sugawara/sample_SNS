@@ -12,6 +12,8 @@ const initialState: StateType = {
   id: '',
   screenName: '',
   iconUrl: '',
+  followIDs: [],
+  followedIDs: [],
   loading: false,
 };
 

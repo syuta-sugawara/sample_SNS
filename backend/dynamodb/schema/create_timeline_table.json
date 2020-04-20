@@ -5,6 +5,14 @@
       "AttributeType": "S"
     },
     {
+      "AttributeName": "id",
+      "AttributeType": "N"
+    },
+    {
+      "AttributeName": "refTweetID",
+      "AttributeType": "N"
+    },
+    {
       "AttributeName": "createdAt",
       "AttributeType": "N"
     }
@@ -18,6 +26,48 @@
     {
       "AttributeName": "createdAt",
       "KeyType": "RANGE"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "sortByTweetID",
+      "KeySchema": [
+        {
+          "AttributeName": "id",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "createdAt",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    },
+    {
+      "IndexName": "sortByRefTweetID",
+      "KeySchema": [
+        {
+          "AttributeName": "refTweetID",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "createdAt",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
     }
   ],
   "BillingMode": "PAY_PER_REQUEST",

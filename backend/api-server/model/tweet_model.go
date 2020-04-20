@@ -121,5 +121,6 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 	}
-	return
+
+	go tm.tlModel.UpdateLike(*reftweetID)
 }

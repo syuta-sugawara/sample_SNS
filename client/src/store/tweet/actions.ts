@@ -44,7 +44,7 @@ export const fetchPostTweet = (data: PostTweetType) => async (
     if (res.ok) {
       const result = await res.json();
       dispatch(tweetAction.postTweet.done({ result, params: {} }));
-      dispatch(modalAction.setIsDisplay({ isDisplay: false }));
+      dispatch(modalAction.hide());
       dispatch(fetchTweetList() as any);
     } else {
       const result = (await res.json()) as ErrorResponse;

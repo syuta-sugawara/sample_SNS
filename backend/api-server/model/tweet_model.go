@@ -59,7 +59,9 @@ func (tm *TweetModel) All() []entity.TweetResp {
 				TweetType: reftweet.TweetType,
 				CreatedAt: reftweet.CreatedAt,
 				User:      refuser,
+				Retweets:  reftweet.Retweets,
 			},
+			Retweets: tweet.Retweets,
 		}
 		tweetsResp = append(tweetsResp, tweetResp)
 	}
@@ -76,9 +78,8 @@ func (tm *TweetModel) Get(id string) *entity.Tweet {
 	return tweet
 }
 
-func (tm *TweetModel) Create(t *entity.PostTweet) {
+func (tm *TweetModel) Create(t *entity.PostTweet, userID string) {
 	cid := tm.seqModel.NextID("tweets")
-	userID := tm.userModel.GetOrCreateDummyUser()
 	tweet := entity.Tweet{
 		ID:        cid,
 		Content:   t.Content,
@@ -94,8 +95,28 @@ func (tm *TweetModel) Create(t *entity.PostTweet) {
 	return
 }
 
+func (tm *TweetModel) Update(t *entity.Tweet) {
+	if err := tm.tweetTable.Put(t).Run(); err != nil {
+		fmt.Println(err)
+	}
+	return
+}
+
 func (tm *TweetModel) Retweet(tweetID int, userID string) {
 	cid := tm.seqModel.NextID("tweets")
+	reftweet := new(entity.Tweet)
+	if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
+		fmt.Println(err)
+	}
+	if reftweet.TweetType == "retweet" || reftweet.TweetType == "likes" {
+		tweetID = reftweet.RefTweetID
+		if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
+			fmt.Println(err)
+		}
+	}
+	reftweet.Retweets = reftweet.Retweets + 1
+	tm.Update(reftweet)
+
 	tweet := entity.Tweet{
 		ID:         cid,
 		TweetType:  "retweet",
@@ -107,6 +128,5 @@ func (tm *TweetModel) Retweet(tweetID int, userID string) {
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 	}
-
 	return
 }

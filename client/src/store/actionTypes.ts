@@ -1,5 +1,6 @@
 export const ActionTypes = {
   getTweetList: 'GET_TWEET_LIST',
   postTweet: 'POST_TWEET',
-  setIsDisplayModal: 'SET_IS_DISPLAY_MODAL',
+  showModal: 'SHOW_MODAL',
+  hideModal: 'HIDE_MODAL',
 } as const;

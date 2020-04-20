@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import AuthAPI from '../requests/auth';
 import STYLES from '../styles/const';
+import { SigninType } from '../types/auth';
+import { ErrorResponse } from '../types/errorResponse';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
 
@@ -17,9 +20,27 @@ const Login: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSignin = async () => {
     // TODO
     console.log('ログイン処理');
+    const authAPI = new AuthAPI();
+    try {
+      const data: SigninType = {
+        id: userId,
+        password,
+      };
+      const res = await authAPI.postSignin(data);
+      if (res.ok) {
+        const result = await res.json();
+        console.log(result);
+      } else {
+        const result = (await res.json()) as ErrorResponse;
+        throw new Error(result.massage);
+      }
+    } catch (err) {
+      const error = err as Error;
+      console.log(error.message);
+    }
   };
 
   return (
@@ -55,7 +76,7 @@ const Login: React.FC = () => {
               text="ログイン"
               variant={Variant.CONTAINED}
               disabled={!userId || !password}
-              onClick={handleLogin}
+              onClick={handleSignin}
             />
           </ButtonWrapper>
         </FormSubmit>

@@ -81,16 +81,18 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 
 // フォロー処理
 func (uc *UsersController) Follow(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "Follow"+userID)
+	followedUserID := c.Param("followedUserID")
+	userID := c.Get("userID").(string)
+	uc.userModel.Follow(c, userID, followedUserID)
+	return c.String(http.StatusOK, "Follow"+followedUserID)
 }
 
 // アンフォロー処理
 func (uc *UsersController) Unfollow(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "Unfollow"+userID)
+	followedUserID := c.Param("followedUserID")
+	userID := c.Get("userID").(string)
+	uc.userModel.UnFollow(c, userID, followedUserID)
+	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 
 //cookie処理

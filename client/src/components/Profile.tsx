@@ -3,12 +3,15 @@ import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
+import { UserType } from '../types/user';
 
 type Props = {
+  user: UserType;
   isMine?: boolean;
 };
 
 const Profile: React.FC<Props> = props => {
+  const { user, isMine } = props;
   const handleClick = () => {
     // TODO:
     console.log('hi');
@@ -25,16 +28,13 @@ const Profile: React.FC<Props> = props => {
         <MainHead>
           <ProfileImageWrapper>
             <ProfileImage>
-              <img
-                src="https://pbs.twimg.com/profile_images/1765776666/s-abetwitter1_400x400.png"
-                alt=""
-              />
+              <img src={user.iconUrl} alt={user.screenName} />
             </ProfileImage>
           </ProfileImageWrapper>
           <ButtonWrapper>
             {/* TODO: !isMineのときフォロー・アンフォローでさらに分岐させる必要あり */}
             <Button
-              text={props.isMine ? 'プロフィールを編集' : 'フォロー'}
+              text={isMine ? 'プロフィールを編集' : 'フォロー'}
               variant={Variant.OUTLINED}
               onClick={handleClick}
             />
@@ -43,10 +43,10 @@ const Profile: React.FC<Props> = props => {
         <MainBody>
           <User>
             <div>
-              <StrongText>阿部晋三</StrongText>
+              <StrongText>{user.screenName}</StrongText>
             </div>
             <div>
-              <SecondaryText>@AbaShinzo</SecondaryText>
+              <SecondaryText>{`@${user.id}`}</SecondaryText>
             </div>
           </User>
           <SelfIntroduction>

@@ -24,7 +24,7 @@ const UserPageLayout: React.FC<Props> = props => {
         <h2>{user.screenName}</h2>
       </Header>
       <Body>
-        <Profile isMine={user.id === myself.id} />
+        <Profile user={user} isMine={user.id === myself.id} />
         {props.children}
       </Body>
     </>

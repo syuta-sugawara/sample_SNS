@@ -34,11 +34,22 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
-func (um *UserModel) Update(t *entity.User) {
-	if err := um.userTable.Put(t).Run(); err != nil {
+func (um *UserModel) Update(userID string, u *entity.UpdateUser) *entity.User {
+	user := new(entity.User)
+	user, _ = um.Get(userID)
+	iconUrl := UploadImage(u.Icon)
+	headerUrl := UploadImage(u.Header)
+	user = &entity.User{
+		ID:         userID,
+		ScreenName: u.ScreenName,
+		Comment:    u.Comment,
+		IconUrl:    iconUrl,
+		HeaderUrl:  headerUrl,
+	}
+	if err := um.userTable.Put(user).Run(); err != nil {
 		fmt.Println(err)
 	}
-	return
+	return user
 }
 
 func (um *UserModel) Updates(c echo.Context, u *entity.User, fu *entity.User) {

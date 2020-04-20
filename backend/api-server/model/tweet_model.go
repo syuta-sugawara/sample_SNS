@@ -142,8 +142,9 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 	if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
 		fmt.Println(err)
 	}
+	reftweetID := tweetID
 	if reftweet.TweetType == "retweet" || reftweet.TweetType == "like" {
-		tweetID = reftweet.RefTweetID
+		reftweetID = reftweet.RefTweetID
 		if err := tm.tweetTable.Get("id", tweetID).One(reftweet); err != nil {
 			fmt.Println(err)
 		}
@@ -157,7 +158,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 		TweetType:  "like",
 		UserID:     userID,
 		CreatedAt:  time.Now().Unix(),
-		RefTweetID: tweetID,
+		RefTweetID: reftweetID,
 	}
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {

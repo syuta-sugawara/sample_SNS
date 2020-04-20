@@ -21,14 +21,28 @@ type Props = {
 
 const ApiRequest = new TweetAPI();
 
-const handlePostRetweets = () => {
-  const res = ApiRequest.putRetweets();
-  return res;
+const handlePostRetweets = async () => {
+  const res = await ApiRequest.putRetweets();
+  try{
+    if(!res.ok){
+      throw Error(res.statusText)
+    }
+      return res
+    }catch(e){
+      console.error(e);
+    }
 };
 
-const handlePostLike = () => {
-  const res = ApiRequest.postLike();
-  return res;
+const handlePostLike = async () => {
+  const res = await ApiRequest.putRetweets();
+  try{
+    if(!res.ok){
+      throw Error(res.statusText)
+    }
+    return res
+  }catch(e){
+    console.error(e);
+  }
 };
 
 const TweetItem: React.FC<Props> = props => {

@@ -14,12 +14,14 @@ import (
 
 type UsersController struct {
 	userModel   model.UserModel
+	tweetModel  model.TweetModel
 	userService services.UserServices
 }
 
 func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
 	return UsersController{
 		userModel:   model.NewUserModel(db, auth),
+		tweetModel:  model.NewTweetModel(db, auth),
 		userService: services.NewUserServices(auth),
 	}
 }
@@ -32,12 +34,19 @@ func (uc *UsersController) GetCurrentUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// ユーザー情報の取得
-func (uc *UsersController) Get(c echo.Context) error {
+func (uc *UsersController) GetUserTL(c echo.Context) error {
 	userID := c.Param("userID")
-	user, _ := uc.userModel.Get(userID)
+	user, err := uc.userModel.Get(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
 
-	return c.JSON(http.StatusOK, user)
+	tweets := uc.tweetModel.UserTL(userID)
+	for i := range *tweets {
+		(*tweets)[i].User = *user
+	}
+
+	return c.JSON(http.StatusOK, tweets)
 }
 
 // フォローの取得

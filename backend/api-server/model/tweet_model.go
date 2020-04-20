@@ -136,3 +136,10 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 
 	go tm.tlModel.UpdateLikeCount(*reftweetID)
 }
+
+func (tm *TweetModel) UserTL(userID string) *[]entity.TweetResp {
+	tweet := new([]entity.TweetResp)
+	tm.tweetTable.Get("userID", userID).Index("userID").Limit(int64(20)).Order(false).All(tweet)
+
+	return tweet
+}

@@ -20,7 +20,8 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	// 認証ありのrouting
 	userRouter := e.Group("/user")
 	userRouter.Use(middleware.AuthMiddleware(auth))
-	userRouter.GET("", userController.Get)
+	userRouter.GET("", userController.GetCurrentUser)
+	userRouter.GET("/:userID", userController.Get)
 	// r.GET("/:userName", userController.UserIndex)
 	// r.GET("/:userName/follows", userController.FollowsIndex)
 	// r.GET("/:userName/followers", userController.FollowersIndex)

@@ -16,6 +16,7 @@ const Profile: React.FC<Props> = props => {
     // TODO:
     console.log('hi');
   };
+
   return (
     <Wrapper>
       <Header>
@@ -49,17 +50,17 @@ const Profile: React.FC<Props> = props => {
               <SecondaryText>{`@${user.id}`}</SecondaryText>
             </div>
           </User>
-          <SelfIntroduction>
+          {/* <SelfIntroduction>
             衆議院議員阿部晋三（あべしんぞう）の公式twitterです。Prime Minister
             of Japon. Leader of Liberal Democratic Party.
-          </SelfIntroduction>
+          </SelfIntroduction> */}
           <Follow>
             <div>
-              <span>193万</span>
+              <span>{user.followIDs.length}</span>
               <SecondaryText>フォロー</SecondaryText>
             </div>
             <div>
-              <span>18</span>
+              <span>{user.followedIDs.length}</span>
               <SecondaryText>フォロワー</SecondaryText>
             </div>
           </Follow>
@@ -109,9 +110,9 @@ const User = styled.div`
   margin-bottom: 10px;
 `;
 
-const SelfIntroduction = styled.div`
-  margin-bottom: 10px;
-`;
+// const SelfIntroduction = styled.div`
+//   margin-bottom: 10px;
+// `;
 
 const Follow = styled.div`
   display: flex;

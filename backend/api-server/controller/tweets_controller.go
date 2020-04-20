@@ -60,7 +60,10 @@ func (tc *TweetsController) Post(c echo.Context) error {
 
 // いいね
 func (tc *TweetsController) Like(c echo.Context) error {
-	tc.tweetModel.All()
+	id := c.Get("userID").(string)
+	tweetID := c.Param("id")
+	t, _ := strconv.Atoi(tweetID)
+	tc.tweetModel.Like(t, id)
 	return c.String(http.StatusOK, "Like")
 }
 

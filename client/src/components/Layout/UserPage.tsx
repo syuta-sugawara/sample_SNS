@@ -1,36 +1,35 @@
 import Head from 'next/head';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Profile from '../Profile';
 import STYLES from '../../styles/const';
+import { RootState } from '../../store';
 
-const withUserPageLayout = (WrappedComponent: any): React.ReactNode =>
-  class WithUserPageLayout extends React.Component<{}, {}> {
-    static async getInitialProps(ctx: any): Promise<any> {
-      return (
-        WrappedComponent.getInitialProps &&
-        (await WrappedComponent.getInitialProps(ctx))
-      );
-    }
+type Props = {
+  children: React.ReactNode;
+};
 
-    render(): JSX.Element {
-      return (
-        <>
-          <Head>
-            <title>【TODO】ユーザ名が入るよ / teamO Twitter</title>
-          </Head>
-          <Header>
-            <h2>【TODO】ユーザ名が入るよ</h2>
-          </Header>
-          <Body>
-            <Profile />
-            <WrappedComponent {...this.props} />
-          </Body>
-        </>
-      );
-    }
-  };
+const UserPageLayout: React.FC<Props> = props => {
+  const myself = useSelector((state: RootState) => state.myself);
+  const user = useSelector((state: RootState) => state.user);
+
+  return (
+    <>
+      <Head>
+        <title>{`${user.screenName} / teamO Twitter`}</title>
+      </Head>
+      <Header>
+        <h2>{user.screenName}</h2>
+      </Header>
+      <Body>
+        <Profile isMine={user.id === myself.id} />
+        {props.children}
+      </Body>
+    </>
+  );
+};
 
 const Header = styled.div`
   display: flex;
@@ -52,4 +51,4 @@ const Body = styled.div`
   }
 `;
 
-export default withUserPageLayout;
+export default UserPageLayout;

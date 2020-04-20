@@ -74,6 +74,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) {
 	}
 	refTweet.RetweetCount++
 	tm.Update(refTweet)
+	refTweet.RefTweet = nil
 
 	tweet := entity.Tweet{
 		ID:         cid,
@@ -88,7 +89,18 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) {
 		fmt.Println(err)
 	}
 
+	refTweet.RetweetCount--
+	tweet = entity.Tweet{
+		ID:         cid,
+		TweetType:  "retweet",
+		UserID:     u.ID,
+		CreatedAt:  utils.GetNowMillsec(),
+		RefTweetID: reftweetID,
+		RefTweet:   refTweet,
+	}
+
 	go tm.tlModel.Add(&tweet, u)
+	go tm.tlModel.UpdateRetweetCount(*reftweetID)
 
 	return
 }
@@ -122,5 +134,5 @@ func (tm *TweetModel) Like(tweetID int, userID string) {
 		fmt.Println(err)
 	}
 
-	go tm.tlModel.UpdateLike(*reftweetID)
+	go tm.tlModel.UpdateLikeCount(*reftweetID)
 }

@@ -92,9 +92,10 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) (*entity.RespCount, e
 		return nil, err
 	}
 
-	resp := new(entity.RespCount)
-	resp.Message = "Retweet success"
-	resp.Count = refTweet.RetweetCount
+	resp := &entity.RespCount{
+		Message: "Retweet success",
+		Count:   refTweet.RetweetCount,
+	}
 
 	refTweet.RetweetCount--
 	tweet = entity.Tweet{
@@ -145,9 +146,10 @@ func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error
 	}
 
 	go tm.tlModel.UpdateLikeCount(*reftweetID)
-	resp := new(entity.RespCount)
-	resp.Message = "Like success"
-	resp.Count = refTweet.LikeCount
+	resp := &entity.RespCount{
+		Message: "Like success",
+		Count:   refTweet.LikeCount,
+	}
 
 	return resp, nil
 }

@@ -66,6 +66,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
 	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
 		resp.Message = err.Error()
+		return resp
 	}
 	reftweetID := &tweetID
 	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
@@ -73,6 +74,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
 		if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 			fmt.Println(err)
 			resp.Message = err.Error()
+			return resp
 		}
 	}
 	refTweet.RetweetCount++
@@ -91,6 +93,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
 	if err := tm.tweetTable.Put(&tweet).Run(); err != nil {
 		fmt.Println(err)
 		resp.Message = err.Error()
+		return resp
 	}
 
 	refTweet.RetweetCount--
@@ -121,6 +124,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) entity.RespCount {
 	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
 		resp.Message = err.Error()
+		return resp
 	}
 	reftweetID := &tweetID
 	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
@@ -128,6 +132,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) entity.RespCount {
 		if err := tm.tweetTable.Get("id", reftweetID).One(refTweet); err != nil {
 			fmt.Println(err)
 			resp.Message = err.Error()
+			return resp
 		}
 	}
 
@@ -145,6 +150,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) entity.RespCount {
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
 		resp.Message = err.Error()
+		return resp
 	}
 
 	go tm.tlModel.UpdateLikeCount(*reftweetID)

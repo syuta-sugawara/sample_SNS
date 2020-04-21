@@ -30,14 +30,16 @@ func (tm *TimelineModel) Add(t *entity.Tweet, u *entity.User) {
 
 	for i := range followedIDs {
 		tweet := entity.TweetResp{
-			ID:         t.ID,
-			Content:    t.Content,
-			TweetType:  t.TweetType,
-			CreatedAt:  t.CreatedAt,
-			UserID:     followedIDs[i],
-			RefTweetID: t.RefTweetID,
-			RefTweet:   t.RefTweet,
-			User:       *u,
+			ID:           t.ID,
+			Content:      t.Content,
+			TweetType:    t.TweetType,
+			CreatedAt:    t.CreatedAt,
+			UserID:       followedIDs[i],
+			RefTweetID:   t.RefTweetID,
+			RefTweet:     t.RefTweet,
+			User:         *u,
+			LikeUsers:    t.LikeUsers,
+			RetweetUsers: t.RetweetUsers,
 		}
 
 		tweets = append(tweets, tweet)

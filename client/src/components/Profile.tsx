@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
+import UserAPI from '../requests/user';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
 
@@ -12,8 +13,14 @@ type Props = {
 
 const Profile: React.FC<Props> = props => {
   const { user, isMine } = props;
-  const handleClick = () => {
+  const handleClick = async () => {
     // TODO:
+    const userAPI = new UserAPI();
+    try {
+      const res = await userAPI.postFollow(user.id);
+    } catch (err) {
+      const error = err as Error;
+    }
     console.log('hi');
   };
 

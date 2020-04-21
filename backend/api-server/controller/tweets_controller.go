@@ -14,30 +14,51 @@ import (
 
 type TweetsController struct {
 	tweetModel model.TweetModel
+	userModel  model.UserModel
+	tlModel    model.TimelineModel
 }
 
 func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
 	return TweetsController{
 		tweetModel: model.NewTweetModel(db, auth),
+		userModel:  model.NewUserModel(db, auth),
+		tlModel:    model.NewTimelineModel(db),
 	}
 }
 
 // ツイート取得
 func (tc *TweetsController) Index(c echo.Context) error {
-	id := c.Get("userID").(string)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
 	tweet := tc.tweetModel.Get(id)
 	return c.JSON(http.StatusOK, tweet)
 }
 
 // ツイート一覧取得
 func (tc *TweetsController) TweetsIndex(c echo.Context) error {
-	tweets := tc.tweetModel.All()
+	userID := c.Get("userID").(string)
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil {
+		limit = 20
+	}
+
+	tweets, err := tc.tlModel.Get(userID, limit)
+	if err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, tweets)
 }
 
 // ツイート投稿
 func (tc *TweetsController) Post(c echo.Context) error {
-	id := c.Get("userID").(string)
+	userID := c.Get("userID").(string)
+	currentUser, err := tc.userModel.Get(userID)
+	if err != nil {
+		return err
+	}
+
 	t := new(entity.PostTweet)
 	c.Bind(t)
 	content := strings.TrimSpace(t.Content)
@@ -51,7 +72,7 @@ func (tc *TweetsController) Post(c echo.Context) error {
 		resp := CreateErrorMessage("Content is over 140")
 		return c.JSON(http.StatusBadRequest, resp)
 	}
-	tc.tweetModel.Create(t, id)
+	tc.tweetModel.Create(t, currentUser)
 
 	// TODO: 作成されたtweetを返すようにしたい
 	resp := CreateErrorMessage("POST success")
@@ -60,15 +81,23 @@ func (tc *TweetsController) Post(c echo.Context) error {
 
 // いいね
 func (tc *TweetsController) Like(c echo.Context) error {
-	tc.tweetModel.All()
+	id := c.Get("userID").(string)
+	tweetID := c.Param("id")
+	t, _ := strconv.Atoi(tweetID)
+	tc.tweetModel.Like(t, id)
 	return c.String(http.StatusOK, "Like")
 }
 
 // リツイート
 func (tc *TweetsController) Retweet(c echo.Context) error {
-	id := c.Get("userID").(string)
+	userID := c.Get("userID").(string)
+	currentUser, err := tc.userModel.Get(userID)
+	if err != nil {
+		return err
+	}
+
 	tweetID := c.Param("id")
 	t, _ := strconv.Atoi(tweetID)
-	tc.tweetModel.Retweet(t, id)
+	tc.tweetModel.Retweet(t, currentUser)
 	return c.String(http.StatusOK, "Retweet")
 }

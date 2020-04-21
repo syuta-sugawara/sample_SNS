@@ -34,6 +34,7 @@ const Login: React.FC = () => {
       };
       const res = await authAPI.postSignin(data);
       if (res.ok) {
+        //TODO: myselfストアにセット
         dispatch(modalAction.hide());
         router.push('/home');
       } else {

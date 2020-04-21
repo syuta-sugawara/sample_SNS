@@ -1,7 +1,10 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import AuthAPI from '../requests/auth';
+import modalAction from '../store/modal/actions';
 import STYLES from '../styles/const';
 import { SignupType } from '../types/auth';
 import { ErrorResponse } from '../types/errorResponse';
@@ -15,6 +18,8 @@ const Signup: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isMisMatch, setIsMisMatch] = useState<boolean>(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
@@ -53,8 +58,9 @@ const Signup: React.FC = () => {
       };
       const res = await authAPI.postSignup(data);
       if (res.ok) {
-        const result = await res.json();
-        console.log(result);
+        //TODO: myselfストアにセット
+        dispatch(modalAction.hide());
+        router.push('/home');
       } else {
         const result = (await res.json()) as ErrorResponse;
         throw new Error(result.massage);

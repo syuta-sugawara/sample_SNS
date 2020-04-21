@@ -1,14 +1,19 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import AuthAPI from '../requests/auth';
 import STYLES from '../styles/const';
+import modalAction from '../store/modal/actions';
 import { SigninType } from '../types/auth';
 import { ErrorResponse } from '../types/errorResponse';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
 
 const Login: React.FC = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -21,8 +26,6 @@ const Login: React.FC = () => {
   };
 
   const handleSignin = async () => {
-    // TODO
-    console.log('ログイン処理');
     const authAPI = new AuthAPI();
     try {
       const data: SigninType = {
@@ -31,8 +34,8 @@ const Login: React.FC = () => {
       };
       const res = await authAPI.postSignin(data);
       if (res.ok) {
-        const result = await res.json();
-        console.log(result);
+        dispatch(modalAction.hide());
+        router.push('/home');
       } else {
         const result = (await res.json()) as ErrorResponse;
         throw new Error(result.massage);

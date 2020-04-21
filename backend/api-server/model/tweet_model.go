@@ -59,22 +59,19 @@ func (tm *TweetModel) Update(t *entity.Tweet) {
 	return
 }
 
-func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
+func (tm *TweetModel) Retweet(tweetID int, u *entity.User) (*entity.RespCount, error) {
 	cid := tm.seqModel.NextID("tweets")
 	refTweet := new(entity.Tweet)
-	resp := entity.RespCount{}
 	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
-		resp.Message = err.Error()
-		return resp
+		return nil, err
 	}
 	reftweetID := &tweetID
 	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
 		reftweetID = refTweet.RefTweetID
 		if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 			fmt.Println(err)
-			resp.Message = err.Error()
-			return resp
+			return nil, err
 		}
 	}
 	refTweet.RetweetCount++
@@ -92,9 +89,12 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
 
 	if err := tm.tweetTable.Put(&tweet).Run(); err != nil {
 		fmt.Println(err)
-		resp.Message = err.Error()
-		return resp
+		return nil, err
 	}
+
+	resp := new(entity.RespCount)
+	resp.Message = "Retweet success"
+	resp.Count = refTweet.RetweetCount
 
 	refTweet.RetweetCount--
 	tweet = entity.Tweet{
@@ -109,30 +109,22 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) entity.RespCount {
 	go tm.tlModel.Add(&tweet, u)
 	go tm.tlModel.UpdateRetweetCount(*reftweetID)
 
-	resp = entity.RespCount{
-		Message: "Retweet success",
-		Count:   refTweet.RetweetCount,
-	}
-
-	return resp
+	return resp, nil
 }
 
-func (tm *TweetModel) Like(tweetID int, userID string) entity.RespCount {
+func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error) {
 	cid := tm.seqModel.NextID("tweets")
 	refTweet := new(entity.Tweet)
-	resp := entity.RespCount{}
 	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
-		resp.Message = err.Error()
-		return resp
+		return nil, err
 	}
 	reftweetID := &tweetID
 	if refTweet.TweetType == "retweet" || refTweet.TweetType == "like" {
 		reftweetID = refTweet.RefTweetID
 		if err := tm.tweetTable.Get("id", reftweetID).One(refTweet); err != nil {
 			fmt.Println(err)
-			resp.Message = err.Error()
-			return resp
+			return nil, err
 		}
 	}
 
@@ -149,18 +141,15 @@ func (tm *TweetModel) Like(tweetID int, userID string) entity.RespCount {
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
 		fmt.Println(err)
-		resp.Message = err.Error()
-		return resp
+		return nil, err
 	}
 
 	go tm.tlModel.UpdateLikeCount(*reftweetID)
+	resp := new(entity.RespCount)
+	resp.Message = "Like success"
+	resp.Count = refTweet.LikeCount
 
-	resp = entity.RespCount{
-		Message: "Like success",
-		Count:   refTweet.LikeCount,
-	}
-
-	return resp
+	return resp, nil
 }
 
 func (tm *TweetModel) UserTL(userID string) *[]entity.TweetResp {

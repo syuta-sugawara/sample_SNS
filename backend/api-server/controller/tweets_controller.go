@@ -84,7 +84,10 @@ func (tc *TweetsController) Like(c echo.Context) error {
 	id := c.Get("userID").(string)
 	tweetID := c.Param("id")
 	t, _ := strconv.Atoi(tweetID)
-	resp := tc.tweetModel.Like(t, id)
+	resp, err := tc.tweetModel.Like(t, id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
 	return c.JSON(http.StatusOK, resp)
 }
 
@@ -98,6 +101,9 @@ func (tc *TweetsController) Retweet(c echo.Context) error {
 
 	tweetID := c.Param("id")
 	t, _ := strconv.Atoi(tweetID)
-	resp := tc.tweetModel.Retweet(t, currentUser)
+	resp, err := tc.tweetModel.Retweet(t, currentUser)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
 	return c.JSON(http.StatusOK, resp)
 }

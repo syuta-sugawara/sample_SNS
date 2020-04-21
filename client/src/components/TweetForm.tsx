@@ -15,12 +15,12 @@ type Props = {
 
 const TweetForm: React.FC<Props> = props => {
   const [value, setValue] = useState<string>('');
-  const [wordCount, setCount] = useState(0)
+  const [wordCount, setCount] = useState(0);
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-    setCount(e.target.value.length);  
+    setCount(e.target.value.length);
   };
 
   const handleSubmit = () => {
@@ -43,7 +43,11 @@ const TweetForm: React.FC<Props> = props => {
         </User>
         <Form>
           <FormHead>
-            <textarea placeholder="いまどうしてる？" maxLength={140} onChange={handleChange} />
+            <textarea
+              placeholder="いまどうしてる？"
+              maxLength={140}
+              onChange={handleChange}
+            />
           </FormHead>
           <FormTail>
             <WordCounter>
@@ -150,8 +154,8 @@ const ButtonWrapper = styled.div`
   height: 40px;
 `;
 
-const WordCounter = styled.div` 
- margin:10px
-`
+const WordCounter = styled.div`
+  margin: 10px;
+`;
 
 export default TweetForm;

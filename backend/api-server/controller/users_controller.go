@@ -14,22 +14,47 @@ import (
 
 type UsersController struct {
 	userModel   model.UserModel
+	tweetModel  model.TweetModel
 	userService services.UserServices
 }
 
 func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
 	return UsersController{
 		userModel:   model.NewUserModel(db, auth),
+		tweetModel:  model.NewTweetModel(db, auth),
 		userService: services.NewUserServices(auth),
 	}
 }
 
 // ユーザー情報の取得
-func (uc *UsersController) Get(c echo.Context) error {
+func (uc *UsersController) GetCurrentUser(c echo.Context) error {
 	userID := c.Get("userID").(string)
 	user, _ := uc.userModel.Get(userID)
 
 	return c.JSON(http.StatusOK, user)
+}
+
+// ユーザー情報の取得
+func (uc *UsersController) Get(c echo.Context) error {
+	userID := c.Param("userID")
+	user, _ := uc.userModel.Get(userID)
+
+	return c.JSON(http.StatusOK, user)
+}
+
+func (uc *UsersController) GetUserTL(c echo.Context) error {
+	userID := c.Param("userID")
+	user, err := uc.userModel.Get(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+
+	tweets := uc.tweetModel.UserTL(userID)
+	for i := range *tweets {
+		(*tweets)[i].User = *user
+	}
+
+	return c.JSON(http.StatusOK, tweets)
 }
 
 // フォローの取得
@@ -81,16 +106,18 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 
 // フォロー処理
 func (uc *UsersController) Follow(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "Follow"+userID)
+	followedUserID := c.Param("followedUserID")
+	userID := c.Get("userID").(string)
+	uc.userModel.Follow(c, userID, followedUserID)
+	return c.String(http.StatusOK, "Follow"+followedUserID)
 }
 
 // アンフォロー処理
 func (uc *UsersController) Unfollow(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "Unfollow"+userID)
+	followedUserID := c.Param("followedUserID")
+	userID := c.Get("userID").(string)
+	uc.userModel.UnFollow(c, userID, followedUserID)
+	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 
 //cookie処理

@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import STYLES from '../styles/const';
+import { fetchPostTweet } from '../store/tweet/actions';
 import { UserType } from '../types/user';
 import CloseIcon from './icons/CloseIcon';
 import Button, { Variant } from './Button';
 
 type Props = {
   user: UserType;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const TweetForm: React.FC<Props> = props => {
+  const [value, setValue] = useState<string>('');
+  const [wordCount, setCount] = useState(0);
+  const dispatch = useDispatch();
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+    setCount(e.target.value.length);
+  };
+
+  const handleSubmit = () => {
+    dispatch(fetchPostTweet({ content: value, tweetType: 'tweet' }));
+    setValue('');
+  };
+
   return (
     <Wrapper>
       <Head>
@@ -32,16 +45,21 @@ const TweetForm: React.FC<Props> = props => {
           <FormHead>
             <textarea
               placeholder="いまどうしてる？"
-              onChange={props.onChange}
+              maxLength={140}
+              onChange={handleChange}
             />
           </FormHead>
           <FormTail>
+            <WordCounter>
+              文字数：
+              {wordCount}
+            </WordCounter>
             <ButtonWrapper>
               <Button
                 text="ツイートする"
                 variant={Variant.CONTAINED}
-                disabled={!props.value ? true : false}
-                onClick={props.onSubmit}
+                disabled={!value ? true : false}
+                onClick={handleSubmit}
               />
             </ButtonWrapper>
           </FormTail>
@@ -54,7 +72,7 @@ const TweetForm: React.FC<Props> = props => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 600px;
   height: 295px;
   background-color: ${STYLES.COLOR.WHITE};
   border-radius: 14px;
@@ -134,6 +152,10 @@ const FormTail = styled.div`
 const ButtonWrapper = styled.div`
   width: 150px;
   height: 40px;
+`;
+
+const WordCounter = styled.div`
+  margin: 10px;
 `;
 
 export default TweetForm;

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import STYLES from '../styles/const';
@@ -9,6 +9,7 @@ import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
 import TweetAPI from '../requests/tweet';
+import { type } from 'os';
 
 enum TextVariant {
   PRIMARY,
@@ -19,35 +20,40 @@ type Props = {
   tweet: TweetType;
 };
 
-const ApiRequest = new TweetAPI();
-
-const handlePostRetweets = async () => {
-  const res = await ApiRequest.putRetweets();
-  try{
-    if(!res.ok){
-      throw Error(res.statusText)
-    }
-      return res
-    }catch(e){
-      console.error(e);
-    }
-};
-
-const handlePostLike = async () => {
-  const res = await ApiRequest.putRetweets();
-  try{
-    if(!res.ok){
-      throw Error(res.statusText)
-    }
-    return res
-  }catch(e){
-    console.error(e);
-  }
-};
-
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
-  // const ApiRequest = new TweetAPI();
+  const [retweetCount, setRetweetCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(0);
+  const [isRetweet, setRetweetDisable] = useState(false);
+  const [isPost, setPostDisable] = useState(false);
+
+  const ApiRequest = new TweetAPI();
+
+  const handlePostRetweets = async () => {
+    try {
+      const res = await ApiRequest.putRetweets();
+      if (!res.ok) {
+        throw Error(res.statusText);
+      }
+      setRetweetCount(retweetCount + 1);
+      setRetweetDisable(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handlePostLike = async () => {
+    try {
+      const res = await ApiRequest.putRetweets();
+      if (!res.ok) {
+        throw Error(res.statusText);
+      }
+      setLikeCount(likeCount + 1);
+      setPostDisable(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <Wrapper>
@@ -82,21 +88,25 @@ const TweetItem: React.FC<Props> = props => {
               <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
             </Tweet>
             <Reaction>
-              <ButtonWrapper>
+              <ButtonWrapper disabled={isRetweet}>
                 <Button
                   text=""
                   variant={Variant.TEXT}
-                  onClick={() => handlePostRetweets}
+                  onClick={handlePostRetweets}
+                  disabled={isRetweet}
                   icon={<RetweetIcon />}
                 />
+                <RetweetCounter>{retweetCount}</RetweetCounter>
               </ButtonWrapper>
-              <ButtonWrapper>
+              <ButtonWrapper disabled={isPost}>
                 <Button
                   text=""
                   variant={Variant.TEXT}
-                  onClick={() => handlePostLike}
+                  onClick={handlePostLike}
+                  disabled={isPost}
                   icon={<LikeIcon />}
                 />
+                <LikeCounter>{likeCount}</LikeCounter>
               </ButtonWrapper>
             </Reaction>
           </ContentBody>
@@ -181,10 +191,25 @@ const Reaction = styled.div`
   display: flex;
   flex-direction: row;
 `;
+type ButtonWrapperProps = {
+  disabled?: boolean;
+};
 
 const ButtonWrapper = styled.div`
-  width: 150px;
+  display: flex;
+  width: 100px;
   height: 40px;
+  opacity: ${(props: ButtonWrapperProps) => (props.disabled ? '1' : '0.3')};
+`;
+
+const RetweetCounter = styled.div`
+  margin-top: 14px;
+  margin-right: 20px;
+`;
+
+const LikeCounter = styled.div`
+  margin-top: 14px;
+  margin-right: 20px;
 `;
 
 type TextProps = {

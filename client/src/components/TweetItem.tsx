@@ -9,7 +9,6 @@ import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
 import TweetAPI from '../requests/tweet';
-import { type } from 'os';
 
 enum TextVariant {
   PRIMARY,
@@ -22,10 +21,10 @@ type Props = {
 
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
-  const [retweetCount, setRetweetCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(0);
-  const [isRetweet, setRetweetDisable] = useState(false);
-  const [isPost, setPostDisable] = useState(false);
+  const [retweetCount, setRetweetCount] = useState<number>(0);
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [isRetweet, setRetweetDisable] = useState<boolean>(false);
+  const [isLike, setPostDisable] = useState<boolean>(false);
 
   const ApiRequest = new TweetAPI();
 
@@ -98,12 +97,12 @@ const TweetItem: React.FC<Props> = props => {
                 />
                 <RetweetCounter>{retweetCount}</RetweetCounter>
               </ButtonWrapper>
-              <ButtonWrapper disabled={isPost}>
+              <ButtonWrapper disabled={isLike}>
                 <Button
                   text=""
                   variant={Variant.TEXT}
                   onClick={handlePostLike}
-                  disabled={isPost}
+                  disabled={isLike}
                   icon={<LikeIcon />}
                 />
                 <LikeCounter>{likeCount}</LikeCounter>

@@ -7,6 +7,10 @@ export default class UserAPI extends AuthorizedAPI {
     super(token);
   }
 
+  getCurrentUser = () => {
+    return fetch(this.reqUrl, { headers: { ...this.authHeader } });
+  };
+
   getUser = (uid: string) => {
     return fetch(`${this.reqUrl}/${uid}`, { headers: { ...this.authHeader } });
   };

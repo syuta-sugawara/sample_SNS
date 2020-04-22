@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getTokenFromLocal } from '../store/auth/actions';
+import { fetchCurrentUser } from '../store/myself/actions';
 import { RootState } from '../store';
 
 type Props = {
@@ -16,24 +17,25 @@ const Auth: React.FC<Props> = props => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const auth = useSelector((state: RootState) => state.auth);
+  const myself = useSelector((state: RootState) => state.myself);
   const { pathname } = router;
 
   useEffect(() => {
+    dispatch(getTokenFromLocal());
     isFirstRef.current = true;
   }, []);
 
   useEffect(() => {
     if (isFirstRef.current) {
       isFirstRef.current = false;
-      dispatch(getTokenFromLocal());
+      dispatch(fetchCurrentUser());
     } else {
-      const { token } = auth;
-      if (pathname === '/home' && token === '') {
+      if (pathname === '/home' && (auth.error || myself.error)) {
         router.push('/');
       }
       setIsLoading(false);
     }
-  }, [dispatch, auth]);
+  }, [dispatch, auth, myself]);
 
   return <>{isLoading ? null : props.children}</>;
 };

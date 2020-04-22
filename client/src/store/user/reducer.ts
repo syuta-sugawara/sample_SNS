@@ -1,8 +1,9 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
-import userAction from './actions';
 import { TweetType } from '../../types/tweet';
 import { UserType } from '../../types/user';
+import { defaultIconUrl } from '../../utils/image';
+import userAction from './actions';
 
 export type StateType = UserType & {
   tweets: TweetType[];
@@ -31,7 +32,7 @@ const userReducer = reducerWithInitialState(initialState)
     ...state,
     id: payload.result.id,
     screenName: payload.result.screenName,
-    iconUrl: payload.result.iconUrl,
+    iconUrl: !payload.result.iconUrl ? defaultIconUrl : payload.result.iconUrl,
     loading: false,
     error: undefined,
   }))

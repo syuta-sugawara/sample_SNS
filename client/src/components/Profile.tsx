@@ -4,16 +4,12 @@ import styled from 'styled-components';
 import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
+import { defaultHeaderUrl } from '../utils/image';
 
 type Props = {
   user: UserType;
   isMine?: boolean;
 };
-
-const defaultIconUrl =
-  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taiconImg.jpg';
-const defaultHeaderUrl =
-  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taheaderImg.jpg';
 
 const Profile: React.FC<Props> = props => {
   const { user, isMine } = props;
@@ -31,10 +27,7 @@ const Profile: React.FC<Props> = props => {
         <MainHead>
           <ProfileImageWrapper>
             <ProfileImage>
-              <img
-                src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
-                alt={user.screenName}
-              />
+              <img src={user.iconUrl} alt={user.screenName} />
             </ProfileImage>
           </ProfileImageWrapper>
           <ButtonWrapper>

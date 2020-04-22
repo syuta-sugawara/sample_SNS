@@ -22,6 +22,18 @@ type SignInUser struct {
 	PassWord string `json:"password"`
 }
 
+type RefreshTokenReq struct {
+	RefreshToken string `json:"refreshToken"`
+}
+type RefreshTokenResp struct {
+	Token string `json:"token"`
+}
+
+type SignInResp struct {
+	Token        string `json:"token"`
+	RefreshToken string `json:"refreshToken"`
+}
+
 type DisplayUser struct {
 	ID         string `json:"id"`
 	ScreenName string `json:"screenName"`

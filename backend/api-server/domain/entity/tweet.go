@@ -36,3 +36,8 @@ type NewTweet struct {
 	Content   string
 	TweetType string
 }
+
+type RespCount struct {
+	Message string `json:"message"`
+	Count   int    `json:"count"`
+}

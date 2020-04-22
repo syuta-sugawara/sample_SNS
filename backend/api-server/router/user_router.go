@@ -16,17 +16,15 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	authRouter := e.Group("/auth")
 	authRouter.POST("/signup", userController.RegisterUser)
 	authRouter.POST("/signin", userController.Signin)
+	authRouter.POST("/refresh", userController.Refresh)
 
 	// 認証ありのrouting
 	userRouter := e.Group("/user")
 	userRouter.Use(middleware.AuthMiddleware(auth))
 	userRouter.GET("", userController.GetCurrentUser)
+	userRouter.PUT("", userController.UpdateUser)
 	userRouter.GET("/:userID", userController.Get)
 	userRouter.GET("/:userID/tweets", userController.GetUserTL)
-	// r.GET("/:userName", userController.UserIndex)
-	// r.GET("/:userName/follows", userController.FollowsIndex)
-	// r.GET("/:userName/followers", userController.FollowersIndex)
-	userRouter.PUT("", userController.UpdateUser)
 	userRouter.POST("/:followedUserID/follow", userController.Follow)
 	userRouter.DELETE("/:followedUserID/follow", userController.Unfollow)
 }

@@ -15,12 +15,12 @@ type Props = {
 
 const TweetForm: React.FC<Props> = props => {
   const [value, setValue] = useState<string>('');
-  const [wordCount, setCount] = useState(0)
+  const [wordCount, setCount] = useState<number>(0);
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-    setCount(e.target.value.length);  
+    setCount(e.target.value.length);
   };
 
   const handleSubmit = () => {
@@ -43,7 +43,11 @@ const TweetForm: React.FC<Props> = props => {
         </User>
         <Form>
           <FormHead>
-            <textarea placeholder="いまどうしてる？" maxLength={140} onChange={handleChange} />
+            <textarea
+              placeholder="いまどうしてる？"
+              maxLength={140}
+              onChange={handleChange}
+            />
           </FormHead>
           <FormTail>
             <WordCounter>
@@ -68,14 +72,21 @@ const TweetForm: React.FC<Props> = props => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 600px;
-  height: 295px;
+  width: 100vw;
+  height: 60vh;
   background-color: ${STYLES.COLOR.WHITE};
-  border-radius: 14px;
+  @media ${STYLES.DEVICE.LAPTOP} {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 295px;
+    background-color: ${STYLES.COLOR.WHITE};
+    border-radius: 14px;
+  }
 `;
 
 const Head = styled.div`
-  flex: 1;
+  height: 60px;
   padding: 0 15px;
   border-bottom: solid 1px ${STYLES.COLOR.GRAY_LIGHTER_20};
 `;
@@ -106,7 +117,7 @@ const CloseButton = styled.button`
 
 const Body = styled.div`
   display: flex;
-  height: 242px;
+  flex: 1;
   padding: 10px 15px;
 `;
 
@@ -150,8 +161,8 @@ const ButtonWrapper = styled.div`
   height: 40px;
 `;
 
-const WordCounter = styled.div` 
- margin:10px
-`
+const WordCounter = styled.div`
+  margin: 10px;
+`;
 
 export default TweetForm;

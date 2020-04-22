@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Modal from '../components/Modal';
-import STYLES from '../styles/const';
-import Navigation from './Navigation';
+import Modal from '../../components/Modal';
+import STYLES from '../../styles/const';
+import Navigation from '../Navigation';
 
-export const withLayout = (WrappedComponent: any): any =>
+const withLayout = (WrappedComponent: any): any =>
   class WithLayout extends React.Component<{}, {}> {
     static async getInitialProps(ctx: any): Promise<any> {
       return (

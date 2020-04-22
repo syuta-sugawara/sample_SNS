@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import withLayout from '../components/Layout';
+import withLayout from '../components/Layout/';
 import TweetItem from '../components/TweetItem';
 import { fetchTweetList } from '../store/tweet/actions';
 import { RootState } from '../store';

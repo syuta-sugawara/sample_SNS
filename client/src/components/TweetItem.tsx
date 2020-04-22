@@ -10,6 +10,9 @@ import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
 import TweetAPI from '../requests/tweet';
 
+const defaultIconUrl =
+  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taiconImg.jpg';
+
 enum TextVariant {
   PRIMARY,
   SECONDARY,
@@ -59,7 +62,10 @@ const TweetItem: React.FC<Props> = props => {
       <Label></Label>
       <Body>
         <UserIcon>
-          <img src={user.iconUrl} alt={user.screenName} />
+          <img
+            src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
+            alt={user.screenName}
+          />
         </UserIcon>
         <Content>
           <ContentHead>

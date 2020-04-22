@@ -10,4 +10,10 @@ export default class UserAPI extends AuthorizedAPI {
   getUser = (uid: string) => {
     return fetch(`${this.reqUrl}/${uid}`, { headers: { ...this.authHeader } });
   };
+
+  getUserTweets = (uid: string) => {
+    return fetch(`${this.reqUrl}/${uid}/tweets`, {
+      headers: { ...this.authHeader },
+    });
+  };
 }

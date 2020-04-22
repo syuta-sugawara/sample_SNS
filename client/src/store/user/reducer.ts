@@ -1,9 +1,11 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
-import { UserType } from '../../types/user';
 import userAction from './actions';
+import { TweetType } from '../../types/tweet';
+import { UserType } from '../../types/user';
 
 export type StateType = UserType & {
+  tweets: TweetType[];
   loading: boolean;
   error?: Error;
 };
@@ -14,16 +16,18 @@ const initialState: StateType = {
   iconUrl: '',
   followIDs: [],
   followedIDs: [],
+  tweets: [],
   loading: false,
 };
 
 const userReducer = reducerWithInitialState(initialState)
-  .case(userAction.get.started, state => ({
+  // getUser
+  .case(userAction.getUser.started, state => ({
     ...state,
     loading: true,
     error: undefined,
   }))
-  .case(userAction.get.done, (state, payload) => ({
+  .case(userAction.getUser.done, (state, payload) => ({
     ...state,
     id: payload.result.id,
     screenName: payload.result.screenName,
@@ -31,7 +35,24 @@ const userReducer = reducerWithInitialState(initialState)
     loading: false,
     error: undefined,
   }))
-  .case(userAction.get.failed, (state, payload) => ({
+  .case(userAction.getUser.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
+  }))
+  // getUserTweets
+  .case(userAction.getUserTweets.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(userAction.getUserTweets.done, (state, payload) => ({
+    ...state,
+    tweets: payload.result,
+    loading: false,
+    error: undefined,
+  }))
+  .case(userAction.getUserTweets.failed, (state, payload) => ({
     ...state,
     loading: false,
     error: payload.error,

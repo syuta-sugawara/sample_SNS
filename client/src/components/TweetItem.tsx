@@ -24,7 +24,7 @@ const TweetItem: React.FC<Props> = props => {
   const [retweetCount, setRetweetCount] = useState<number>(0);
   const [likeCount, setLikeCount] = useState<number>(0);
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
-  const [isLike, setPostDisable] = useState<boolean>(false);
+  const [isLike, setLikeDisable] = useState<boolean>(false);
 
   const ApiRequest = new TweetAPI();
 
@@ -48,7 +48,7 @@ const TweetItem: React.FC<Props> = props => {
         throw Error(res.statusText);
       }
       setLikeCount(likeCount + 1);
-      setPostDisable(true);
+      setLikeDisable(true);
     } catch (e) {
       console.error(e);
     }

@@ -19,7 +19,7 @@ export default class TweetAPI {
   };
 
   postLike = async () => {
-    const response = await fetch('{this.TWEET_API_URL}/{tweetsID}/like', {
+    const response = await fetch(`${this.TWEET_API_URL}/{tweetsID}/like`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -29,7 +29,7 @@ export default class TweetAPI {
   };
 
   putRetweets = async () => {
-    const response = await fetch('{this.TWEET_API_URL}/{tweetsID}/retweet', {
+    const response = await fetch(`${this.TWEET_API_URL}/{tweetsID}/retweet`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',

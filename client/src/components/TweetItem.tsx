@@ -2,16 +2,14 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import TweetAPI from '../requests/tweet';
 import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
+import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
-import TweetAPI from '../requests/tweet';
-
-const defaultIconUrl =
-  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taiconImg.jpg';
 
 enum TextVariant {
   PRIMARY,

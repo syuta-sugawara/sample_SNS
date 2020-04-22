@@ -10,6 +10,11 @@ type Props = {
   isMine?: boolean;
 };
 
+const defaultIconUrl =
+  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taiconImg.jpg';
+const defaultHeaderUrl =
+  'https://teamo-image.s3-ap-northeast-1.amazonaws.com/usericon/taheaderImg.jpg';
+
 const Profile: React.FC<Props> = props => {
   const { user, isMine } = props;
   const handleClick = () => {
@@ -20,16 +25,16 @@ const Profile: React.FC<Props> = props => {
   return (
     <Wrapper>
       <Header>
-        <img
-          src="https://pbs.twimg.com/profile_banners/636957320/1514493736/1500x500"
-          alt=""
-        />
+        <img src={defaultHeaderUrl} alt="" />
       </Header>
       <Main>
         <MainHead>
           <ProfileImageWrapper>
             <ProfileImage>
-              <img src={user.iconUrl} alt={user.screenName} />
+              <img
+                src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
+                alt={user.screenName}
+              />
             </ProfileImage>
           </ProfileImageWrapper>
           <ButtonWrapper>
@@ -74,6 +79,11 @@ const Wrapper = styled.div``;
 
 const Header = styled.div`
   height: 200px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Main = styled.div`

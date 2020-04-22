@@ -28,7 +28,8 @@ export const fetchTweetList = () => async (
   try {
     const res = await tweetAPI.getAllTweets();
     if (res.ok) {
-      const result = (await res.json()) as TweetType[];
+      const response = (await res.json()) as TweetType[];
+      const result = response === null ? [] : response;
       dispatch(tweetAction.getTweetList.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;

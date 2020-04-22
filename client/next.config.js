@@ -8,4 +8,5 @@ module.exports = {
   env: {
     API_URL: IS_PRODUCTION ? process.env.API_URL_PROD : process.env.API_URL_DEV,
   },
+  target: 'serverless'
 };

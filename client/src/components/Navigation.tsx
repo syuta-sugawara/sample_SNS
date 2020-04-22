@@ -20,6 +20,8 @@ const Navigation: React.FC = () => {
     screenName: 'じゅんきち',
     iconUrl:
       'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
+    followIDs: [],
+    followedIDs: [],
   };
 
   const handleClose = () => {
@@ -45,7 +47,7 @@ const Navigation: React.FC = () => {
         <MenuItem>
           <ResponsiveDiv isMobile>
             <Button
-              text=""
+              text=''
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
                 handleClick(e, '/home')
@@ -55,7 +57,7 @@ const Navigation: React.FC = () => {
           </ResponsiveDiv>
           <ResponsiveDiv>
             <Button
-              text="ホーム"
+              text='ホーム'
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
                 handleClick(e, '/home')
@@ -67,30 +69,30 @@ const Navigation: React.FC = () => {
         <MenuItem>
           <ResponsiveDiv isMobile>
             <Button
-              text=""
+              text=''
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
                 handleClick(e, '/users/hoge')
               }
               icon={
                 <img
-                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
-                  alt="aaa"
+                  src='https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg'
+                  alt='aaa'
                 />
               }
             />
           </ResponsiveDiv>
           <ResponsiveDiv>
             <Button
-              text="プロフィール"
+              text='プロフィール'
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
                 handleClick(e, '/users/hoge')
               }
               icon={
                 <img
-                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
-                  alt="aaa"
+                  src='https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg'
+                  alt='aaa'
                 />
               }
             />
@@ -108,7 +110,7 @@ const Navigation: React.FC = () => {
           </ResponsiveDiv>
           <ResponsiveDiv>
             <Button
-              text="ツイートする"
+              text='ツイートする'
               variant={Variant.CONTAINED}
               onClick={() =>
                 dispatch(modalAction.show({ children: tweetForm }))

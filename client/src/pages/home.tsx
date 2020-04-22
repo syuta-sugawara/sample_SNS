@@ -14,6 +14,7 @@ import { TweetType } from '../types/tweet';
 const Home: NextPage = () => {
   const tweetList = useSelector((state: RootState) => state.tweet.results);
   const dispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(fetchTweetList());

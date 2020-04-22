@@ -5,6 +5,9 @@ import { CredentialType, SigninType, SignupType } from '../../types/auth';
 import { ActionTypes } from '../actionTypes';
 import AuthAPI from '../../requests/auth';
 import { ErrorResponse } from '../../types/errorResponse';
+import { NextRouter } from 'next/router';
+import modalAction from '../modal/actions';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -30,7 +33,9 @@ const setLocalStorage = (credential: Partial<CredentialType>) => {
     localStorage.setItem('refreshToken', credential.refreshToken);
 };
 
-export const fetchSignin = (data: SigninType) => async (dispatch: Dispatch) => {
+export const fetchSignin = (data: SigninType, router: NextRouter) => async (
+  dispatch: Dispatch
+) => {
   dispatch(authAction.signin.started({ params: {} }));
   const authAPI = new AuthAPI();
   try {
@@ -38,7 +43,9 @@ export const fetchSignin = (data: SigninType) => async (dispatch: Dispatch) => {
     if (res.ok) {
       const result = (await res.json()) as CredentialType;
       dispatch(authAction.signin.done({ result, params: {} }));
+      dispatch(modalAction.hide());
       setLocalStorage(result);
+      router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
       throw new Error(result.massage);

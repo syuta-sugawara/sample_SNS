@@ -1,15 +1,14 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import AuthAPI from '../requests/auth';
 import STYLES from '../styles/const';
-import modalAction from '../store/modal/actions';
 import { SigninType } from '../types/auth';
-import { ErrorResponse } from '../types/errorResponse';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
+import { fetchSignin } from '../store/auth/actions';
+import { RootState } from '../store';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -26,25 +25,11 @@ const Login: React.FC = () => {
   };
 
   const handleSignin = async () => {
-    const authAPI = new AuthAPI();
-    try {
-      const data: SigninType = {
-        id: userId,
-        password,
-      };
-      const res = await authAPI.postSignin(data);
-      if (res.ok) {
-        //TODO: myselfストアにセット
-        dispatch(modalAction.hide());
-        router.push('/home');
-      } else {
-        const result = (await res.json()) as ErrorResponse;
-        throw new Error(result.massage);
-      }
-    } catch (err) {
-      const error = err as Error;
-      console.log(error.message);
-    }
+    const data: SigninType = {
+      id: userId,
+      password,
+    };
+    dispatch(fetchSignin(data, router));
   };
 
   return (
@@ -56,8 +41,8 @@ const Login: React.FC = () => {
         <FormBody>
           <FormItem>
             <InputText
-              label="userID"
-              placeholder="半角英数字で入力"
+              label='userID'
+              placeholder='半角英数字で入力'
               value={userId}
               validation={Validation.HALF_WIDTH}
               onChange={handleUserIdChange}
@@ -65,8 +50,8 @@ const Login: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label="パスワード"
-              placeholder="半角英数字で入力"
+              label='パスワード'
+              placeholder='半角英数字で入力'
               value={password}
               password
               validation={Validation.HALF_WIDTH}
@@ -77,7 +62,7 @@ const Login: React.FC = () => {
         <FormSubmit>
           <ButtonWrapper>
             <Button
-              text="ログイン"
+              text='ログイン'
               variant={Variant.CONTAINED}
               disabled={!userId || !password}
               onClick={handleSignin}

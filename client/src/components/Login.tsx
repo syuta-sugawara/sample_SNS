@@ -1,11 +1,17 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import STYLES from '../styles/const';
+import { SigninType } from '../types/auth';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
+import { fetchSignin } from '../store/auth/actions';
 
 const Login: React.FC = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -17,9 +23,12 @@ const Login: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // TODO
-    console.log('ログイン処理');
+  const handleSignin = async () => {
+    const data: SigninType = {
+      id: userId,
+      password,
+    };
+    dispatch(fetchSignin(data, router));
   };
 
   return (
@@ -55,7 +64,7 @@ const Login: React.FC = () => {
               text="ログイン"
               variant={Variant.CONTAINED}
               disabled={!userId || !password}
-              onClick={handleLogin}
+              onClick={handleSignin}
             />
           </ButtonWrapper>
         </FormSubmit>

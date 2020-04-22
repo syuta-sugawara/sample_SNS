@@ -6,6 +6,7 @@ import { ActionTypes } from '../actionTypes';
 import modalAction from '../modal/actions';
 import { TweetType, PostTweetType } from '../../types/tweet';
 import { ErrorResponse } from '../../types/errorResponse';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -16,9 +17,14 @@ const tweetAction = {
   postTweet: actionCreator.async<{}, {}, Error>(ActionTypes.postTweet),
 };
 
-export const fetchTweetList = () => async (dispatch: Dispatch) => {
+export const fetchTweetList = () => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(tweetAction.getTweetList.started({ params: {} }));
-  const tweetAPI = new TweetAPI();
+  const { auth } = getState();
+
+  const tweetAPI = new TweetAPI(auth.token);
   try {
     const res = await tweetAPI.getAllTweets();
     if (res.ok) {
@@ -35,10 +41,12 @@ export const fetchTweetList = () => async (dispatch: Dispatch) => {
 };
 
 export const fetchPostTweet = (data: PostTweetType) => async (
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  getState: () => RootState
 ): Promise<any> => {
   dispatch(tweetAction.postTweet.started({ params: {} }));
-  const tweetAPI = new TweetAPI();
+  const { auth } = getState();
+  const tweetAPI = new TweetAPI(auth.token);
   try {
     const res = await tweetAPI.postTweet(data);
     if (res.ok) {

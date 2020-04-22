@@ -20,6 +20,8 @@ const Navigation: React.FC = () => {
     screenName: 'じゅんきち',
     iconUrl:
       'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
+    followIDs: [],
+    followedIDs: [],
   };
 
   const handleClose = () => {

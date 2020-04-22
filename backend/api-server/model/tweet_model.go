@@ -20,7 +20,7 @@ func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetMo
 	return TweetModel{
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
-		userModel:  NewUserModel(db, auth),
+		userModel:  NewUserModel(db, auth, nil),
 		tlModel:    NewTimelineModel(db),
 	}
 }

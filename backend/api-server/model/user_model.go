@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -12,12 +13,14 @@ import (
 type UserModel struct {
 	userTable dynamo.Table
 	auth      *cognito.CognitoIdentityProvider
+	upload    *s3manager.Uploader
 }
 
-func NewUserModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UserModel {
+func NewUserModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) UserModel {
 	return UserModel{
 		userTable: db.Table("Users"),
 		auth:      auth,
+		upload:    upload,
 	}
 }
 
@@ -34,18 +37,16 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
-func (um *UserModel) Update(c echo.Context) *entity.User {
+func (um *UserModel) Update(c echo.Context) (*entity.User, error) {
 	userID := c.Get("userID").(string)
 	screeName := c.FormValue("screenName")
 	comment := c.FormValue("comment")
-	i, _ := c.FormFile("iconImg")
-	icon, _ := i.Open()
-	defer icon.Close()
-	iconUrl := UploadImage(icon, userID+"icon")
-	h, _ := c.FormFile("headerImg")
-	header, _ := h.Open()
-	defer header.Close()
-	headerUrl := UploadImage(header, userID+"header")
+	iconUrl, err := um.UploadImage(c, userID, "iconImg")
+	if err != nil {
+		return nil, err
+	}
+	headerUrl, err := um.UploadImage(c, userID, "headerImg")
+
 	user := new(entity.User)
 	user = &entity.User{
 		ID:         userID,
@@ -55,9 +56,9 @@ func (um *UserModel) Update(c echo.Context) *entity.User {
 		HeaderUrl:  headerUrl,
 	}
 	if err := um.userTable.Put(user).Run(); err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return user
+	return user, nil
 }
 
 func (um *UserModel) Updates(c echo.Context, u *entity.User, fu *entity.User) {

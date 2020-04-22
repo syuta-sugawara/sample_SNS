@@ -5,12 +5,13 @@ import (
 	"backend/api-server/middleware"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
 
-func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvider) {
-	userController := controller.NewUserController(db, auth)
+func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) {
+	userController := controller.NewUserController(db, auth, upload)
 
 	// 認証なしのrouting
 	authRouter := e.Group("/auth")

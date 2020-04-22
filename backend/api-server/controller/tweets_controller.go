@@ -21,7 +21,7 @@ type TweetsController struct {
 func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
 	return TweetsController{
 		tweetModel: model.NewTweetModel(db, auth),
-		userModel:  model.NewUserModel(db, auth),
+		userModel:  model.NewUserModel(db, auth, nil),
 		tlModel:    model.NewTimelineModel(db),
 	}
 }

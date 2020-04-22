@@ -1,9 +1,12 @@
 package model
 
 import (
-	"crypto/rand"
-	"encoding/binary"
-	"strconv"
+	"fmt"
+	"mime/multipart"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 func IsNotFound(err error) bool {
@@ -12,37 +15,27 @@ func IsNotFound(err error) bool {
 	}
 	return false
 }
-func UploadImage(i string) string {
+func UploadImage(file multipart.File, name string) string {
+	bucketName := "teamo-image"
+	objectKey := "usericon/" + name + ".jpg"
+	// creds := credentials.NewStaticCredentials("AWS_ACCESS_KEY", "AWS_SECRET_ACCESS_KEY", "")
+	sess, err := session.NewSession(&aws.Config{
+		//Credentials: creds,
+		Region: aws.String("ap-northeast-1")},
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	// TODO：アップロード処理
-	// sess := session.Must(session.NewSessionWithOptions(session.Options{
-	// 	Profile:           "di",
-	// 	SharedConfigState: session.SharedConfigEnable,
-	// }))
-	// data, _ := base64.StdEncoding.DecodeString(i)
-	// file, _ := os.Create(random() + ".jpg")
-	// defer file.Close()
-
-	// file.Write(data)
-
-	// bucketName := "teamo-image"
-	// objectKey := "/usericon"
-
-	// uploader := s3manager.NewUploader(sess)
-	// _, err := uploader.Upload(&s3manager.UploadInput{
-	// 	Bucket: aws.String(bucketName),
-	// 	Key:    aws.String(objectKey),
-	// 	Body:   file,
-	// })
-
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	return "url"
-}
-
-func random() string {
-	var n uint64
-	binary.Read(rand.Reader, binary.LittleEndian, &n)
-	return strconv.FormatUint(n, 36)
+	uploader := s3manager.NewUploader(sess)
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(objectKey),
+		Body:   file,
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey
+	return url
 }

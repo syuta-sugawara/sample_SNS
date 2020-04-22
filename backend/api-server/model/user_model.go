@@ -34,15 +34,25 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
-func (um *UserModel) Update(userID string, u *entity.UpdateUser) *entity.User {
+func (um *UserModel) Update(c echo.Context) *entity.User {
+	userID := c.Get("userID").(string)
+	screeName := c.FormValue("screenName")
+	comment := c.FormValue("comment")
+	i, _ := c.FormFile("iconImg")
+	icon, _ := i.Open()
+	defer icon.Close()
+	iconUrl := UploadImage(icon, userID+"icon")
+	h, _ := c.FormFile("headerImg")
+	header, _ := h.Open()
+	defer header.Close()
+	headerUrl := UploadImage(header, userID+"header")
 	user := new(entity.User)
-	user, _ = um.Get(userID)
 	user = &entity.User{
 		ID:         userID,
-		ScreenName: u.ScreenName,
-		Comment:    u.Comment,
-		IconUrl:    u.Icon,
-		HeaderUrl:  u.Header,
+		ScreenName: screeName,
+		Comment:    comment,
+		IconUrl:    iconUrl,
+		HeaderUrl:  headerUrl,
 	}
 	if err := um.userTable.Put(user).Run(); err != nil {
 		fmt.Println(err)

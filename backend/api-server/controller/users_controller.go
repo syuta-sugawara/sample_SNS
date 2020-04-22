@@ -73,11 +73,8 @@ func (uc *UsersController) FollowersIndex(c echo.Context) error {
 
 // ユーザー情報更新
 func (uc *UsersController) UpdateUser(c echo.Context) error {
-	userID := c.Get("userID").(string)
-	user := new(entity.UpdateUser)
-	c.Bind(user)
-	userInfo := uc.userModel.Update(userID, user)
-	return c.JSON(http.StatusBadRequest, userInfo)
+	userInfo := uc.userModel.Update(c)
+	return c.JSON(http.StatusOK, userInfo)
 }
 
 // ユーザー登録

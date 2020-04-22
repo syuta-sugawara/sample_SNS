@@ -4,7 +4,7 @@ import { PostTweetType } from '../types/tweet';
 import AuthorizedAPI from './common';
 
 export default class TweetAPI extends AuthorizedAPI {
-  readonly TWEET_API_URL = `${process.env.API_URL}/tweets/`;
+  readonly TWEET_API_URL = `${process.env.API_URL}/tweets`;
 
   constructor(token?: string) {
     super(token);

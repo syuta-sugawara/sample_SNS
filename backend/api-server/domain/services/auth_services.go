@@ -41,7 +41,7 @@ func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 	return nil
 }
 
-func (us *UserServices) GetUserFromCognito(u *entity.SignInUser) (*string, error) {
+func (us *UserServices) GetToken(u *entity.SignInUser) (*entity.Credentials, error) {
 	params := &cognito.InitiateAuthInput{
 		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
 		AuthParameters: map[string]*string{
@@ -56,7 +56,33 @@ func (us *UserServices) GetUserFromCognito(u *entity.SignInUser) (*string, error
 		return nil, err
 	}
 
-	return resp.AuthenticationResult.AccessToken, nil
+	credentials := entity.Credentials{
+		AccessToken:  *resp.AuthenticationResult.AccessToken,
+		RefreshToken: resp.AuthenticationResult.RefreshToken,
+	}
+
+	return &credentials, nil
+}
+
+func (us *UserServices) GetTokenWtihRefreshToken(refreshToken string) (*entity.Credentials, error) {
+	params := &cognito.InitiateAuthInput{
+		AuthFlow: aws.String("REFRESH_TOKEN_AUTH"),
+		AuthParameters: map[string]*string{
+			"REFRESH_TOKEN": aws.String(refreshToken),
+		},
+		ClientId: aws.String(os.Getenv("CLIENT_ID")),
+	}
+
+	resp, err := us.auth.InitiateAuth(params)
+	if err != nil {
+		return nil, err
+	}
+
+	credentials := entity.Credentials{
+		AccessToken: *resp.AuthenticationResult.AccessToken,
+	}
+
+	return &credentials, nil
 }
 
 func (us *UserServices) VerifyUserOnCognito(accessToken string) (*string, error) {

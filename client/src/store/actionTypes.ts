@@ -3,4 +3,6 @@ export const ActionTypes = {
   postTweet: 'POST_TWEET',
   showModal: 'SHOW_MODAL',
   hideModal: 'HIDE_MODAL',
+  setMyself: 'SET_MYSELF',
+  getUser: 'GET_USER',
 } as const;

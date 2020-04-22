@@ -20,16 +20,16 @@ const Profile: React.FC<Props> = props => {
   return (
     <Wrapper>
       <Header>
-        <img
-          src="https://pbs.twimg.com/profile_banners/636957320/1514493736/1500x500"
-          alt=""
-        />
+        <img src="/img/profile-header.jpeg" alt="" />
       </Header>
       <Main>
         <MainHead>
           <ProfileImageWrapper>
             <ProfileImage>
-              <img src={user.iconUrl} alt={user.screenName} />
+              <img
+                src={!user.iconUrl ? '/img/profile-icon.png' : user.iconUrl}
+                alt={user.screenName}
+              />
             </ProfileImage>
           </ProfileImageWrapper>
           <ButtonWrapper>
@@ -74,6 +74,11 @@ const Wrapper = styled.div``;
 
 const Header = styled.div`
   height: 200px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Main = styled.div`

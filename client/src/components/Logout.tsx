@@ -11,7 +11,7 @@ type Props = {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-const Logout: React.FC<Props> = (props) => {
+const Logout: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const router = useRouter();
   const handleLogout = () => {

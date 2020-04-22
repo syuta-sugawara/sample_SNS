@@ -18,9 +18,7 @@ func IsNotFound(err error) bool {
 func UploadImage(file multipart.File, name string) string {
 	bucketName := "teamo-image"
 	objectKey := "usericon/" + name + ".jpg"
-	// creds := credentials.NewStaticCredentials("AWS_ACCESS_KEY", "AWS_SECRET_ACCESS_KEY", "")
 	sess, err := session.NewSession(&aws.Config{
-		//Credentials: creds,
 		Region: aws.String("ap-northeast-1")},
 	)
 	if err != nil {

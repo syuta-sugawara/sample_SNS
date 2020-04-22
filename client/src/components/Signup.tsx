@@ -1,24 +1,30 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import STYLES from '../styles/const';
+import { SignupType } from '../types/auth';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
+import { fetchSignup } from '../store/auth/actions';
 
 const Signup: React.FC = () => {
   const [userId, setUserId] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [mail, setMail] = useState<string>('');
+  const [screenName, setScreenName] = useState<string>('');
+  const [email, setMail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isMisMatch, setIsMisMatch] = useState<boolean>(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setScreenName(e.target.value);
   };
 
   const handleMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,15 +37,22 @@ const Signup: React.FC = () => {
 
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setConfirmPassword(value);
-    if (password !== confirmPassword) {
+    if (password !== value) {
       setIsMisMatch(true);
+    } else {
+      setIsMisMatch(false);
     }
+    setConfirmPassword(value);
   };
 
-  const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // TODO
-    console.log('登録処理');
+  const handleRegister = async () => {
+    const data: SignupType = {
+      id: userId,
+      screenName,
+      mail: email,
+      password,
+    };
+    dispatch(fetchSignup(data, router));
   };
 
   return (
@@ -60,19 +73,19 @@ const Signup: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label="ユーザ名"
+              label="メールアドレス"
               placeholder=""
-              value={name}
-              onChange={handleNameChange}
+              value={email}
+              validation={Validation.EMAIL}
+              onChange={handleMailChange}
             />
           </FormItem>
           <FormItem>
             <InputText
-              label="メールアドレス"
+              label="ユーザ名"
               placeholder=""
-              value={mail}
-              validation={Validation.EMAIL}
-              onChange={handleMailChange}
+              value={screenName}
+              onChange={handleNameChange}
             />
           </FormItem>
           <FormItem>
@@ -95,7 +108,7 @@ const Signup: React.FC = () => {
               onChange={handleConfirmPassword}
             />
             {!isMisMatch ? null : (
-              <Error>入力したパスワードが一致していません</Error>
+              <ErrorText>入力したパスワードが一致していません</ErrorText>
             )}
           </FormItem>
         </FormBody>
@@ -149,7 +162,7 @@ const ButtonWrapper = styled.div`
   height: 40px;
 `;
 
-const Error = styled.span`
+const ErrorText = styled.span`
   font-size: 15px;
   font-weight: 400;
   color: ${STYLES.COLOR.RED};

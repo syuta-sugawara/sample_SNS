@@ -189,7 +189,7 @@ const Tweet = styled.div``;
 const Reaction = styled.div`
   display: flex;
 `;
- 
+
 type ButtonWrapperProps = {
   disabled?: boolean;
 };

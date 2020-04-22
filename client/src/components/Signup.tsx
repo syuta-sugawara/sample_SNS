@@ -80,8 +80,8 @@ const Signup: React.FC = () => {
         <FormBody>
           <FormItem>
             <InputText
-              label='userID'
-              placeholder='半角英数字で入力'
+              label="userID"
+              placeholder="半角英数字で入力"
               value={userId}
               validation={Validation.HALF_WIDTH}
               onChange={handleUserIdChange}
@@ -89,8 +89,8 @@ const Signup: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label='メールアドレス'
-              placeholder=''
+              label="メールアドレス"
+              placeholder=""
               value={email}
               validation={Validation.EMAIL}
               onChange={handleMailChange}
@@ -98,16 +98,16 @@ const Signup: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label='ユーザ名'
-              placeholder=''
+              label="ユーザ名"
+              placeholder=""
               value={screenName}
               onChange={handleNameChange}
             />
           </FormItem>
           <FormItem>
             <InputText
-              label='パスワード'
-              placeholder='8文字以上の半角英数字で入力'
+              label="パスワード"
+              placeholder="8文字以上の半角英数字で入力"
               value={password}
               password
               validation={Validation.PASSWORD}
@@ -116,8 +116,8 @@ const Signup: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label='パスワード（確認用）'
-              placeholder='8文字以上の半角英数字で入力'
+              label="パスワード（確認用）"
+              placeholder="8文字以上の半角英数字で入力"
               value={confirmPassword}
               password
               validation={Validation.PASSWORD}
@@ -131,7 +131,7 @@ const Signup: React.FC = () => {
         <FormSubmit>
           <ButtonWrapper>
             <Button
-              text='登録'
+              text="登録"
               variant={Variant.CONTAINED}
               onClick={handleRegister}
             />

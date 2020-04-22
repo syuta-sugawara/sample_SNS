@@ -1,8 +1,8 @@
 export default class API {
   public token: string;
 
-  constructor(token: string) {
-    this.token = token;
+  constructor(token?: string) {
+    this.token = token || localStorage.getItem('token') || '';
   }
 
   public get authHeader() {

@@ -8,7 +8,6 @@ import { SigninType } from '../types/auth';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
 import { fetchSignin } from '../store/auth/actions';
-import { RootState } from '../store';
 
 const Login: React.FC = () => {
   const router = useRouter();

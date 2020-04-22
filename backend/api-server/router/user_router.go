@@ -23,6 +23,7 @@ func UserRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvid
 	userRouter.GET("", userController.GetCurrentUser)
 	userRouter.GET("/:userID", userController.Get)
 	userRouter.GET("/:userID/tweets", userController.GetUserTL)
+	userRouter.POST("/signout", userController.Signout)
 	// r.GET("/:userName", userController.UserIndex)
 	// r.GET("/:userName/follows", userController.FollowsIndex)
 	// r.GET("/:userName/followers", userController.FollowersIndex)

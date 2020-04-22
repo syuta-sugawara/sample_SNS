@@ -1,4 +1,4 @@
-export default class API {
+export default class AuthorizedAPI {
   public token: string;
 
   constructor(token?: string) {

@@ -3,13 +3,11 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import AuthAPI from '../requests/auth';
-import modalAction from '../store/modal/actions';
 import STYLES from '../styles/const';
 import { SignupType } from '../types/auth';
-import { ErrorResponse } from '../types/errorResponse';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
+import { fetchSignup } from '../store/auth/actions';
 
 const Signup: React.FC = () => {
   const [userId, setUserId] = useState<string>('');
@@ -54,21 +52,7 @@ const Signup: React.FC = () => {
       mail: email,
       password,
     };
-    const authAPI = new AuthAPI();
-    try {
-      const res = await authAPI.postSignup(data);
-      if (res.ok) {
-        //TODO: myselfストアにセット
-        dispatch(modalAction.hide());
-        router.push('/home');
-      } else {
-        const result = (await res.json()) as ErrorResponse;
-        throw new Error(result.massage);
-      }
-    } catch (err) {
-      const error = err as Error;
-      console.log(error);
-    }
+    dispatch(fetchSignup(data, router));
   };
 
   return (

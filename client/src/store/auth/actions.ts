@@ -7,7 +7,6 @@ import AuthAPI from '../../requests/auth';
 import { ErrorResponse } from '../../types/errorResponse';
 import { NextRouter } from 'next/router';
 import modalAction from '../modal/actions';
-import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -16,6 +15,7 @@ const authAction = {
   signin: actionCreator.async<{}, CredentialType, Error>(
     ActionTypes.execSignin
   ),
+  signout: actionCreator.async<{}, {}, {}>(ActionTypes.execSignout),
   getTokenFromLocal: actionCreator.async<{}, { token: string }, Error>(
     ActionTypes.getTokenFromLocal
   ),
@@ -31,6 +31,10 @@ const setLocalStorage = (credential: Partial<CredentialType>) => {
   credential.token && localStorage.setItem('token', credential.token);
   credential.refreshToken &&
     localStorage.setItem('refreshToken', credential.refreshToken);
+};
+
+const clearLocalStorage = () => {
+  localStorage.clear();
 };
 
 export const fetchSignin = (data: SigninType, router: NextRouter) => async (
@@ -56,7 +60,9 @@ export const fetchSignin = (data: SigninType, router: NextRouter) => async (
   }
 };
 
-export const fetchSignup = (data: SignupType) => async (dispatch: Dispatch) => {
+export const fetchSignup = (data: SignupType, router: NextRouter) => async (
+  dispatch: Dispatch
+) => {
   dispatch(authAction.signup.started({ params: {} }));
   const authAPI = new AuthAPI();
   try {
@@ -68,6 +74,8 @@ export const fetchSignup = (data: SignupType) => async (dispatch: Dispatch) => {
       //   authAction.signup.done({ result: { token: result.token }, params: {} })
       // );
       // setLocalStorage(result);
+      dispatch(modalAction.hide());
+      router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
       throw new Error(result.massage);
@@ -76,6 +84,15 @@ export const fetchSignup = (data: SignupType) => async (dispatch: Dispatch) => {
     const error = err as Error;
     dispatch(authAction.signup.failed({ error, params: {} }));
   }
+};
+
+export const asyncSignout = (router: NextRouter) => async (
+  dispatch: Dispatch
+) => {
+  dispatch(authAction.signout.started({ params: {} }));
+  clearLocalStorage();
+  dispatch(authAction.signout.done({ result: {}, params: {} }));
+  router.push('');
 };
 
 export const getTokenFromLocal = () => (dispatch: Dispatch) => {

@@ -12,11 +12,11 @@ const initialState: StateType = { token: '', refreshToken: '', loading: false };
 
 const authReducer = reducerWithInitialState(initialState)
   // signup
-  .case(authAction.signup.started, state => ({
+  .case(authAction.signup.started, (state) => ({
     ...state,
     loading: true,
   }))
-  .case(authAction.signup.done, state => ({
+  .case(authAction.signup.done, (state) => ({
     ...state,
     loading: false,
   }))
@@ -27,7 +27,7 @@ const authReducer = reducerWithInitialState(initialState)
   }))
 
   //signin
-  .case(authAction.signin.started, state => ({
+  .case(authAction.signin.started, (state) => ({
     ...state,
     loading: true,
   }))
@@ -42,8 +42,18 @@ const authReducer = reducerWithInitialState(initialState)
     error: payload.error,
   }))
 
+  //signout
+  .case(authAction.signout.started, (state) => ({
+    ...state,
+  }))
+  .case(authAction.signout.done, (state) => ({
+    ...state,
+    token: '',
+    refreshToken: '',
+  }))
+
   // getTokenFromLocal
-  .case(authAction.getTokenFromLocal.started, state => ({
+  .case(authAction.getTokenFromLocal.started, (state) => ({
     ...state,
   }))
   .case(authAction.getTokenFromLocal.done, (state, payload) => ({

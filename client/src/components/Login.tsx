@@ -40,8 +40,8 @@ const Login: React.FC = () => {
         <FormBody>
           <FormItem>
             <InputText
-              label='userID'
-              placeholder='半角英数字で入力'
+              label="userID"
+              placeholder="半角英数字で入力"
               value={userId}
               validation={Validation.HALF_WIDTH}
               onChange={handleUserIdChange}
@@ -49,8 +49,8 @@ const Login: React.FC = () => {
           </FormItem>
           <FormItem>
             <InputText
-              label='パスワード'
-              placeholder='半角英数字で入力'
+              label="パスワード"
+              placeholder="半角英数字で入力"
               value={password}
               password
               validation={Validation.HALF_WIDTH}
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
         <FormSubmit>
           <ButtonWrapper>
             <Button
-              text='ログイン'
+              text="ログイン"
               variant={Variant.CONTAINED}
               disabled={!userId || !password}
               onClick={handleSignin}

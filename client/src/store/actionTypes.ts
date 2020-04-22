@@ -9,4 +9,5 @@ export const ActionTypes = {
   getTokenFromRemote: 'GET_TOKEN_FROM_REMOTE',
   execSignup: 'EXEC_SIGNUP',
   execSignin: 'EXEC_SIGNIN',
+  execSignout: 'EXEC_SIGNOUT',
 } as const;

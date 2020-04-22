@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-unfetch';
 
 import { PostTweetType } from '../types/tweet';
-import API from './common';
+import AuthorizedAPI from './common';
 
-export default class TweetAPI extends API {
+export default class TweetAPI extends AuthorizedAPI {
   constructor(token: string) {
     super(token);
   }

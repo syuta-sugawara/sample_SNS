@@ -55,13 +55,16 @@ const authReducer = reducerWithInitialState(initialState)
   // getTokenFromLocal
   .case(authAction.getTokenFromLocal.started, state => ({
     ...state,
+    loading: true,
   }))
   .case(authAction.getTokenFromLocal.done, (state, payload) => ({
     ...state,
+    loading: false,
     token: payload.result.token,
   }))
   .case(authAction.getTokenFromLocal.failed, (state, payload) => ({
     ...state,
+    loading: false,
     error: payload.error,
   }));
 

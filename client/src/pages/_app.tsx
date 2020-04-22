@@ -4,6 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 
+import Auth from '../components/Auth';
 import store from '../store';
 import reset from '../styles/reset';
 
@@ -30,7 +31,9 @@ class MyApp extends App<ReduxWrapperAppProps> {
     return (
       <Provider store={store}>
         <GlobalStyle />
-        <Component {...pageProps} />
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
       </Provider>
     );
   }

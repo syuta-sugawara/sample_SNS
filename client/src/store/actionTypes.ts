@@ -5,4 +5,8 @@ export const ActionTypes = {
   hideModal: 'HIDE_MODAL',
   setMyself: 'SET_MYSELF',
   getUser: 'GET_USER',
+  getTokenFromLocal: 'GET_TOKEN_FROM_LOCAL',
+  getTokenFromRemote: 'GET_TOKEN_FROM_REMOTE',
+  execSignup: 'EXEC_SIGNUP',
+  execSignin: 'EXEC_SIGNIN',
 } as const;

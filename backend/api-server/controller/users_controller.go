@@ -5,7 +5,6 @@ import (
 	"backend/api-server/domain/services"
 	"backend/api-server/model"
 	"net/http"
-	"time"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
@@ -124,36 +123,36 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 
-func deleteCookie() *http.Cookie {
-	cookie := new(http.Cookie)
-	cookie.Name = "token"
-	cookie.Path = "/"
-	cookie.Value = ""
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-	cookie.HttpOnly = true
-	cookie.MaxAge = -1
-	return cookie
-}
-
 // サインイン処理
 func (uc *UsersController) Signin(c echo.Context) error {
 	u := new(entity.SignInUser)
 	c.Bind(u)
-	accessToken, err := uc.userService.GetUserFromCognito(u)
+	credentials, err := uc.userService.GetToken(u)
 
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	}
 
 	resp := entity.SignInResp{
-		Token: *accessToken,
+		Token:        credentials.AccessToken,
+		RefreshToken: *credentials.RefreshToken,
 	}
 
 	return c.JSON(http.StatusOK, resp)
 }
 
-// サインアウト処理
-func (uc *UsersController) Signout(c echo.Context) error {
-	c.SetCookie(deleteCookie())
-	return c.JSON(http.StatusOK, CreateErrorMessage("signout"))
+func (uc *UsersController) Refresh(c echo.Context) error {
+	req := new(entity.RefreshTokenReq)
+	c.Bind(req)
+	credentials, err := uc.userService.GetTokenWtihRefreshToken(req.RefreshToken)
+
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
+	}
+
+	resp := entity.RefreshTokenResp{
+		Token: credentials.AccessToken,
+	}
+
+	return c.JSON(http.StatusOK, resp)
 }

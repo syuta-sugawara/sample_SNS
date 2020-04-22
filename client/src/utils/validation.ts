@@ -12,3 +12,9 @@ export const isMailAddress = (str: string) => {
 export const isMoreLeastCharacter = (str: string, least: number) => {
   return str.length >= least;
 };
+
+export const isImageUrl = (str: string) => {
+  const regex = /https?:\/\/.*\.(?:png|jpg|jpeg|gif)/i;
+  if (str.match(regex)) return true;
+  return false;
+};

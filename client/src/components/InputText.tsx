@@ -6,12 +6,14 @@ import {
   isHalfWidth,
   isMailAddress,
   isMoreLeastCharacter,
+  isImageUrl,
 } from '../utils/validation';
 
 export enum Validation {
   EMAIL = 'email',
   HALF_WIDTH = 'half_width',
   PASSWORD = 'password',
+  IMAGE = 'image',
 }
 
 type Props = {
@@ -61,6 +63,16 @@ const InputText: React.FC<Props> = props => {
           } else {
             setErrorMessage('');
           }
+          break;
+        case Validation.IMAGE:
+          if (!isImageUrl(e.target.value)) {
+            setErrorMessage(
+              '画像URLの形式（jpg/jpeg/png/gif）が正しくありません'
+            );
+          } else {
+            setErrorMessage('');
+          }
+          break;
       }
     }
     props.onChange(e);

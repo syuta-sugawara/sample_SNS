@@ -21,6 +21,10 @@ type SignInUser struct {
 	PassWord string `json:"password"`
 }
 
+type SignInResp struct {
+	Token string `json:"token"`
+}
+
 type DisplayUser struct {
 	ID         string `json:"id"`
 	ScreenName string `json:"screenName"`

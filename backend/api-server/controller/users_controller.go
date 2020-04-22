@@ -100,7 +100,11 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 	//		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	//	}
 	//
-	//	c.SetCookie(createCookie(*accessToken))
+	//	resp := entity.SignInResp{
+	// 	Token: *accessToken,
+	// }
+
+	// return c.JSON(http.StatusOK, resp)
 	return c.JSON(http.StatusCreated, resp)
 }
 
@@ -118,17 +122,6 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 	userID := c.Get("userID").(string)
 	uc.userModel.UnFollow(c, userID, followedUserID)
 	return c.String(http.StatusOK, "UnFollow"+followedUserID)
-}
-
-//cookie処理
-func createCookie(token string) *http.Cookie {
-	cookie := new(http.Cookie)
-	cookie.Name = "token"
-	cookie.Path = "/"
-	cookie.Value = token
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-	cookie.HttpOnly = true
-	return cookie
 }
 
 func deleteCookie() *http.Cookie {
@@ -152,8 +145,11 @@ func (uc *UsersController) Signin(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	}
 
-	c.SetCookie(createCookie(*accessToken))
-	return c.JSON(http.StatusOK, CreateErrorMessage("success"))
+	resp := entity.SignInResp{
+		Token: *accessToken,
+	}
+
+	return c.JSON(http.StatusOK, resp)
 }
 
 // サインアウト処理

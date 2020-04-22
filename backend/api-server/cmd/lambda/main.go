@@ -20,7 +20,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	e := router.InitEcho(sess)
+	e := router.InitEcho(sess, sess)
 	echoLambda = echolamda.New(e)
 }
 

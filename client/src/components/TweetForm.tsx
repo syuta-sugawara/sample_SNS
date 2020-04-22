@@ -15,7 +15,7 @@ type Props = {
 
 const TweetForm: React.FC<Props> = props => {
   const [value, setValue] = useState<string>('');
-  const [wordCount, setCount] = useState(0);
+  const [wordCount, setCount] = useState<number>(0);
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -24,7 +24,6 @@ type Props = {
 };
 
 const TweetItem: React.FC<Props> = props => {
-  const myself = useSelector((state: RootState) => state.auth.currentUser);
   const user = props.tweet.user;
   const likeCount = props.tweet.likeCount;
   const likeUsers = props.tweet.likeUsers;
@@ -35,6 +34,7 @@ const TweetItem: React.FC<Props> = props => {
   const dispatch = useDispatch();
 
   const auth = useSelector((state: RootState) => state.auth);
+  const myself = auth.currentUser;
   const ApiRequest = new TweetAPI(auth.credentials.token);
 
   const content: string | undefined = (() => {

@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import TweetAPI from '../requests/tweet';
 import STYLES from '../styles/const';
+import { fetchTweetList } from '../store/tweet/actions';
 import { TweetType } from '../types/tweet';
 import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
@@ -26,6 +28,7 @@ const TweetItem: React.FC<Props> = props => {
   const [likeCount, setLikeCount] = useState<number>(0);
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const ApiRequest = new TweetAPI();
 
@@ -37,6 +40,7 @@ const TweetItem: React.FC<Props> = props => {
       }
       setRetweetCount(retweetCount + 1);
       setRetweetDisable(true);
+      dispatch(fetchTweetList());
     } catch (e) {
       console.error(e);
     }

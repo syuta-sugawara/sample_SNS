@@ -35,7 +35,7 @@ export const fetchUser = (uid: string) => async (
       dispatch(userAction.getUser.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -58,7 +58,7 @@ export const fetchUserTweets = (uid: string) => async (
       dispatch(userAction.getUserTweets.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -80,7 +80,7 @@ export const fetchFollow = (uid: string) => async (
       dispatch(userAction.postFollow.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -102,7 +102,7 @@ export const fetchUnFollow = (uid: string) => async (
       dispatch(userAction.deleteFollow.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;

@@ -57,14 +57,15 @@ func (um *UserModel) Update(c echo.Context) (*entity.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	user := new(entity.User)
-	user = &entity.User{
-		ID:         userID,
-		ScreenName: screeName,
-		Comment:    comment,
-		IconUrl:    *iconUrl,
-		HeaderUrl:  *headerUrl,
+	user, err := um.Get(userID)
+	if err != nil {
+		return nil, err
 	}
+	user.ScreenName = screeName
+	user.Comment = comment
+	user.IconUrl = *iconUrl
+	user.HeaderUrl = *headerUrl
+
 	if err := um.userTable.Put(user).Run(); err != nil {
 		return nil, err
 	}

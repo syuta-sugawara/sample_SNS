@@ -96,7 +96,7 @@ export const asyncSignout = (router: NextRouter) => async (
 };
 
 export const getTokenFromLocal = () => (dispatch: Dispatch) => {
-  dispatch(authAction.signin.started({ params: {} }));
+  dispatch(authAction.getTokenFromLocal.started({ params: {} }));
   try {
     const token = getTokenFromLS();
     if (token) {
@@ -108,7 +108,7 @@ export const getTokenFromLocal = () => (dispatch: Dispatch) => {
     }
   } catch (err) {
     const error = err as Error;
-    dispatch(authAction.signin.failed({ error, params: {} }));
+    dispatch(authAction.getTokenFromLocal.failed({ error, params: {} }));
   }
 };
 

@@ -174,10 +174,14 @@ func (tm *TweetModel) UserLikes(userID string) (*[]entity.TweetResp, error) {
 	if err != nil {
 		return nil, err
 	}
+	likeList := userInfo.LikeList
+	if len(likeList) > 20 {
+		likeList = likeList[len(likeList)-20:]
+	}
 	tweets := []entity.TweetResp{}
 	tweetResp := new(entity.TweetResp)
-	sort.Sort(sort.Reverse(sort.IntSlice(userInfo.LikeList)))
-	for i := range userInfo.LikeList {
+	sort.Sort(sort.Reverse(sort.IntSlice(likeList)))
+	for i := range likeList {
 		tm.tweetTable.Get("id", userInfo.LikeList[i]).One(tweetResp)
 		tweets = append(tweets, *tweetResp)
 	}

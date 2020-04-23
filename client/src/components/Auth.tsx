@@ -30,7 +30,7 @@ const Auth: React.FC<Props> = props => {
       isFirstRef.current = false;
       dispatch(fetchCurrentUser());
     } else {
-      if (pathname === '/home' && (auth.error || myself.error)) {
+      if (pathname !== '/' && (auth.error || myself.error)) {
         router.push('/');
       }
       setIsLoading(false);

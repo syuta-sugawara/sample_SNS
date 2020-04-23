@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -24,13 +24,30 @@ type Props = {
 
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
-  const [retweetCount, setRetweetCount] = useState<number>(0);
-  const [likeCount, setLikeCount] = useState<number>(0);
+  const likeCount = props.tweet.likeCount;
+  const likeUsers = props.tweet.likeUsers;
+  const retweetCount = props.tweet.retweetCount;
+  const retweetsUsers = props.tweet.retweetUsers;
+  // const [retweetCount, setRetweetCount] = useState<number>(0);
+  // const [likeCount, setLikeCount] = useState(props.tweet.likeCount);
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const ApiRequest = new TweetAPI();
+
+  useEffect(() => {
+    retweetsUsers?.forEach(item => {
+      if (item == user.id) {
+        setRetweetDisable(true)
+      }
+    });
+    likeUsers?.forEach(item => {
+      if (item == user.id) {
+        setLikeDisable(true);
+      }
+    });
+  });
 
   const handlePostRetweets = async () => {
     try {
@@ -38,8 +55,6 @@ const TweetItem: React.FC<Props> = props => {
       if (!res.ok) {
         throw Error(res.statusText);
       }
-      setRetweetCount(retweetCount + 1);
-      setRetweetDisable(true);
       dispatch(fetchTweetList());
     } catch (e) {
       console.error(e);
@@ -52,8 +67,7 @@ const TweetItem: React.FC<Props> = props => {
       if (!res.ok) {
         throw Error(res.statusText);
       }
-      setLikeCount(likeCount + 1);
-      setLikeDisable(true);
+      dispatch(fetchTweetList());
     } catch (e) {
       console.error(e);
     }

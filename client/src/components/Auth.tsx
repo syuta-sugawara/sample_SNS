@@ -13,9 +13,9 @@ type Props = {
 const Auth: React.FC<Props> = props => {
   const router = useRouter();
   const dispatch = useDispatch();
+
   const isCheckedAuth = useRef<boolean>(false);
   const isCheckedMyself = useRef<boolean>(false);
-
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const auth = useSelector((state: RootState) => state.auth);
   const myself = useSelector((state: RootState) => state.myself);

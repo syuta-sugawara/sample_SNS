@@ -5,6 +5,7 @@ import { ErrorResponse } from '../../types/errorResponse';
 import { UserType } from '../../types/user';
 import { ActionTypes } from '../actionTypes';
 import UserAPI from '../../requests/user';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -12,9 +13,13 @@ const myselfAction = {
   getUser: actionCreator.async<{}, UserType, Error>(ActionTypes.getCurrentUser),
 };
 
-export const fetchCurrentUser = () => async (dispatch: Dispatch) => {
+export const fetchCurrentUser = () => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(myselfAction.getUser.started({ params: {} }));
-  const userAPI = new UserAPI();
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.token);
   try {
     const res = await userAPI.getCurrentUser();
     if (res.ok) {

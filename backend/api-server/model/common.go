@@ -21,7 +21,8 @@ func (um *UserModel) UploadImage(f *multipart.FileHeader, userID string, key str
 	}
 	defer file.Close()
 	bucketName := "teamo-image"
-	objectKey := key + "/" + userID
+	extension := imageExtension(f.Filename)
+	objectKey := key + "/" + userID + extension
 	_, err = um.upload.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(objectKey),
@@ -30,11 +31,11 @@ func (um *UserModel) UploadImage(f *multipart.FileHeader, userID string, key str
 	if err != nil {
 		return nil, err
 	}
-	url := imageUrl(f.Filename, objectKey)
+	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey + extension
 	return &url, nil
 }
 
-func imageUrl(fileName string, objectKey string) string {
+func imageExtension(fileName string) string {
 	extension := ""
 	if regexp.MustCompile(`.png`).MatchString(fileName) {
 		extension = ".png"
@@ -48,6 +49,5 @@ func imageUrl(fileName string, objectKey string) string {
 	if regexp.MustCompile(`.jpeg`).MatchString(fileName) {
 		extension = ".jpeg"
 	}
-	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey + extension
-	return url
+	return extension
 }

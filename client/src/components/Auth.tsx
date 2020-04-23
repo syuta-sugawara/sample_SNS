@@ -13,7 +13,8 @@ type Props = {
 const Auth: React.FC<Props> = props => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const isFirstRef = useRef(true);
+  const isCheckedAuth = useRef<boolean>(false);
+  const isCheckedMyself = useRef<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const auth = useSelector((state: RootState) => state.auth);
@@ -22,20 +23,32 @@ const Auth: React.FC<Props> = props => {
 
   useEffect(() => {
     dispatch(getTokenFromLocal());
-    isFirstRef.current = true;
+    isCheckedAuth.current = false;
+    isCheckedMyself.current = false;
   }, []);
 
   useEffect(() => {
-    if (isFirstRef.current) {
-      isFirstRef.current = false;
-      dispatch(fetchCurrentUser());
+    if (!isCheckedAuth.current) {
+      isCheckedAuth.current = true;
     } else {
-      if (pathname !== '/' && (auth.error || myself.error)) {
+      if (!auth.error && !isCheckedMyself.current) {
+        dispatch(fetchCurrentUser());
+        isCheckedMyself.current = true;
+      } else if (auth.error) {
+        router.push('/');
+        setIsLoading(false);
+      }
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (isCheckedMyself.current) {
+      if (pathname !== '/' && myself.error) {
         router.push('/');
       }
       setIsLoading(false);
     }
-  }, [dispatch, auth, myself]);
+  }, [myself]);
 
   return <>{isLoading ? null : props.children}</>;
 };

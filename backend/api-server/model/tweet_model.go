@@ -171,7 +171,6 @@ func (tm *TweetModel) addLikeList(tweetID int, userID string) error {
 
 func (tm *TweetModel) UserLikes(userID string) (*[]entity.TweetResp, error) {
 	userInfo, err := tm.userModel.Get(userID)
-	fmt.Println("GET")
 	if err != nil {
 		return nil, err
 	}

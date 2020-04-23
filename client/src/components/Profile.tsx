@@ -1,8 +1,9 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
-import UserAPI from '../requests/user';
+import { fetchFollow, fetchUnFollow } from '../store/user/actions';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
 import { defaultHeaderUrl } from '../utils/image';
@@ -10,20 +11,50 @@ import { defaultHeaderUrl } from '../utils/image';
 type Props = {
   user: UserType;
   isMine?: boolean;
+  isFollow?: boolean;
 };
 
 const Profile: React.FC<Props> = props => {
-  const { user, isMine } = props;
-  const handleClick = async () => {
-    // TODO:
-    const userAPI = new UserAPI();
-    try {
-      const res = await userAPI.postFollow(user.id);
-    } catch (err) {
-      const error = err as Error;
-    }
-    console.log('hi');
+  const { user, isMine, isFollow } = props;
+  const dispatch = useDispatch();
+
+  const handleEditProfile = () => {
+    //todo: プロフィール編集コンポーネント出す
   };
+
+  const handleFollow = () => {
+    dispatch(fetchFollow(user.id));
+  };
+
+  const handleUnFollow = () => {
+    dispatch(fetchUnFollow(user.id));
+  };
+
+  const button = (() => {
+    if (isMine)
+      return (
+        <Button
+          text="プロフィールを編集"
+          variant={Variant.OUTLINED}
+          onClick={handleEditProfile}
+        />
+      );
+    if (isFollow)
+      return (
+        <Button
+          text="フォローをはずす"
+          variant={Variant.CONTAINED}
+          onClick={handleUnFollow}
+        />
+      );
+    return (
+      <Button
+        text="フォロー"
+        variant={Variant.OUTLINED}
+        onClick={handleFollow}
+      />
+    );
+  })();
 
   return (
     <Wrapper>
@@ -37,14 +68,7 @@ const Profile: React.FC<Props> = props => {
               <img src={user.iconUrl} alt={user.screenName} />
             </ProfileImage>
           </ProfileImageWrapper>
-          <ButtonWrapper>
-            {/* TODO: !isMineのときフォロー・アンフォローでさらに分岐させる必要あり */}
-            <Button
-              text={isMine ? 'プロフィールを編集' : 'フォロー'}
-              variant={Variant.OUTLINED}
-              onClick={handleClick}
-            />
-          </ButtonWrapper>
+          <ButtonWrapper>{button}</ButtonWrapper>
         </MainHead>
         <MainBody>
           <User>
@@ -119,10 +143,6 @@ const MainBody = styled.div``;
 const User = styled.div`
   margin-bottom: 10px;
 `;
-
-// const SelfIntroduction = styled.div`
-//   margin-bottom: 10px;
-// `;
 
 const Follow = styled.div`
   display: flex;

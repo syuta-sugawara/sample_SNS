@@ -2,7 +2,7 @@ export default class AuthorizedAPI {
   public token: string;
 
   constructor(token: string) {
-    this.token = token || localStorage.getItem('token') || '';
+    this.token = token;
   }
 
   public get authHeader() {

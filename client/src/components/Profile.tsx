@@ -8,7 +8,6 @@ import modalAction from '../store/modal/actions';
 import { fetchFollow, fetchUnFollow } from '../store/user/actions';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
-import { defaultHeaderUrl } from '../utils/image';
 
 type Props = {
   user: UserType;
@@ -67,7 +66,7 @@ const Profile: React.FC<Props> = props => {
   return (
     <Wrapper>
       <Header>
-        <img src={defaultHeaderUrl} alt="" />
+        <img src={user.headerUrl} alt={`${user.screenName}のヘッダー画像`} />
       </Header>
       <Main>
         <MainHead>

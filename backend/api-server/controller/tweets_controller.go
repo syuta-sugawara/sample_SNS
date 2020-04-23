@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -18,10 +19,10 @@ type TweetsController struct {
 	tlModel    model.TimelineModel
 }
 
-func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetsController {
+func NewTweetController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) TweetsController {
 	return TweetsController{
-		tweetModel: model.NewTweetModel(db, auth),
-		userModel:  model.NewUserModel(db, auth),
+		tweetModel: model.NewTweetModel(db, auth, upload),
+		userModel:  model.NewUserModel(db, auth, upload),
 		tlModel:    model.NewTimelineModel(db),
 	}
 }

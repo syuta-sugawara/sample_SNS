@@ -5,12 +5,13 @@ import (
 	"backend/api-server/middleware"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
 
-func TweetRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvider) {
-	tweetController := controller.NewTweetController(db, auth)
+func TweetRouter(e *echo.Echo, db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) {
+	tweetController := controller.NewTweetController(db, auth, upload)
 	r := e.Group("/tweets")
 	r.Use(middleware.AuthMiddleware(auth))
 	r.GET("", tweetController.TweetsIndex)

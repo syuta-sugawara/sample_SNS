@@ -10,6 +10,8 @@ import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 enum TextVariant {
   PRIMARY,
@@ -27,7 +29,8 @@ const TweetItem: React.FC<Props> = props => {
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
 
-  const ApiRequest = new TweetAPI();
+  const auth = useSelector((state: RootState) => state.auth);
+  const ApiRequest = new TweetAPI(auth.credentials.token);
 
   const handlePostRetweets = async () => {
     try {

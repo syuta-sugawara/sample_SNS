@@ -1,14 +1,33 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
 import { CredentialType } from '../../types/auth';
+import { UserType } from '../../types/user';
+import { defaultIconUrl, defaultHeaderUrl } from '../../utils/image';
 import authAction from './actions';
 
-export type StateType = CredentialType & {
+export type StateType = {
+  currentUser: UserType;
+  credentials: CredentialType;
   loading: boolean;
   error?: Error;
 };
 
-const initialState: StateType = { token: '', refreshToken: '', loading: false };
+const initialState: StateType = {
+  currentUser: {
+    id: '',
+    screenName: '',
+    comment: '',
+    iconUrl: '',
+    headerUrl: '',
+    followIDs: [],
+    followedIDs: [],
+  },
+  credentials: {
+    token: '',
+    refreshToken: '',
+  },
+  loading: false,
+};
 
 const authReducer = reducerWithInitialState(initialState)
   // signup
@@ -33,7 +52,16 @@ const authReducer = reducerWithInitialState(initialState)
   }))
   .case(authAction.signin.done, (state, payload) => ({
     ...state,
-    ...payload.result,
+    ...payload.result.credentials,
+    currentUser: {
+      ...payload.result.currentUser,
+      iconUrl: !payload.result.currentUser.iconUrl
+        ? defaultIconUrl
+        : payload.result.currentUser.iconUrl,
+      headerUrl: !payload.result.currentUser.headerUrl
+        ? defaultHeaderUrl
+        : payload.result.currentUser.headerUrl,
+    },
     loading: false,
   }))
   .case(authAction.signin.failed, (state, payload) => ({
@@ -55,13 +83,42 @@ const authReducer = reducerWithInitialState(initialState)
   // getTokenFromLocal
   .case(authAction.getTokenFromLocal.started, state => ({
     ...state,
+    loading: true,
   }))
   .case(authAction.getTokenFromLocal.done, (state, payload) => ({
     ...state,
+    loading: false,
     token: payload.result.token,
   }))
   .case(authAction.getTokenFromLocal.failed, (state, payload) => ({
     ...state,
+    loading: false,
+    error: payload.error,
+  }))
+
+  // getCurrentUSer
+  .case(authAction.getUser.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(authAction.getUser.done, (state, payload) => ({
+    ...state,
+    currentUser: {
+      ...payload.result,
+      iconUrl: !payload.result.iconUrl
+        ? defaultIconUrl
+        : payload.result.iconUrl,
+      headerUrl: !payload.result.headerUrl
+        ? defaultHeaderUrl
+        : payload.result.headerUrl,
+    },
+    loading: false,
+    error: undefined,
+  }))
+  .case(authAction.getUser.failed, (state, payload) => ({
+    ...state,
+    loading: false,
     error: payload.error,
   }));
 

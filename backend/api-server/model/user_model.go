@@ -93,18 +93,20 @@ func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 	return user
 }
 
-func (um *UserModel) Follow(c echo.Context, userID string, followedID string) {
+func (um *UserModel) Follow(c echo.Context, userID string, followedID string) *entity.User {
 	userInfo, followedUserInfo := um.GetUsersInfo(userID, followedID)
 	userInfo.FollowIDs = append(userInfo.FollowIDs, followedID)
 	followedUserInfo.FollowedIDs = append(followedUserInfo.FollowedIDs, userID)
 	um.Updates(c, userInfo, followedUserInfo)
+	return followedUserInfo
 }
 
-func (um *UserModel) UnFollow(c echo.Context, userID string, followedID string) {
+func (um *UserModel) UnFollow(c echo.Context, userID string, followedID string) *entity.User {
 	userInfo, followedUserInfo := um.GetUsersInfo(userID, followedID)
 	userInfo.FollowIDs = removeUser(userInfo.FollowIDs, followedID)
 	followedUserInfo.FollowedIDs = removeUser(followedUserInfo.FollowedIDs, userID)
 	um.Updates(c, userInfo, followedUserInfo)
+	return followedUserInfo
 }
 
 func removeUser(userIDList []string, userID string) []string {

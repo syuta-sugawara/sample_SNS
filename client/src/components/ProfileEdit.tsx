@@ -159,6 +159,7 @@ const Body = styled.div`
 `;
 
 const HeaderImage = styled.div`
+  position: relative;
   height: 200px;
   img {
     width: 100%;

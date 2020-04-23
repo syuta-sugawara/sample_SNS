@@ -123,16 +123,16 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 func (uc *UsersController) Follow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	uc.userModel.Follow(c, userID, followedUserID)
-	return c.String(http.StatusOK, "Follow"+followedUserID)
+	followUserInfo := uc.userModel.Follow(c, userID, followedUserID)
+	return c.JSON(http.StatusOK, followUserInfo)
 }
 
 // アンフォロー処理
 func (uc *UsersController) Unfollow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	uc.userModel.UnFollow(c, userID, followedUserID)
-	return c.String(http.StatusOK, "UnFollow"+followedUserID)
+	followUserInfo := uc.userModel.UnFollow(c, userID, followedUserID)
+	return c.JSON(http.StatusOK, followUserInfo)
 }
 
 // サインイン処理

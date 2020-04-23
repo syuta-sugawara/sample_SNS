@@ -1,16 +1,17 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import TweetAPI from '../requests/tweet';
 import STYLES from '../styles/const';
+import { fetchTweetList } from '../store/tweet/actions';
 import { TweetType } from '../types/tweet';
 import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
-import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 enum TextVariant {
@@ -24,22 +25,43 @@ type Props = {
 
 const TweetItem: React.FC<Props> = props => {
   const user = props.tweet.user;
-  const [retweetCount, setRetweetCount] = useState<number>(0);
-  const [likeCount, setLikeCount] = useState<number>(0);
+  const likeCount = props.tweet.likeCount;
+  const likeUsers = props.tweet.likeUsers;
+  const retweetCount = props.tweet.retweetCount;
+  const retweetsUsers = props.tweet.retweetUsers;
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const auth = useSelector((state: RootState) => state.auth);
+  const myself = auth.currentUser;
   const ApiRequest = new TweetAPI(auth.credentials.token);
+
+  const content: string | undefined = (() => {
+    if (props.tweet.tweetType === 'tweet') {
+      return props.tweet.content;
+    } else {
+      return props.tweet.refTweet?.content;
+    }
+  })();
+
+  useEffect(() => {
+    const isRetweetDisabled =
+      user.id === myself.id || retweetsUsers?.includes(myself.id)
+        ? true
+        : false;
+    setRetweetDisable(isRetweetDisabled);
+    setLikeDisable(likeUsers?.includes(myself.id) as boolean);
+  });
 
   const handlePostRetweets = async () => {
     try {
-      const res = await ApiRequest.putRetweets();
+      const res = await ApiRequest.putRetweets(props.tweet.id);
+
       if (!res.ok) {
         throw Error(res.statusText);
       }
-      setRetweetCount(retweetCount + 1);
-      setRetweetDisable(true);
+      dispatch(fetchTweetList());
     } catch (e) {
       console.error(e);
     }
@@ -47,12 +69,11 @@ const TweetItem: React.FC<Props> = props => {
 
   const handlePostLike = async () => {
     try {
-      const res = await ApiRequest.putRetweets();
+      const res = await ApiRequest.postLike(props.tweet.id);
       if (!res.ok) {
         throw Error(res.statusText);
       }
-      setLikeCount(likeCount + 1);
-      setLikeDisable(true);
+      dispatch(fetchTweetList());
     } catch (e) {
       console.error(e);
     }
@@ -91,7 +112,7 @@ const TweetItem: React.FC<Props> = props => {
           </ContentHead>
           <ContentBody>
             <Tweet>
-              <Text variant={TextVariant.PRIMARY}>{props.tweet.content}</Text>
+              <Text variant={TextVariant.PRIMARY}>{content}</Text>
             </Tweet>
             <Reaction>
               <ButtonWrapper disabled={isRetweet}>

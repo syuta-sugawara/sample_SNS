@@ -5,6 +5,12 @@ export type TweetType = {
   content: string;
   tweetType: string;
   createdAt: number;
+  likeCount?: number;
+  likeUsers?: string[];
+  refTweet?: TweetType;
+  refTweetID?: number;
+  retweetCount?: number;
+  retweetUsers?: string[];
   user: UserType;
 };
 

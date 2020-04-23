@@ -41,6 +41,7 @@ func (tm *TweetModel) Create(t *entity.PostTweet, u *entity.User) {
 		TweetType: t.TweetType,
 		UserID:    u.ID,
 		CreatedAt: utils.GetNowMillsec(),
+		User:      *u,
 	}
 
 	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
@@ -75,6 +76,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) (*entity.RespCount, e
 		}
 	}
 	refTweet.RetweetCount++
+	refTweet.RetweetUsers = append(refTweet.RetweetUsers, u.ID)
 	tm.Update(refTweet)
 	refTweet.RefTweet = nil
 
@@ -108,7 +110,7 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) (*entity.RespCount, e
 	}
 
 	go tm.tlModel.Add(&tweet, u)
-	go tm.tlModel.UpdateRetweetCount(*reftweetID)
+	go tm.tlModel.UpdateRetweet(*reftweetID, u.ID)
 
 	return resp, nil
 }
@@ -130,6 +132,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error
 	}
 
 	refTweet.LikeCount++
+	refTweet.LikeUsers = append(refTweet.LikeUsers, userID)
 	tm.Update(refTweet)
 
 	tweet := entity.Tweet{
@@ -145,7 +148,7 @@ func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error
 		return nil, err
 	}
 
-	go tm.tlModel.UpdateLikeCount(*reftweetID)
+	go tm.tlModel.UpdateLike(*reftweetID, userID)
 	resp := &entity.RespCount{
 		Message: "Like success",
 		Count:   refTweet.LikeCount,

@@ -21,3 +21,10 @@ export type AuthResponseType = {
   credentials: CredentialType;
   currentUser: UserType;
 };
+
+export type PutCurrentUserType = {
+  screenName: string;
+  comment: string;
+  iconImg: File;
+  headerImg: File;
+};

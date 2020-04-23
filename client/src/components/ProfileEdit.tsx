@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import InputFile from '../components/InputFile';
+import { fetchPutCurrentUser } from '../store/auth/actions';
 import STYLES from '../styles/const';
+import { PutCurrentUserType } from '../types/auth';
+import { UserType } from '../types/user';
 import CloseIcon from './icons/CloseIcon';
 import Button, { Variant } from './Button';
-import InputText, { Validation } from './InputText';
+import InputText from './InputText';
 
 type Props = {
+  user: UserType;
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const ProfileEdit: React.FC<Props> = props => {
-  // todo: 変更前のプロフィール情報をstoreから引っ張ってきてstateにつっこむ
-  const [name, setName] = useState<string>('');
-  const [comment, setComment] = useState<string>('');
-  const [iconUrl, setIconUrl] = useState<string>('');
-  const [headerUrl, setHeaderUrl] = useState<string>('');
+  const dispatch = useDispatch();
+  const [name, setName] = useState<string>(props.user.screenName);
+  const [comment, setComment] = useState<string>(props.user.comment);
+  const [iconUrl, setIconUrl] = useState<string>(props.user.iconUrl);
+  const [headerUrl, setHeaderUrl] = useState<string>(props.user.headerUrl);
+  const [iconImg, setIconImg] = useState<File>();
+  const [headerImg, setHeaderImg] = useState<File>();
 
   const handleSave = () => {
-    // todo: 保存処理
-    console.log(12222);
+    const formData: PutCurrentUserType = {
+      screenName: name,
+      comment,
+      iconImg: iconImg as File,
+      headerImg: headerImg as File,
+    };
+    dispatch(fetchPutCurrentUser(formData));
   };
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +43,32 @@ const ProfileEdit: React.FC<Props> = props => {
     setComment(e.target.value);
   };
 
-  const handleChangeIconUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIconUrl(e.target.value);
+  const handleChangeIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target: HTMLInputElement = e.target as HTMLInputElement;
+    if (target.files !== null && target.files.length > 0) {
+      const file: File = target.files.item(0) as File;
+      setIconImg(file);
+      const reader = new FileReader();
+      reader.onload = e => {
+        setIconUrl(e!.target!.result as string);
+      };
+      reader.readAsDataURL(file);
+      console.log(file);
+    }
   };
 
-  const handleChangeHeaderUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHeaderUrl(e.target.value);
+  const handleChangeHeader = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target: HTMLInputElement = e.target as HTMLInputElement;
+    if (target.files !== null && target.files.length > 0) {
+      const file: File = target.files.item(0) as File;
+      setHeaderImg(file);
+      const reader = new FileReader();
+      reader.onload = e => {
+        setHeaderUrl(e!.target!.result as string);
+      };
+      reader.readAsDataURL(file);
+      console.log(file);
+    }
   };
 
   return (
@@ -55,27 +88,15 @@ const ProfileEdit: React.FC<Props> = props => {
       <Body>
         <HeaderImage>
           <img src={headerUrl} alt="" />
+          <InputFile onChange={handleChangeHeader} />
         </HeaderImage>
         <ProfileImageWrapper>
           <ProfileImage>
             <img src={iconUrl} alt="" />
+            <InputFile onChange={handleChangeIcon} />
           </ProfileImage>
         </ProfileImageWrapper>
         <TextForm>
-          <InputText
-            label="バナー画像のURL"
-            placeholder="バナー画像のURL"
-            value={headerUrl}
-            validation={Validation.IMAGE}
-            onChange={handleChangeHeaderUrl}
-          />
-          <InputText
-            label="アイコン画像のURL"
-            placeholder="アイコン画像のURL"
-            value={iconUrl}
-            validation={Validation.IMAGE}
-            onChange={handleChangeIconUrl}
-          />
           <InputText
             label="名前"
             placeholder="名前を追加"
@@ -96,7 +117,11 @@ const ProfileEdit: React.FC<Props> = props => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 600px;
+  background-color: ${STYLES.COLOR.WHITE};
+  border-radius: 12px;
+`;
 
 const Head = styled.div`
   display: flex;

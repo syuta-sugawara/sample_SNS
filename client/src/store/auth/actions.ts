@@ -9,6 +9,7 @@ import {
   SigninType,
   SignupType,
   AuthResponseType,
+  PutCurrentUserType,
 } from '../../types/auth';
 import { ErrorResponse } from '../../types/errorResponse';
 import { UserType } from '../../types/user';
@@ -28,6 +29,7 @@ const authAction = {
     ActionTypes.getTokenFromLocal
   ),
   getUser: actionCreator.async<{}, UserType, Error>(ActionTypes.getCurrentUser),
+  putUser: actionCreator.async<{}, UserType, Error>(ActionTypes.putCurrentUser),
   // 余力があればrefreshTokenの実装をやる
   // getTokenFromRemote: actionCreator.async<{}, { token: string }, {}>(
   //   ActionTypes.getTokenFromRemote
@@ -61,7 +63,7 @@ export const fetchSignin = (data: SigninType, router: NextRouter) => async (
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -87,7 +89,7 @@ export const fetchSignup = (data: SignupType, router: NextRouter) => async (
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -135,11 +137,34 @@ export const fetchCurrentUser = () => async (
       dispatch(authAction.getUser.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
     dispatch(authAction.getUser.failed({ error, params: {} }));
+  }
+};
+
+export const fetchPutCurrentUser = (formData: PutCurrentUserType) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
+  dispatch(authAction.putUser.started({ params: {} }));
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
+  try {
+    const res = await userAPI.putCurrentUser(formData);
+    if (res.ok) {
+      const result = (await res.json()) as UserType;
+      dispatch(authAction.putUser.done({ result, params: {} }));
+      dispatch(modalAction.hide());
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.message);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(authAction.putUser.failed({ error, params: {} }));
   }
 };
 

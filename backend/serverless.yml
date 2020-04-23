@@ -21,6 +21,8 @@ provider:
         - dynamodb:BatchWriteItem
         - dynamodb:BatchGetItem
         - cognito-idp:AdminConfirmSignUp
+        - s3:*
+        - S3:*
       Resource: '*'
 
 package:

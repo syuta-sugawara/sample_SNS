@@ -23,7 +23,7 @@ export const fetchUser = (uid: string) => async (
 ) => {
   dispatch(userAction.getUser.started({ params: {} }));
   const { auth } = getState();
-  const userAPI = new UserAPI(auth.token);
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.getUser(uid);
     if (res.ok) {
@@ -45,7 +45,7 @@ export const fetchUserTweets = (uid: string) => async (
 ) => {
   dispatch(userAction.getUserTweets.started({ params: {} }));
   const { auth } = getState();
-  const userAPI = new UserAPI(auth.token);
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.getUserTweets(uid);
     if (res.ok) {

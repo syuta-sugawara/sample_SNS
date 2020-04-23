@@ -15,7 +15,7 @@ import TweetForm from './TweetForm';
 const Navigation: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const myself = useSelector((state: RootState) => state.myself);
+  const myself = useSelector((state: RootState) => state.auth.currentUser);
 
   const handleClose = () => {
     dispatch(modalAction.hide());

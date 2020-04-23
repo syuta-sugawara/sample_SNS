@@ -24,7 +24,7 @@ export const fetchTweetList = () => async (
   dispatch(tweetAction.getTweetList.started({ params: {} }));
   const { auth } = getState();
 
-  const tweetAPI = new TweetAPI(auth.token);
+  const tweetAPI = new TweetAPI(auth.credentials.token);
   try {
     const res = await tweetAPI.getAllTweets();
     if (res.ok) {
@@ -47,7 +47,7 @@ export const fetchPostTweet = (data: PostTweetType) => async (
 ): Promise<any> => {
   dispatch(tweetAction.postTweet.started({ params: {} }));
   const { auth } = getState();
-  const tweetAPI = new TweetAPI(auth.token);
+  const tweetAPI = new TweetAPI(auth.credentials.token);
   try {
     const res = await tweetAPI.postTweet(data);
     if (res.ok) {

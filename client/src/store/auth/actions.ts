@@ -1,12 +1,15 @@
+import { NextRouter } from 'next/router';
 import actionCreatorFactory from 'typescript-fsa';
 import { Dispatch } from 'redux';
 
-import { CredentialType, SigninType, SignupType } from '../../types/auth';
-import { ActionTypes } from '../actionTypes';
 import AuthAPI from '../../requests/auth';
+import UserAPI from '../../requests/user';
+import { CredentialType, SigninType, SignupType } from '../../types/auth';
 import { ErrorResponse } from '../../types/errorResponse';
-import { NextRouter } from 'next/router';
+import { UserType } from '../../types/user';
 import modalAction from '../modal/actions';
+import { ActionTypes } from '../actionTypes';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -19,6 +22,7 @@ const authAction = {
   getTokenFromLocal: actionCreator.async<{}, { token: string }, Error>(
     ActionTypes.getTokenFromLocal
   ),
+  getUser: actionCreator.async<{}, UserType, Error>(ActionTypes.getCurrentUser),
   // 余力があればrefreshTokenの実装をやる
   // getTokenFromRemote: actionCreator.async<{}, { token: string }, {}>(
   //   ActionTypes.getTokenFromRemote
@@ -109,6 +113,28 @@ export const getTokenFromLocal = () => (dispatch: Dispatch) => {
   } catch (err) {
     const error = err as Error;
     dispatch(authAction.getTokenFromLocal.failed({ error, params: {} }));
+  }
+};
+
+export const fetchCurrentUser = () => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
+  dispatch(authAction.getUser.started({ params: {} }));
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
+  try {
+    const res = await userAPI.getCurrentUser();
+    if (res.ok) {
+      const result = (await res.json()) as UserType;
+      dispatch(authAction.getUser.done({ result, params: {} }));
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.massage);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(authAction.getUser.failed({ error, params: {} }));
   }
 };
 

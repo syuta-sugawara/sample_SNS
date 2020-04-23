@@ -30,14 +30,14 @@ func (us *UserServices) CreateUserOnCognito(u *entity.SignUpUser) error {
 		return err
 	}
 	// ローカルでは認証が失敗するけど本番行けそう
-	// confirmPrams := &cognito.AdminConfirmSignUpInput{
-	// 	Username:   aws.String(u.ID),
-	// 	UserPoolId: aws.String(os.Getenv("POOL_ID")),
-	// }
+	confirmPrams := &cognito.AdminConfirmSignUpInput{
+		Username:   aws.String(u.ID),
+		UserPoolId: aws.String(os.Getenv("POOL_ID")),
+	}
 
-	// if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
-	// 	return err
-	// }
+	if _, err := us.auth.AdminConfirmSignUp(confirmPrams); err != nil {
+		return err
+	}
 	return nil
 }
 

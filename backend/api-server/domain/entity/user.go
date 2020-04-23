@@ -29,9 +29,14 @@ type RefreshTokenResp struct {
 	Token string `json:"token"`
 }
 
-type SignInResp struct {
-	Token        string `json:"token"`
-	RefreshToken string `json:"refreshToken"`
+type CredentialResp struct {
+	Token        string  `json:"token"`
+	RefreshToken *string `json:"refreshToken"`
+}
+
+type AuthResp struct {
+	CurrentUser User           `json:"currentUser"`
+	Credentials CredentialResp `json:"credentials"`
 }
 
 type DisplayUser struct {

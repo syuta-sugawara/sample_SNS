@@ -89,25 +89,28 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, CreateErrorMessage(err.Error()))
 	}
 
-	resp := uc.userModel.Regist(u)
+	user := uc.userModel.Regist(u)
 
-	//	credential := &entity.SignInUser{
-	//		ID:       u.ID,
-	//		PassWord: u.PassWord,
-	//	}
+	su := &entity.SignInUser{
+		ID:       u.ID,
+		PassWord: u.PassWord,
+	}
 
-	// 	accessToken, err := uc.userService.GetUserFromCognito(credential)
+	cl, err := uc.userService.GetToken(su)
 
-	//	if err != nil {
-	//		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
-	//	}
-	//
-	//	resp := entity.SignInResp{
-	// 	Token: *accessToken,
-	// }
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
+	}
 
-	// return c.JSON(http.StatusOK, resp)
-	return c.JSON(http.StatusCreated, resp)
+	resp := &entity.AuthResp{
+		Credentials: entity.CredentialResp{
+			Token:        cl.AccessToken,
+			RefreshToken: cl.RefreshToken,
+		},
+		CurrentUser: user,
+	}
+
+	return c.JSON(http.StatusOK, resp)
 }
 
 // フォロー処理
@@ -136,9 +139,17 @@ func (uc *UsersController) Signin(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	}
 
-	resp := entity.SignInResp{
-		Token:        credentials.AccessToken,
-		RefreshToken: *credentials.RefreshToken,
+	user, err := uc.userModel.Get(u.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+
+	resp := &entity.AuthResp{
+		Credentials: entity.CredentialResp{
+			Token:        credentials.AccessToken,
+			RefreshToken: credentials.RefreshToken,
+		},
+		CurrentUser: *user,
 	}
 
 	return c.JSON(http.StatusOK, resp)

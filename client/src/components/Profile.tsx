@@ -1,7 +1,9 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
+import { fetchFollow, fetchUnFollow } from '../store/user/actions';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
 import { defaultHeaderUrl } from '../utils/image';
@@ -9,14 +11,50 @@ import { defaultHeaderUrl } from '../utils/image';
 type Props = {
   user: UserType;
   isMine?: boolean;
+  isFollow?: boolean;
 };
 
 const Profile: React.FC<Props> = props => {
-  const { user, isMine } = props;
-  const handleClick = () => {
-    // TODO:
-    console.log('hi');
+  const { user, isMine, isFollow } = props;
+  const dispatch = useDispatch();
+
+  const handleEditProfile = () => {
+    //todo: プロフィール編集コンポーネント出す
   };
+
+  const handleFollow = () => {
+    dispatch(fetchFollow(user.id));
+  };
+
+  const handleUnFollow = () => {
+    dispatch(fetchUnFollow(user.id));
+  };
+
+  const button = (() => {
+    if (isMine)
+      return (
+        <Button
+          text="プロフィールを編集"
+          variant={Variant.OUTLINED}
+          onClick={handleEditProfile}
+        />
+      );
+    if (isFollow)
+      return (
+        <Button
+          text="フォローをはずす"
+          variant={Variant.CONTAINED}
+          onClick={handleUnFollow}
+        />
+      );
+    return (
+      <Button
+        text="フォロー"
+        variant={Variant.OUTLINED}
+        onClick={handleFollow}
+      />
+    );
+  })();
 
   return (
     <Wrapper>
@@ -30,14 +68,7 @@ const Profile: React.FC<Props> = props => {
               <img src={user.iconUrl} alt={user.screenName} />
             </ProfileImage>
           </ProfileImageWrapper>
-          <ButtonWrapper>
-            {/* TODO: !isMineのときフォロー・アンフォローでさらに分岐させる必要あり */}
-            <Button
-              text={isMine ? 'プロフィールを編集' : 'フォロー'}
-              variant={Variant.OUTLINED}
-              onClick={handleClick}
-            />
-          </ButtonWrapper>
+          <ButtonWrapper>{button}</ButtonWrapper>
         </MainHead>
         <MainBody>
           <User>
@@ -48,10 +79,7 @@ const Profile: React.FC<Props> = props => {
               <SecondaryText>{`@${user.id}`}</SecondaryText>
             </div>
           </User>
-          {/* <SelfIntroduction>
-            衆議院議員阿部晋三（あべしんぞう）の公式twitterです。Prime Minister
-            of Japon. Leader of Liberal Democratic Party.
-          </SelfIntroduction> */}
+          <SelfIntroduction>{user.comment}</SelfIntroduction>
           <Follow>
             <div>
               <span>{user.followIDs.length}</span>
@@ -113,9 +141,7 @@ const User = styled.div`
   margin-bottom: 10px;
 `;
 
-// const SelfIntroduction = styled.div`
-//   margin-bottom: 10px;
-// `;
+const SelfIntroduction = styled.div``;
 
 const Follow = styled.div`
   display: flex;

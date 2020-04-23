@@ -2,8 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getTokenFromLocal } from '../store/auth/actions';
-import { fetchCurrentUser } from '../store/myself/actions';
+import { getTokenFromLocal, fetchCurrentUser } from '../store/auth/actions';
 import { RootState } from '../store';
 
 type Props = {
@@ -13,29 +12,42 @@ type Props = {
 const Auth: React.FC<Props> = props => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const isFirstRef = useRef(true);
 
+  const isCheckedAuth = useRef<boolean>(false);
+  const isCheckedMyself = useRef<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const auth = useSelector((state: RootState) => state.auth);
-  const myself = useSelector((state: RootState) => state.myself);
+  const myself = useSelector((state: RootState) => state.auth.currentUser);
   const { pathname } = router;
 
   useEffect(() => {
     dispatch(getTokenFromLocal());
-    isFirstRef.current = true;
+    isCheckedAuth.current = false;
+    isCheckedMyself.current = false;
   }, []);
 
   useEffect(() => {
-    if (isFirstRef.current) {
-      isFirstRef.current = false;
-      dispatch(fetchCurrentUser());
+    if (!isCheckedAuth.current) {
+      isCheckedAuth.current = true;
     } else {
-      if (pathname !== '/' && (auth.error || myself.error)) {
+      if (!auth.error && !isCheckedMyself.current) {
+        dispatch(fetchCurrentUser());
+        isCheckedMyself.current = true;
+      } else if (auth.error) {
+        router.push('/');
+        setIsLoading(false);
+      }
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (isCheckedMyself.current) {
+      if (pathname !== '/' && myself.id === '') {
         router.push('/');
       }
       setIsLoading(false);
     }
-  }, [dispatch, auth, myself]);
+  }, [myself]);
 
   return <>{isLoading ? null : props.children}</>;
 };

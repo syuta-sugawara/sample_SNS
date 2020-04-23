@@ -1,6 +1,6 @@
 service: backend
 
-frameworkVersion: ">=1.28.0 <2.0.0"
+frameworkVersion: '>=1.28.0 <2.0.0'
 
 provider:
   name: aws
@@ -18,7 +18,10 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "*"
+        - dynamodb:BatchWriteItem
+        - dynamodb:BatchGetItem
+        - cognito-idp:AdminConfirmSignUp
+      Resource: '*'
 
 package:
   exclude:
@@ -31,12 +34,12 @@ functions:
     handler: bin/lambda
     events:
       - http: ANY /
-      - http: "ANY {proxy+}"
+      - http: 'ANY {proxy+}'
 
 resources:
   Resources:
     TweetsDynamoDbTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
@@ -52,7 +55,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: "Tweets"
+        TableName: 'Tweets'
         GlobalSecondaryIndexes:
           - IndexName: userID
             KeySchema:
@@ -66,7 +69,7 @@ resources:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
     UsersDynamoDbTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
@@ -78,9 +81,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: "Users"
+        TableName: 'Users'
     SequencesDynamoDbTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
@@ -92,4 +95,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: "Sequences"
+        TableName: 'Sequences'

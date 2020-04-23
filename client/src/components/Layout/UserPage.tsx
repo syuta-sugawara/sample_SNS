@@ -14,7 +14,7 @@ type Props = {
 };
 
 const UserPageLayout: React.FC<Props> = props => {
-  const myself = useSelector((state: RootState) => state.myself);
+  const myself = useSelector((state: RootState) => state.auth.currentUser);
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { pathname } = router;

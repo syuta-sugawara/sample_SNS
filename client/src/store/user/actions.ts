@@ -6,6 +6,7 @@ import { ErrorResponse } from '../../types/errorResponse';
 import { TweetType } from '../../types/tweet';
 import { UserType } from '../../types/user';
 import { ActionTypes } from '../actionTypes';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
@@ -18,9 +19,13 @@ const userAction = {
   deleteFollow: actionCreator.async<{}, {}, Error>(ActionTypes.deleteFollow),
 };
 
-export const fetchUser = (uid: string) => async (dispatch: Dispatch) => {
+export const fetchUser = (uid: string) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(userAction.getUser.started({ params: {} }));
-  const userAPI = new UserAPI();
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.getUser(uid);
     if (res.ok) {
@@ -36,9 +41,13 @@ export const fetchUser = (uid: string) => async (dispatch: Dispatch) => {
   }
 };
 
-export const fetchUserTweets = (uid: string) => async (dispatch: Dispatch) => {
+export const fetchUserTweets = (uid: string) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(userAction.getUserTweets.started({ params: {} }));
-  const userAPI = new UserAPI();
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.getUserTweets(uid);
     if (res.ok) {

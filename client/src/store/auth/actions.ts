@@ -1,24 +1,33 @@
+import { NextRouter } from 'next/router';
 import actionCreatorFactory from 'typescript-fsa';
 import { Dispatch } from 'redux';
 
-import { CredentialType, SigninType, SignupType } from '../../types/auth';
-import { ActionTypes } from '../actionTypes';
 import AuthAPI from '../../requests/auth';
+import UserAPI from '../../requests/user';
+import {
+  CredentialType,
+  SigninType,
+  SignupType,
+  AuthResponseType,
+} from '../../types/auth';
 import { ErrorResponse } from '../../types/errorResponse';
-import { NextRouter } from 'next/router';
+import { UserType } from '../../types/user';
 import modalAction from '../modal/actions';
+import { ActionTypes } from '../actionTypes';
+import { RootState } from '..';
 
 const actionCreator = actionCreatorFactory();
 
 const authAction = {
   signup: actionCreator.async<{}, {}, Error>(ActionTypes.execSignup),
-  signin: actionCreator.async<{}, CredentialType, Error>(
+  signin: actionCreator.async<{}, AuthResponseType, Error>(
     ActionTypes.execSignin
   ),
   signout: actionCreator.async<{}, {}, {}>(ActionTypes.execSignout),
   getTokenFromLocal: actionCreator.async<{}, { token: string }, Error>(
     ActionTypes.getTokenFromLocal
   ),
+  getUser: actionCreator.async<{}, UserType, Error>(ActionTypes.getCurrentUser),
   // 余力があればrefreshTokenの実装をやる
   // getTokenFromRemote: actionCreator.async<{}, { token: string }, {}>(
   //   ActionTypes.getTokenFromRemote
@@ -45,10 +54,10 @@ export const fetchSignin = (data: SigninType, router: NextRouter) => async (
   try {
     const res = await authAPI.postSignin(data);
     if (res.ok) {
-      const result = (await res.json()) as CredentialType;
+      const result = (await res.json()) as AuthResponseType;
       dispatch(authAction.signin.done({ result, params: {} }));
       dispatch(modalAction.hide());
-      setLocalStorage(result);
+      setLocalStorage(result.credentials);
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
@@ -96,7 +105,7 @@ export const asyncSignout = (router: NextRouter) => async (
 };
 
 export const getTokenFromLocal = () => (dispatch: Dispatch) => {
-  dispatch(authAction.signin.started({ params: {} }));
+  dispatch(authAction.getTokenFromLocal.started({ params: {} }));
   try {
     const token = getTokenFromLS();
     if (token) {
@@ -108,7 +117,29 @@ export const getTokenFromLocal = () => (dispatch: Dispatch) => {
     }
   } catch (err) {
     const error = err as Error;
-    dispatch(authAction.signin.failed({ error, params: {} }));
+    dispatch(authAction.getTokenFromLocal.failed({ error, params: {} }));
+  }
+};
+
+export const fetchCurrentUser = () => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
+  dispatch(authAction.getUser.started({ params: {} }));
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
+  try {
+    const res = await userAPI.getCurrentUser();
+    if (res.ok) {
+      const result = (await res.json()) as UserType;
+      dispatch(authAction.getUser.done({ result, params: {} }));
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.massage);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(authAction.getUser.failed({ error, params: {} }));
   }
 };
 

@@ -1,3 +1,3 @@
 export type ErrorResponse = {
-  massage: string;
+  message: string;
 };

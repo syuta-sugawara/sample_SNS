@@ -61,7 +61,7 @@ export const fetchSignin = (data: SigninType, router: NextRouter) => async (
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -87,7 +87,7 @@ export const fetchSignup = (data: SignupType, router: NextRouter) => async (
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -135,7 +135,7 @@ export const fetchCurrentUser = () => async (
       dispatch(authAction.getUser.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;

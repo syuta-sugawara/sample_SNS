@@ -52,7 +52,16 @@ const authReducer = reducerWithInitialState(initialState)
   }))
   .case(authAction.signin.done, (state, payload) => ({
     ...state,
-    ...payload.result,
+    ...payload.result.credentials,
+    currentUser: {
+      ...payload.result.currentUser,
+      iconUrl: !payload.result.currentUser.iconUrl
+        ? defaultIconUrl
+        : payload.result.currentUser.iconUrl,
+      headerUrl: !payload.result.currentUser.headerUrl
+        ? defaultHeaderUrl
+        : payload.result.currentUser.headerUrl,
+    },
     loading: false,
   }))
   .case(authAction.signin.failed, (state, payload) => ({
@@ -96,17 +105,13 @@ const authReducer = reducerWithInitialState(initialState)
   .case(authAction.getUser.done, (state, payload) => ({
     ...state,
     currentUser: {
-      id: payload.result.id,
-      screenName: payload.result.screenName,
-      comment: payload.result.comment,
+      ...payload.result,
       iconUrl: !payload.result.iconUrl
         ? defaultIconUrl
         : payload.result.iconUrl,
       headerUrl: !payload.result.headerUrl
         ? defaultHeaderUrl
         : payload.result.headerUrl,
-      followIDs: payload.result.followIDs,
-      followedIDs: payload.result.followedIDs,
     },
     loading: false,
     error: undefined,

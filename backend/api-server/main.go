@@ -26,8 +26,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	sessUpload, err := session.NewSession(&aws.Config{
+		Region: aws.String("ap-northeast-1"),
+	})
+	if err != nil {
+		panic(err)
+	}
 
-	e := router.InitEcho(sess)
+	e := router.InitEcho(sess, sessUpload)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

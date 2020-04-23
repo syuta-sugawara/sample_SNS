@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -17,10 +18,10 @@ type UsersController struct {
 	userService services.UserServices
 }
 
-func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
+func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) UsersController {
 	return UsersController{
-		userModel:   model.NewUserModel(db, auth),
-		tweetModel:  model.NewTweetModel(db, auth),
+		userModel:   model.NewUserModel(db, auth, upload),
+		tweetModel:  model.NewTweetModel(db, auth, upload),
 		userService: services.NewUserServices(auth),
 	}
 }
@@ -72,9 +73,11 @@ func (uc *UsersController) FollowersIndex(c echo.Context) error {
 
 // ユーザー情報更新
 func (uc *UsersController) UpdateUser(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "GetFollowers"+userID)
+	userInfo, err := uc.userModel.Update(c)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+	return c.JSON(http.StatusOK, userInfo)
 }
 
 // ユーザー登録

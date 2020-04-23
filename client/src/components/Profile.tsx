@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
+import { defaultHeaderUrl } from '../utils/image';
 
 type Props = {
   user: UserType;
@@ -20,10 +21,7 @@ const Profile: React.FC<Props> = props => {
   return (
     <Wrapper>
       <Header>
-        <img
-          src="https://pbs.twimg.com/profile_banners/636957320/1514493736/1500x500"
-          alt=""
-        />
+        <img src={defaultHeaderUrl} alt="" />
       </Header>
       <Main>
         <MainHead>
@@ -74,6 +72,11 @@ const Wrapper = styled.div``;
 
 const Header = styled.div`
   height: 200px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Main = styled.div`

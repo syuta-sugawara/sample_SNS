@@ -2,13 +2,14 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import TweetAPI from '../requests/tweet';
 import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
+import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
-import TweetAPI from '../requests/tweet';
 
 enum TextVariant {
   PRIMARY,
@@ -59,7 +60,10 @@ const TweetItem: React.FC<Props> = props => {
       <Label></Label>
       <Body>
         <UserIcon>
-          <img src={user.iconUrl} alt={user.screenName} />
+          <img
+            src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
+            alt={user.screenName}
+          />
         </UserIcon>
         <Content>
           <ContentHead>

@@ -7,3 +7,6 @@ out/
 
 # env
 .env
+
+# now
+.now

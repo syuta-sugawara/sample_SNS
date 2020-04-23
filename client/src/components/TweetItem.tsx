@@ -24,11 +24,7 @@ type Props = {
 };
 
 const TweetItem: React.FC<Props> = props => {
-  const user = props.tweet.user;
-  const likeCount = props.tweet.likeCount;
-  const likeUsers = props.tweet.likeUsers;
-  const retweetCount = props.tweet.retweetCount;
-  const retweetsUsers = props.tweet.retweetUsers;
+  const { tweetType } = props.tweet;
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -37,26 +33,27 @@ const TweetItem: React.FC<Props> = props => {
   const myself = auth.currentUser;
   const ApiRequest = new TweetAPI(auth.credentials.token);
 
-  const content: string | undefined = (() => {
-    if (props.tweet.tweetType === 'tweet') {
-      return props.tweet.content;
+  const item: any = (() => {
+    if (tweetType === 'retweet') {
+      return { ...props.tweet.refTweet };
     } else {
-      return props.tweet.refTweet?.content;
+      return { ...props.tweet };
     }
   })();
 
   useEffect(() => {
     const isRetweetDisabled =
-      user.id === myself.id || retweetsUsers?.includes(myself.id)
+      item.user.id === myself.id ||
+      props.tweet.retweetUsers?.includes(myself.id)
         ? true
         : false;
     setRetweetDisable(isRetweetDisabled);
-    setLikeDisable(likeUsers?.includes(myself.id) as boolean);
+    setLikeDisable(item.likeUsers?.includes(myself.id) as boolean);
   });
 
   const handlePostRetweets = async () => {
     try {
-      const res = await ApiRequest.putRetweets(props.tweet.id);
+      const res = await ApiRequest.putRetweets(item.id);
 
       if (!res.ok) {
         throw Error(res.statusText);
@@ -69,7 +66,7 @@ const TweetItem: React.FC<Props> = props => {
 
   const handlePostLike = async () => {
     try {
-      const res = await ApiRequest.postLike(props.tweet.id);
+      const res = await ApiRequest.postLike(item.id);
       if (!res.ok) {
         throw Error(res.statusText);
       }
@@ -81,23 +78,33 @@ const TweetItem: React.FC<Props> = props => {
 
   return (
     <Wrapper>
-      <Label></Label>
+      {tweetType !== 'retweet' ? null : (
+        <Label>
+          <span>
+            {props.tweet.user.id !== myself.id
+              ? `${props.tweet.user.screenName}さんがリツイートしました`
+              : 'リツイート済'}
+          </span>
+        </Label>
+      )}
       <Body>
         <UserIcon>
           <img
-            src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
-            alt={user.screenName}
+            src={!item.user.iconUrl ? defaultIconUrl : item.user.iconUrl}
+            alt={item.user.screenName}
           />
         </UserIcon>
         <Content>
           <ContentHead>
             <User>
-              <Link href="/users/[uid]" as={`/users/${user.id}`}>
+              <Link href="/users/[uid]" as={`/users/${item.user.id}`}>
                 <a>
                   <Text variant={TextVariant.PRIMARY} bold>
-                    {user.screenName}
+                    {item.user.screenName}
                   </Text>
-                  <Text variant={TextVariant.SECONDARY}>{`@${user.id}`}</Text>
+                  <Text
+                    variant={TextVariant.SECONDARY}
+                  >{`@${item.user.id}`}</Text>
                 </a>
               </Link>
             </User>
@@ -112,7 +119,7 @@ const TweetItem: React.FC<Props> = props => {
           </ContentHead>
           <ContentBody>
             <Tweet>
-              <Text variant={TextVariant.PRIMARY}>{content}</Text>
+              <Text variant={TextVariant.PRIMARY}>{item.content}</Text>
             </Tweet>
             <Reaction>
               <ButtonWrapper disabled={isRetweet}>
@@ -123,7 +130,7 @@ const TweetItem: React.FC<Props> = props => {
                   disabled={isRetweet}
                   icon={<RetweetIcon />}
                 />
-                <RetweetCounter>{retweetCount}</RetweetCounter>
+                <RetweetCounter>{item.retweetCount}</RetweetCounter>
               </ButtonWrapper>
               <ButtonWrapper disabled={isLike}>
                 <Button
@@ -133,7 +140,7 @@ const TweetItem: React.FC<Props> = props => {
                   disabled={isLike}
                   icon={<LikeIcon />}
                 />
-                <LikeCounter>{likeCount}</LikeCounter>
+                <LikeCounter>{item.likeCount}</LikeCounter>
               </ButtonWrapper>
             </Reaction>
           </ContentBody>
@@ -159,7 +166,12 @@ const Wrapper = styled.article`
 `;
 
 const Label = styled.div`
-  /* todo: ooさんがリツイート/いいねしました */
+  padding: 0 20px;
+  margin-bottom: 7px;
+  span {
+    font-size: 12px;
+    color: ${STYLES.COLOR.GRAY};
+  }
 `;
 
 const Body = styled.div`

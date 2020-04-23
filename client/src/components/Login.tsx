@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { fetchSignin } from '../store/auth/actions';
 import STYLES from '../styles/const';
 import { SigninType } from '../types/auth';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
-import { fetchSignin } from '../store/auth/actions';
 
 const Login: React.FC = () => {
   const router = useRouter();

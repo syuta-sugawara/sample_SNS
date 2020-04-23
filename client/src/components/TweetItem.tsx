@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import TweetAPI from '../requests/tweet';
-import STYLES from '../styles/const';
 import { fetchTweetList } from '../store/tweet/actions';
+import { RootState } from '../store';
+import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
 import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
-import { RootState } from '../store';
 
 enum TextVariant {
   PRIMARY,

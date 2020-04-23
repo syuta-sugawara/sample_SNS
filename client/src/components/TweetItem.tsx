@@ -39,7 +39,7 @@ const TweetItem: React.FC<Props> = props => {
   useEffect(() => {
     retweetsUsers?.forEach(item => {
       if (item == user.id) {
-        setRetweetDisable(true)
+        setRetweetDisable(true);
       }
     });
     likeUsers?.forEach(item => {

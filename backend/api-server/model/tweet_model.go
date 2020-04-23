@@ -4,8 +4,10 @@ import (
 	"backend/api-server/domain/entity"
 	"backend/api-server/utils"
 	"fmt"
+	"sort"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 )
 
@@ -16,11 +18,11 @@ type TweetModel struct {
 	tlModel    TimelineModel
 }
 
-func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetModel {
+func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) TweetModel {
 	return TweetModel{
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
-		userModel:  NewUserModel(db, auth),
+		userModel:  NewUserModel(db, auth, upload),
 		tlModel:    NewTimelineModel(db),
 	}
 }
@@ -116,7 +118,11 @@ func (tm *TweetModel) Retweet(tweetID int, u *entity.User) (*entity.RespCount, e
 }
 
 func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error) {
-	cid := tm.seqModel.NextID("tweets")
+	err := tm.addLikeList(tweetID, userID)
+	if err != nil {
+		return nil, err
+	}
+
 	refTweet := new(entity.Tweet)
 	if err := tm.tweetTable.Get("id", tweetID).One(refTweet); err != nil {
 		fmt.Println(err)
@@ -135,19 +141,6 @@ func (tm *TweetModel) Like(tweetID int, userID string) (*entity.RespCount, error
 	refTweet.LikeUsers = append(refTweet.LikeUsers, userID)
 	tm.Update(refTweet)
 
-	tweet := entity.Tweet{
-		ID:         cid,
-		TweetType:  "like",
-		UserID:     userID,
-		CreatedAt:  utils.GetNowMillsec(),
-		RefTweetID: reftweetID,
-	}
-
-	if err := tm.tweetTable.Put(tweet).Run(); err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
 	go tm.tlModel.UpdateLike(*reftweetID, userID)
 	resp := &entity.RespCount{
 		Message: "Like success",
@@ -162,4 +155,36 @@ func (tm *TweetModel) UserTL(userID string) *[]entity.TweetResp {
 	tm.tweetTable.Get("userID", userID).Index("userID").Limit(int64(20)).Order(false).All(tweet)
 
 	return tweet
+}
+
+func (tm *TweetModel) addLikeList(tweetID int, userID string) error {
+	userInfo, err := tm.userModel.Get(userID)
+	if err != nil {
+		return err
+	}
+	userInfo.LikeList = append(userInfo.LikeList, tweetID)
+	if err := tm.userModel.userTable.Put(userInfo).Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (tm *TweetModel) UserLikes(userID string) (*[]entity.TweetResp, error) {
+	userInfo, err := tm.userModel.Get(userID)
+	if err != nil {
+		return nil, err
+	}
+	likeList := userInfo.LikeList
+	if len(likeList) > 20 {
+		likeList = likeList[len(likeList)-20:]
+	}
+	tweets := []entity.TweetResp{}
+	tweetResp := new(entity.TweetResp)
+	sort.Sort(sort.Reverse(sort.IntSlice(likeList)))
+
+	for i := range likeList {
+		tm.tweetTable.Get("id", userInfo.LikeList[i]).One(tweetResp)
+		tweets = append(tweets, *tweetResp)
+	}
+	return &tweets, nil
 }

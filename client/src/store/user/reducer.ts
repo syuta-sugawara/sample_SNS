@@ -2,7 +2,7 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
 import { TweetType } from '../../types/tweet';
 import { UserType } from '../../types/user';
-import { defaultIconUrl } from '../../utils/image';
+import { defaultIconUrl, defaultHeaderUrl } from '../../utils/image';
 import userAction from './actions';
 
 export type StateType = UserType & {
@@ -14,7 +14,9 @@ export type StateType = UserType & {
 const initialState: StateType = {
   id: '',
   screenName: '',
+  comment: '',
   iconUrl: '',
+  headerUrl: '',
   followIDs: [],
   followedIDs: [],
   tweets: [],
@@ -30,9 +32,11 @@ const userReducer = reducerWithInitialState(initialState)
   }))
   .case(userAction.getUser.done, (state, payload) => ({
     ...state,
-    id: payload.result.id,
-    screenName: payload.result.screenName,
+    ...payload.result,
     iconUrl: !payload.result.iconUrl ? defaultIconUrl : payload.result.iconUrl,
+    headerUrl: !payload.result.headerUrl
+      ? defaultHeaderUrl
+      : payload.result.headerUrl,
     loading: false,
     error: undefined,
   }))
@@ -54,6 +58,48 @@ const userReducer = reducerWithInitialState(initialState)
     error: undefined,
   }))
   .case(userAction.getUserTweets.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
+  }))
+  // postFollow
+  .case(userAction.postFollow.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(userAction.postFollow.done, (state, payload) => ({
+    ...state,
+    ...payload.result,
+    iconUrl: !payload.result.iconUrl ? defaultIconUrl : payload.result.iconUrl,
+    headerUrl: !payload.result.headerUrl
+      ? defaultHeaderUrl
+      : payload.result.headerUrl,
+    loading: false,
+    error: undefined,
+  }))
+  .case(userAction.postFollow.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
+  }))
+  // deleteFollow
+  .case(userAction.deleteFollow.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(userAction.deleteFollow.done, (state, payload) => ({
+    ...state,
+    ...payload.result,
+    iconUrl: !payload.result.iconUrl ? defaultIconUrl : payload.result.iconUrl,
+    headerUrl: !payload.result.headerUrl
+      ? defaultHeaderUrl
+      : payload.result.headerUrl,
+    loading: false,
+    error: undefined,
+  }))
+  .case(userAction.deleteFollow.failed, (state, payload) => ({
     ...state,
     loading: false,
     error: payload.error,

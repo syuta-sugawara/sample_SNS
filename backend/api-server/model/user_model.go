@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -12,12 +13,14 @@ import (
 type UserModel struct {
 	userTable dynamo.Table
 	auth      *cognito.CognitoIdentityProvider
+	upload    *s3manager.Uploader
 }
 
-func NewUserModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UserModel {
+func NewUserModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) UserModel {
 	return UserModel{
 		userTable: db.Table("Users"),
 		auth:      auth,
+		upload:    upload,
 	}
 }
 
@@ -34,11 +37,39 @@ func (um *UserModel) Get(id string) (*entity.User, error) {
 	return user, nil
 }
 
-func (um *UserModel) Update(t *entity.User) {
-	if err := um.userTable.Put(t).Run(); err != nil {
-		fmt.Println(err)
+func (um *UserModel) Update(c echo.Context) (*entity.User, error) {
+	userID := c.Get("userID").(string)
+	screeName := c.FormValue("screenName")
+	comment := c.FormValue("comment")
+	iconFile, err := c.FormFile("iconImg")
+	if err != nil {
+		return nil, err
 	}
-	return
+	iconUrl, err := um.UploadImage(iconFile, userID, "iconImg")
+	if err != nil {
+		return nil, err
+	}
+	headerFile, err := c.FormFile("headerImg")
+	if err != nil {
+		return nil, err
+	}
+	headerUrl, err := um.UploadImage(headerFile, userID, "headerImg")
+	if err != nil {
+		return nil, err
+	}
+	user, err := um.Get(userID)
+	if err != nil {
+		return nil, err
+	}
+	user.ScreenName = screeName
+	user.Comment = comment
+	user.IconUrl = *iconUrl
+	user.HeaderUrl = *headerUrl
+
+	if err := um.userTable.Put(user).Run(); err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (um *UserModel) Updates(c echo.Context, u *entity.User, fu *entity.User) {
@@ -63,18 +94,20 @@ func (um *UserModel) Regist(u *entity.SignUpUser) entity.User {
 	return user
 }
 
-func (um *UserModel) Follow(c echo.Context, userID string, followedID string) {
+func (um *UserModel) Follow(c echo.Context, userID string, followedID string) *entity.User {
 	userInfo, followedUserInfo := um.GetUsersInfo(userID, followedID)
 	userInfo.FollowIDs = append(userInfo.FollowIDs, followedID)
 	followedUserInfo.FollowedIDs = append(followedUserInfo.FollowedIDs, userID)
 	um.Updates(c, userInfo, followedUserInfo)
+	return followedUserInfo
 }
 
-func (um *UserModel) UnFollow(c echo.Context, userID string, followedID string) {
+func (um *UserModel) UnFollow(c echo.Context, userID string, followedID string) *entity.User {
 	userInfo, followedUserInfo := um.GetUsersInfo(userID, followedID)
 	userInfo.FollowIDs = removeUser(userInfo.FollowIDs, followedID)
 	followedUserInfo.FollowedIDs = removeUser(followedUserInfo.FollowedIDs, userID)
 	um.Updates(c, userInfo, followedUserInfo)
+	return followedUserInfo
 }
 
 func removeUser(userIDList []string, userID string) []string {

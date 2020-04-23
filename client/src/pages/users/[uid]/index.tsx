@@ -7,25 +7,24 @@ import withLayout from '../../../components/Layout/';
 import UserPageLayout from '../../../components/Layout/UserPage';
 import TweetItem from '../../../components/TweetItem';
 import { RootState } from '../../../store';
-import { fetchTweetList } from '../../../store/tweet/actions';
-import { fetchUser } from '../../../store/user/actions';
+import { fetchUser, fetchUserTweets } from '../../../store/user/actions';
 import { TweetType } from '../../../types/tweet';
 
 const User: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const tweetList = useSelector((state: RootState) => state.tweet.results);
+  const tweets = useSelector((state: RootState) => state.user.tweets);
   const uid = router.query.uid as string;
 
   useEffect(() => {
     dispatch(fetchUser(uid));
-    dispatch(fetchTweetList());
+    dispatch(fetchUserTweets(uid));
   }, []);
 
   return (
     <UserPageLayout>
       <ul>
-        {tweetList.map((item: TweetType) => (
+        {tweets.map((item: TweetType) => (
           <li key={item.id}>
             <TweetItem tweet={item} />
           </li>

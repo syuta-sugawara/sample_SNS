@@ -5,7 +5,6 @@ import (
 	"backend/api-server/domain/services"
 	"backend/api-server/model"
 	"net/http"
-	"time"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/guregu/dynamo"
@@ -14,12 +13,14 @@ import (
 
 type UsersController struct {
 	userModel   model.UserModel
+	tweetModel  model.TweetModel
 	userService services.UserServices
 }
 
 func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
 	return UsersController{
 		userModel:   model.NewUserModel(db, auth),
+		tweetModel:  model.NewTweetModel(db, auth),
 		userService: services.NewUserServices(auth),
 	}
 }
@@ -38,6 +39,21 @@ func (uc *UsersController) Get(c echo.Context) error {
 	user, _ := uc.userModel.Get(userID)
 
 	return c.JSON(http.StatusOK, user)
+}
+
+func (uc *UsersController) GetUserTL(c echo.Context) error {
+	userID := c.Param("userID")
+	user, err := uc.userModel.Get(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+
+	tweets := uc.tweetModel.UserTL(userID)
+	for i := range *tweets {
+		(*tweets)[i].User = *user
+	}
+
+	return c.JSON(http.StatusOK, tweets)
 }
 
 // フォローの取得
@@ -83,7 +99,11 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 	//		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	//	}
 	//
-	//	c.SetCookie(createCookie(*accessToken))
+	//	resp := entity.SignInResp{
+	// 	Token: *accessToken,
+	// }
+
+	// return c.JSON(http.StatusOK, resp)
 	return c.JSON(http.StatusCreated, resp)
 }
 
@@ -103,27 +123,36 @@ func (uc *UsersController) Unfollow(c echo.Context) error {
 	return c.String(http.StatusOK, "UnFollow"+followedUserID)
 }
 
-//cookie処理
-func createCookie(token string) *http.Cookie {
-	cookie := new(http.Cookie)
-	cookie.Name = "token"
-	cookie.Path = "/"
-	cookie.Value = token
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-	cookie.HttpOnly = true
-	return cookie
-}
-
 // サインイン処理
 func (uc *UsersController) Signin(c echo.Context) error {
 	u := new(entity.SignInUser)
 	c.Bind(u)
-	accessToken, err := uc.userService.GetUserFromCognito(u)
+	credentials, err := uc.userService.GetToken(u)
 
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	}
 
-	c.SetCookie(createCookie(*accessToken))
-	return c.JSON(http.StatusOK, CreateErrorMessage("success"))
+	resp := entity.SignInResp{
+		Token:        credentials.AccessToken,
+		RefreshToken: *credentials.RefreshToken,
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (uc *UsersController) Refresh(c echo.Context) error {
+	req := new(entity.RefreshTokenReq)
+	c.Bind(req)
+	credentials, err := uc.userService.GetTokenWtihRefreshToken(req.RefreshToken)
+
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
+	}
+
+	resp := entity.RefreshTokenResp{
+		Token: credentials.AccessToken,
+	}
+
+	return c.JSON(http.StatusOK, resp)
 }

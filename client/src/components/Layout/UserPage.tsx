@@ -18,6 +18,7 @@ const UserPageLayout: React.FC<Props> = props => {
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { pathname } = router;
+  const uid = router.query.uid;
 
   return (
     <>
@@ -31,12 +32,12 @@ const UserPageLayout: React.FC<Props> = props => {
         <Profile user={user} isMine={user.id === myself.id} />
         <TabList>
           <TabItem primary={pathname === '/users/[uid]'}>
-            <Link href="/users/[uid]" as={`/users/${user.id}`}>
+            <Link href="/users/[uid]" as={`/users/${uid}`}>
               <a>ツイート</a>
             </Link>
           </TabItem>
           <TabItem primary={pathname === '/users/[uid]/likes'}>
-            <Link href="/users/[uid]/likes" as={`/users/${user.id}/likes`}>
+            <Link href="/users/[uid]/likes" as={`/users/${uid}/likes`}>
               <a>いいね</a>
             </Link>
           </TabItem>

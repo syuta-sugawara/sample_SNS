@@ -3,14 +3,19 @@ import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
 import STYLES from '../styles/const';
+import { useDispatch } from 'react-redux';
+import { asyncSignout } from '../store/auth/actions';
+import { useRouter } from 'next/router';
 
 type Props = {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const Logout: React.FC<Props> = props => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const handleLogout = () => {
-    // TODO: ログアウト処理
+    dispatch(asyncSignout(router));
   };
 
   return (

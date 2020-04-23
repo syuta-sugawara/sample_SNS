@@ -31,7 +31,7 @@ const TweetItem: React.FC<Props> = props => {
 
   const handlePostRetweets = async () => {
     try {
-      const res = await ApiRequest.putRetweets();
+      const res = await ApiRequest.putRetweets(props.tweet.id);
       if (!res.ok) {
         throw Error(res.statusText);
       }
@@ -44,7 +44,7 @@ const TweetItem: React.FC<Props> = props => {
 
   const handlePostLike = async () => {
     try {
-      const res = await ApiRequest.putRetweets();
+      const res = await ApiRequest.postLike(props.tweet.id);
       if (!res.ok) {
         throw Error(res.statusText);
       }

@@ -27,21 +27,23 @@ export default class TweetAPI extends AuthorizedAPI {
     });
   };
 
-  postLike = async () => {
-    const response = await fetch(`${this.TWEET_API_URL}/{tweetsID}/like`, {
+  postLike = async (tweetsID: number) => {
+    const response = await fetch(`${this.TWEET_API_URL}/${tweetsID}/likes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
+        ...this.authHeader,
       },
     });
     return response;
   };
 
-  putRetweets = async () => {
-    const response = await fetch(`${this.TWEET_API_URL}/{tweetsID}/retweet`, {
-      method: 'PUT',
+  putRetweets = async (tweetsID: number) => {
+    const response = await fetch(`${this.TWEET_API_URL}/${tweetsID}/retweets`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
+        ...this.authHeader,
       },
     });
     return response;

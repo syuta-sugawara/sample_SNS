@@ -76,8 +76,10 @@ const authReducer = reducerWithInitialState(initialState)
   }))
   .case(authAction.signout.done, state => ({
     ...state,
-    token: '',
-    refreshToken: '',
+    credentials: {
+      token: '',
+      refreshToken: '',
+    },
   }))
 
   // getTokenFromLocal
@@ -88,7 +90,10 @@ const authReducer = reducerWithInitialState(initialState)
   .case(authAction.getTokenFromLocal.done, (state, payload) => ({
     ...state,
     loading: false,
-    token: payload.result.token,
+    credentials: {
+      token: payload.result.token,
+      refreshToken: '',
+    },
   }))
   .case(authAction.getTokenFromLocal.failed, (state, payload) => ({
     ...state,

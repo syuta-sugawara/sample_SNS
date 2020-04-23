@@ -64,9 +64,13 @@ export const fetchUserTweets = (uid: string) => async (
   }
 };
 
-export const fetchFollow = (uid: string) => async (dispatch: Dispatch) => {
+export const fetchFollow = (uid: string) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(userAction.postFollow.started({ params: {} }));
-  const userAPI = new UserAPI();
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.postFollow(uid);
     if (res.ok) {
@@ -81,9 +85,13 @@ export const fetchFollow = (uid: string) => async (dispatch: Dispatch) => {
   }
 };
 
-export const fetchUnFollow = (uid: string) => async (dispatch: Dispatch) => {
+export const fetchUnFollow = (uid: string) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
   dispatch(userAction.deleteFollow.started({ params: {} }));
-  const userAPI = new UserAPI();
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
   try {
     const res = await userAPI.deleteFollow(uid);
     if (res.ok) {

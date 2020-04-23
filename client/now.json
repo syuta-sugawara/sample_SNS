@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "build": {
+    "src": "next.config.js",
+    "use": "@now/next",
+    "env": {
+      "API_URL_PROD": "@api_url_prod"
+    }
+  }
+}

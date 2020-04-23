@@ -2,13 +2,16 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import TweetAPI from '../requests/tweet';
 import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
+import { defaultIconUrl } from '../utils/image';
 import { fromNow } from '../utils/time';
 import Button, { Variant } from './Button';
 import RetweetIcon from './icons/RetweetIcon';
 import LikeIcon from './icons/LikeIcon';
-import TweetAPI from '../requests/tweet';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 enum TextVariant {
   PRIMARY,
@@ -26,7 +29,8 @@ const TweetItem: React.FC<Props> = props => {
   const [isRetweet, setRetweetDisable] = useState<boolean>(false);
   const [isLike, setLikeDisable] = useState<boolean>(false);
 
-  const ApiRequest = new TweetAPI();
+  const auth = useSelector((state: RootState) => state.auth);
+  const ApiRequest = new TweetAPI(auth.credentials.token);
 
   const handlePostRetweets = async () => {
     try {
@@ -59,7 +63,10 @@ const TweetItem: React.FC<Props> = props => {
       <Label></Label>
       <Body>
         <UserIcon>
-          <img src={user.iconUrl} alt={user.screenName} />
+          <img
+            src={!user.iconUrl ? defaultIconUrl : user.iconUrl}
+            alt={user.screenName}
+          />
         </UserIcon>
         <Content>
           <ContentHead>
@@ -189,7 +196,7 @@ const Tweet = styled.div``;
 const Reaction = styled.div`
   display: flex;
 `;
- 
+
 type ButtonWrapperProps = {
   disabled?: boolean;
 };

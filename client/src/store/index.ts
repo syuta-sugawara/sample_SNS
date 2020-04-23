@@ -3,15 +3,15 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 import modalReducer from './modal/reducer';
-import myselfReducer from './myself/reducer';
 import tweetReducer from './tweet/reducer';
 import userReducer from './user/reducer';
+import authReducer from './auth/reducer';
 
 const rootReducer = combineReducers({
   modal: modalReducer,
-  myself: myselfReducer,
   tweet: tweetReducer,
   user: userReducer,
+  auth: authReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

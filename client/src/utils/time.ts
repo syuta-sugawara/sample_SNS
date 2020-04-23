@@ -6,7 +6,7 @@ dayjs.locale('ja');
 dayjs.extend(relativeTime);
 
 const fromNow = (timestamp: number): string => {
-  const date = dayjs.unix(timestamp);
+  const date = dayjs.unix(timestamp / 1000);
   return date.fromNow();
 };
 

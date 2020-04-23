@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { RootState } from '../store';
 import modalAction from '../store/modal/actions';
 import STYLES from '../styles/const';
-import { UserType } from '../types/user';
 import HomeIcon from './icons/HomeIcon';
 import TweetBtnIcon from './icons/TweetBtnIcon';
 import TwitterIcon from './icons/TwitterIcon';
@@ -15,12 +15,7 @@ import TweetForm from './TweetForm';
 const Navigation: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const user: UserType = {
-    id: 'junkisai',
-    screenName: 'じゅんきち',
-    iconUrl:
-      'https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg',
-  };
+  const myself = useSelector((state: RootState) => state.auth.currentUser);
 
   const handleClose = () => {
     dispatch(modalAction.hide());
@@ -34,7 +29,7 @@ const Navigation: React.FC = () => {
     router.push(path);
   };
 
-  const tweetForm = <TweetForm user={user} onClose={handleClose} />;
+  const tweetForm = <TweetForm user={myself} onClose={handleClose} />;
 
   return (
     <Wrapper>
@@ -70,14 +65,9 @@ const Navigation: React.FC = () => {
               text=""
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                handleClick(e, '/users/hoge')
+                handleClick(e, `/users/${myself.id}`)
               }
-              icon={
-                <img
-                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
-                  alt="aaa"
-                />
-              }
+              icon={<img src={myself.iconUrl} alt={myself.screenName} />}
             />
           </ResponsiveDiv>
           <ResponsiveDiv>
@@ -85,14 +75,9 @@ const Navigation: React.FC = () => {
               text="プロフィール"
               variant={Variant.TEXT}
               onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-                handleClick(e, '/users/hoge')
+                handleClick(e, `/users/${myself.id}`)
               }
-              icon={
-                <img
-                  src="https://pbs.twimg.com/profile_images/1195340954548363266/OeJ3BmJ2_400x400.jpg"
-                  alt="aaa"
-                />
-              }
+              icon={<img src={myself.iconUrl} alt={myself.screenName} />}
             />
           </ResponsiveDiv>
         </MenuItem>

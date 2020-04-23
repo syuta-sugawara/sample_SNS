@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 	"github.com/labstack/echo"
 )
@@ -17,10 +18,10 @@ type UsersController struct {
 	userService services.UserServices
 }
 
-func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) UsersController {
+func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) UsersController {
 	return UsersController{
-		userModel:   model.NewUserModel(db, auth),
-		tweetModel:  model.NewTweetModel(db, auth),
+		userModel:   model.NewUserModel(db, auth, upload),
+		tweetModel:  model.NewTweetModel(db, auth, upload),
 		userService: services.NewUserServices(auth),
 	}
 }
@@ -56,6 +57,15 @@ func (uc *UsersController) GetUserTL(c echo.Context) error {
 	return c.JSON(http.StatusOK, tweets)
 }
 
+func (uc *UsersController) GetLikeTweets(c echo.Context) error {
+	userID := c.Param("userID")
+	tweets, err := uc.tweetModel.UserLikes(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+	return c.JSON(http.StatusOK, tweets)
+}
+
 // フォローの取得
 func (uc *UsersController) FollowsIndex(c echo.Context) error {
 	userID := c.Param("userName")
@@ -72,9 +82,11 @@ func (uc *UsersController) FollowersIndex(c echo.Context) error {
 
 // ユーザー情報更新
 func (uc *UsersController) UpdateUser(c echo.Context) error {
-	userID := c.Param("userName")
-	uc.userModel.All()
-	return c.String(http.StatusOK, "GetFollowers"+userID)
+	userInfo, err := uc.userModel.Update(c)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+	return c.JSON(http.StatusOK, userInfo)
 }
 
 // ユーザー登録
@@ -86,41 +98,44 @@ func (uc *UsersController) RegisterUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, CreateErrorMessage(err.Error()))
 	}
 
-	resp := uc.userModel.Regist(u)
+	user := uc.userModel.Regist(u)
 
-	//	credential := &entity.SignInUser{
-	//		ID:       u.ID,
-	//		PassWord: u.PassWord,
-	//	}
+	su := &entity.SignInUser{
+		ID:       u.ID,
+		PassWord: u.PassWord,
+	}
 
-	// 	accessToken, err := uc.userService.GetUserFromCognito(credential)
+	cl, err := uc.userService.GetToken(su)
 
-	//	if err != nil {
-	//		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
-	//	}
-	//
-	//	resp := entity.SignInResp{
-	// 	Token: *accessToken,
-	// }
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
+	}
 
-	// return c.JSON(http.StatusOK, resp)
-	return c.JSON(http.StatusCreated, resp)
+	resp := &entity.AuthResp{
+		Credentials: entity.CredentialResp{
+			Token:        cl.AccessToken,
+			RefreshToken: cl.RefreshToken,
+		},
+		CurrentUser: user,
+	}
+
+	return c.JSON(http.StatusOK, resp)
 }
 
 // フォロー処理
 func (uc *UsersController) Follow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	uc.userModel.Follow(c, userID, followedUserID)
-	return c.String(http.StatusOK, "Follow"+followedUserID)
+	followUserInfo := uc.userModel.Follow(c, userID, followedUserID)
+	return c.JSON(http.StatusOK, followUserInfo)
 }
 
 // アンフォロー処理
 func (uc *UsersController) Unfollow(c echo.Context) error {
 	followedUserID := c.Param("followedUserID")
 	userID := c.Get("userID").(string)
-	uc.userModel.UnFollow(c, userID, followedUserID)
-	return c.String(http.StatusOK, "UnFollow"+followedUserID)
+	followUserInfo := uc.userModel.UnFollow(c, userID, followedUserID)
+	return c.JSON(http.StatusOK, followUserInfo)
 }
 
 // サインイン処理
@@ -133,9 +148,17 @@ func (uc *UsersController) Signin(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, CreateErrorMessage(err.Error()))
 	}
 
-	resp := entity.SignInResp{
-		Token:        credentials.AccessToken,
-		RefreshToken: *credentials.RefreshToken,
+	user, err := uc.userModel.Get(u.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+
+	resp := &entity.AuthResp{
+		Credentials: entity.CredentialResp{
+			Token:        credentials.AccessToken,
+			RefreshToken: credentials.RefreshToken,
+		},
+		CurrentUser: *user,
 	}
 
 	return c.JSON(http.StatusOK, resp)

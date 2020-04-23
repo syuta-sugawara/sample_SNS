@@ -57,6 +57,15 @@ func (uc *UsersController) GetUserTL(c echo.Context) error {
 	return c.JSON(http.StatusOK, tweets)
 }
 
+func (uc *UsersController) GetLikeTweets(c echo.Context) error {
+	userID := c.Param("userID")
+	tweets, err := uc.tweetModel.UserLikes(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, CreateErrorMessage(err.Error()))
+	}
+	return c.JSON(http.StatusOK, tweets)
+}
+
 // フォローの取得
 func (uc *UsersController) FollowsIndex(c echo.Context) error {
 	userID := c.Param("userName")

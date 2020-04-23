@@ -8,6 +8,7 @@ type User struct {
 	HeaderUrl   string   `dynamo:"headerUrl" json:"headerUrl"`
 	FollowIDs   []string `dynamo:"followIDs" json:"followIDs"`
 	FollowedIDs []string `dynamo:"followedIDs" json:"followedIDs"`
+	LikeList    []int    `dynamo:"likeList" json:"likeList"`
 }
 
 type SignUpUser struct {

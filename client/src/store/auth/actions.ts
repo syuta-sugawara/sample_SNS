@@ -4,7 +4,12 @@ import { Dispatch } from 'redux';
 
 import AuthAPI from '../../requests/auth';
 import UserAPI from '../../requests/user';
-import { CredentialType, SigninType, SignupType } from '../../types/auth';
+import {
+  CredentialType,
+  SigninType,
+  SignupType,
+  AuthResponseType,
+} from '../../types/auth';
 import { ErrorResponse } from '../../types/errorResponse';
 import { UserType } from '../../types/user';
 import modalAction from '../modal/actions';
@@ -15,7 +20,7 @@ const actionCreator = actionCreatorFactory();
 
 const authAction = {
   signup: actionCreator.async<{}, {}, Error>(ActionTypes.execSignup),
-  signin: actionCreator.async<{}, CredentialType, Error>(
+  signin: actionCreator.async<{}, AuthResponseType, Error>(
     ActionTypes.execSignin
   ),
   signout: actionCreator.async<{}, {}, {}>(ActionTypes.execSignout),
@@ -49,10 +54,10 @@ export const fetchSignin = (data: SigninType, router: NextRouter) => async (
   try {
     const res = await authAPI.postSignin(data);
     if (res.ok) {
-      const result = (await res.json()) as CredentialType;
+      const result = (await res.json()) as AuthResponseType;
       dispatch(authAction.signin.done({ result, params: {} }));
       dispatch(modalAction.hide());
-      setLocalStorage(result);
+      setLocalStorage(result.credentials);
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;

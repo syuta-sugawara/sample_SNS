@@ -1,3 +1,5 @@
+import { UserType } from './user';
+
 export type SignupType = {
   id: string;
   screenName: string;
@@ -13,4 +15,9 @@ export type SigninType = {
 export type CredentialType = {
   token: string;
   refreshToken: string;
+};
+
+export type AuthResponseType = {
+  credentials: CredentialType;
+  currentUser: UserType;
 };

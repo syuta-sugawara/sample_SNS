@@ -15,6 +15,9 @@ const userAction = {
   getUserTweets: actionCreator.async<{}, TweetType[], Error>(
     ActionTypes.getUserTweets
   ),
+  getUserLikeTweets: actionCreator.async<{}, TweetType[], Error>(
+    ActionTypes.getUserLikeTweets
+  ),
   postFollow: actionCreator.async<{}, UserType, Error>(ActionTypes.postFollow),
   deleteFollow: actionCreator.async<{}, UserType, Error>(
     ActionTypes.deleteFollow
@@ -35,7 +38,7 @@ export const fetchUser = (uid: string) => async (
       dispatch(userAction.getUser.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -58,11 +61,34 @@ export const fetchUserTweets = (uid: string) => async (
       dispatch(userAction.getUserTweets.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
     dispatch(userAction.getUserTweets.failed({ error, params: {} }));
+  }
+};
+
+export const fetchUserLikeTweets = (uid: string) => async (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
+  dispatch(userAction.getUserLikeTweets.started({ params: {} }));
+  const { auth } = getState();
+  const userAPI = new UserAPI(auth.credentials.token);
+  try {
+    const res = await userAPI.getUsetLikeTweets(uid);
+    if (res.ok) {
+      const response = (await res.json()) as TweetType[];
+      const result = response === null ? [] : response;
+      dispatch(userAction.getUserLikeTweets.done({ result, params: {} }));
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.message);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(userAction.getUserLikeTweets.failed({ error, params: {} }));
   }
 };
 
@@ -80,7 +106,7 @@ export const fetchFollow = (uid: string) => async (
       dispatch(userAction.postFollow.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -102,7 +128,7 @@ export const fetchUnFollow = (uid: string) => async (
       dispatch(userAction.deleteFollow.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;

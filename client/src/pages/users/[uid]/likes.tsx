@@ -7,7 +7,7 @@ import withLayout from '../../../components/Layout/';
 import UserPageLayout from '../../../components/Layout/UserPage';
 import TweetItem from '../../../components/TweetItem';
 import { RootState } from '../../../store';
-import { fetchUser, fetchUserTweets } from '../../../store/user/actions';
+import { fetchUser, fetchUserLikeTweets } from '../../../store/user/actions';
 import { TweetType } from '../../../types/tweet';
 
 const User: NextPage = () => {
@@ -18,8 +18,7 @@ const User: NextPage = () => {
 
   useEffect(() => {
     dispatch(fetchUser(uid));
-    // todo: いいねしたツイート一覧取得に変更
-    dispatch(fetchUserTweets(uid));
+    dispatch(fetchUserLikeTweets(uid));
   }, []);
 
   return (

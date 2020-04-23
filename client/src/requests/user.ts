@@ -22,6 +22,12 @@ export default class UserAPI extends AuthorizedAPI {
     });
   };
 
+  getUsetLikeTweets = (uid: string) => {
+    return fetch(`${this.reqUrl}/${uid}/likes`, {
+      headers: { ...this.authHeader },
+    });
+  };
+
   postFollow = (uid: string) => {
     return fetch(`${this.reqUrl}/${uid}/follow`, {
       method: 'POST',

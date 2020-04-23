@@ -33,7 +33,7 @@ export const fetchTweetList = () => async (
       dispatch(tweetAction.getTweetList.done({ result, params: {} }));
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;
@@ -57,7 +57,7 @@ export const fetchPostTweet = (data: PostTweetType) => async (
       dispatch(fetchTweetList() as any);
     } else {
       const result = (await res.json()) as ErrorResponse;
-      throw new Error(result.massage);
+      throw new Error(result.message);
     }
   } catch (err) {
     const error = err as Error;

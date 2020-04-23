@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/guregu/dynamo"
 )
 
@@ -16,11 +17,11 @@ type TweetModel struct {
 	tlModel    TimelineModel
 }
 
-func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider) TweetModel {
+func NewTweetModel(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) TweetModel {
 	return TweetModel{
 		tweetTable: db.Table("Tweets"),
 		seqModel:   NewSequenceModel(db),
-		userModel:  NewUserModel(db, auth, nil),
+		userModel:  NewUserModel(db, auth, upload),
 		tlModel:    NewTimelineModel(db),
 	}
 }

@@ -41,19 +41,29 @@ func (um *UserModel) Update(c echo.Context) (*entity.User, error) {
 	userID := c.Get("userID").(string)
 	screeName := c.FormValue("screenName")
 	comment := c.FormValue("comment")
-	iconUrl, err := um.UploadImage(c, userID, "iconImg")
+	iconFile, err := c.FormFile("iconImg")
 	if err != nil {
 		return nil, err
 	}
-	headerUrl, err := um.UploadImage(c, userID, "headerImg")
-
+	iconUrl, err := um.UploadImage(iconFile, userID, "iconImg")
+	if err != nil {
+		return nil, err
+	}
+	headerFile, err := c.FormFile("headerImg")
+	if err != nil {
+		return nil, err
+	}
+	headerUrl, err := um.UploadImage(headerFile, userID, "headerImg")
+	if err != nil {
+		return nil, err
+	}
 	user := new(entity.User)
 	user = &entity.User{
 		ID:         userID,
 		ScreenName: screeName,
 		Comment:    comment,
-		IconUrl:    iconUrl,
-		HeaderUrl:  headerUrl,
+		IconUrl:    *iconUrl,
+		HeaderUrl:  *headerUrl,
 	}
 	if err := um.userTable.Put(user).Run(); err != nil {
 		return nil, err

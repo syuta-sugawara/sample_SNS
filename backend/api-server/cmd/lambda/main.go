@@ -20,7 +20,14 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	e := router.InitEcho(sess, sess)
+	sessload, err := session.NewSession(&aws.Config{
+		Region: aws.String("ap-northeast-1"),
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	e := router.InitEcho(sess, sessload)
 	echoLambda = echolamda.New(e)
 }
 

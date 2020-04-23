@@ -32,7 +32,7 @@ func InitEcho(sess *session.Session, sessUpload *session.Session) *echo.Echo {
 
 	// Users
 	UserRouter(e, db, auth, upload)
-	TweetRouter(e, db, auth)
+	TweetRouter(e, db, auth, upload)
 
 	return e
 }

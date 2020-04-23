@@ -21,7 +21,7 @@ type UsersController struct {
 func NewUserController(db *dynamo.DB, auth *cognito.CognitoIdentityProvider, upload *s3manager.Uploader) UsersController {
 	return UsersController{
 		userModel:   model.NewUserModel(db, auth, upload),
-		tweetModel:  model.NewTweetModel(db, auth),
+		tweetModel:  model.NewTweetModel(db, auth, upload),
 		userService: services.NewUserServices(auth),
 	}
 }

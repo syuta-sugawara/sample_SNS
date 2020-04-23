@@ -2,6 +2,7 @@ package model
 
 import (
 	"mime/multipart"
+	"regexp"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -20,7 +21,7 @@ func (um *UserModel) UploadImage(f *multipart.FileHeader, userID string, key str
 	}
 	defer file.Close()
 	bucketName := "teamo-image"
-	objectKey := key + "/" + userID + ".jpg"
+	objectKey := key + "/" + userID
 	_, err = um.upload.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(objectKey),
@@ -29,6 +30,24 @@ func (um *UserModel) UploadImage(f *multipart.FileHeader, userID string, key str
 	if err != nil {
 		return nil, err
 	}
-	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey
+	url := imageUrl(f.Filename, objectKey)
 	return &url, nil
+}
+
+func imageUrl(fileName string, objectKey string) string {
+	extension := ""
+	if regexp.MustCompile(`.png`).MatchString(fileName) {
+		extension = ".png"
+	}
+	if regexp.MustCompile(`.gif`).MatchString(fileName) {
+		extension = ".gif"
+	}
+	if regexp.MustCompile(`.jpg`).MatchString(fileName) {
+		extension = ".jpg"
+	}
+	if regexp.MustCompile(`.jpeg`).MatchString(fileName) {
+		extension = ".jpeg"
+	}
+	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey + extension
+	return url
 }

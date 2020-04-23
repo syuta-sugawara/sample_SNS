@@ -41,30 +41,28 @@ func (um *UserModel) Update(c echo.Context) (*entity.User, error) {
 	userID := c.Get("userID").(string)
 	screeName := c.FormValue("screenName")
 	comment := c.FormValue("comment")
-	iconFile, err := c.FormFile("iconImg")
-	if err != nil {
-		return nil, err
-	}
-	iconUrl, err := um.UploadImage(iconFile, userID, "iconImg")
-	if err != nil {
-		return nil, err
-	}
-	headerFile, err := c.FormFile("headerImg")
-	if err != nil {
-		return nil, err
-	}
-	headerUrl, err := um.UploadImage(headerFile, userID, "headerImg")
-	if err != nil {
-		return nil, err
-	}
 	user, err := um.Get(userID)
 	if err != nil {
 		return nil, err
 	}
+	iconFile, err := c.FormFile("iconImg")
+	if iconFile != nil {
+		iconUrl, err := um.UploadImage(iconFile, userID, "iconImg")
+		if err != nil {
+			return nil, err
+		}
+		user.IconUrl = *iconUrl
+	}
+	headerFile, err := c.FormFile("headerImg")
+	if headerFile != nil {
+		headerUrl, err := um.UploadImage(headerFile, userID, "headerImg")
+		if err != nil {
+			return nil, err
+		}
+		user.HeaderUrl = *headerUrl
+	}
 	user.ScreenName = screeName
 	user.Comment = comment
-	user.IconUrl = *iconUrl
-	user.HeaderUrl = *headerUrl
 
 	if err := um.userTable.Put(user).Run(); err != nil {
 		return nil, err

@@ -62,6 +62,23 @@ const userReducer = reducerWithInitialState(initialState)
     loading: false,
     error: payload.error,
   }))
+  // getUserLikeTweets
+  .case(userAction.getUserLikeTweets.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(userAction.getUserLikeTweets.done, (state, payload) => ({
+    ...state,
+    tweets: payload.result,
+    loading: false,
+    error: undefined,
+  }))
+  .case(userAction.getUserLikeTweets.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
+  }))
   // postFollow
   .case(userAction.postFollow.started, state => ({
     ...state,

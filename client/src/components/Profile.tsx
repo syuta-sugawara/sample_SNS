@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
+import ProfileEdit from '../components/ProfileEdit';
+import modalAction from '../store/modal/actions';
 import { fetchFollow, fetchUnFollow } from '../store/user/actions';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
@@ -18,8 +20,14 @@ const Profile: React.FC<Props> = props => {
   const { user, isMine, isFollow } = props;
   const dispatch = useDispatch();
 
+  const handleModalClose = () => {
+    dispatch(modalAction.hide());
+  };
+
+  const profileEdit = <ProfileEdit user={user} onClose={handleModalClose} />;
+
   const handleEditProfile = () => {
-    //todo: プロフィール編集コンポーネント出す
+    dispatch(modalAction.show({ children: profileEdit }));
   };
 
   const handleFollow = () => {

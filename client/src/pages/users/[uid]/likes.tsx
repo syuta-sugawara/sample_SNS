@@ -13,7 +13,7 @@ import { TweetType } from '../../../types/tweet';
 const User: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const tweetList = useSelector((state: RootState) => state.tweet.results);
+  const tweetList = useSelector((state: RootState) => state.user.tweets);
   const uid = router.query.uid as string;
 
   useEffect(() => {

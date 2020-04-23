@@ -33,6 +33,8 @@ const userReducer = reducerWithInitialState(initialState)
     id: payload.result.id,
     screenName: payload.result.screenName,
     iconUrl: !payload.result.iconUrl ? defaultIconUrl : payload.result.iconUrl,
+    followIDs: payload.result.followIDs,
+    followedIDs: payload.result.followedIDs,
     loading: false,
     error: undefined,
   }))

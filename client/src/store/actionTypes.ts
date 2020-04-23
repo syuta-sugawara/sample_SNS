@@ -5,6 +5,8 @@ export const ActionTypes = {
   hideModal: 'HIDE_MODAL',
   getUser: 'GET_USER',
   getUserTweets: 'GET_USER_TWEETS',
+  postFollow: 'POST_FOLLOW',
+  deleteFollow: 'DELETE_FOLLOW',
   getCurrentUser: 'GET_CURRENT_USER',
   getTokenFromLocal: 'GET_TOKEN_FROM_LOCAL',
   getTokenFromRemote: 'GET_TOKEN_FROM_REMOTE',

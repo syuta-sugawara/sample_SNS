@@ -14,6 +14,8 @@ const userAction = {
   getUserTweets: actionCreator.async<{}, TweetType[], Error>(
     ActionTypes.getUserTweets
   ),
+  postFollow: actionCreator.async<{}, {}, Error>(ActionTypes.postFollow),
+  deleteFollow: actionCreator.async<{}, {}, Error>(ActionTypes.deleteFollow),
 };
 
 export const fetchUser = (uid: string) => async (dispatch: Dispatch) => {
@@ -50,6 +52,40 @@ export const fetchUserTweets = (uid: string) => async (dispatch: Dispatch) => {
   } catch (err) {
     const error = err as Error;
     dispatch(userAction.getUserTweets.failed({ error, params: {} }));
+  }
+};
+
+export const fetchFollow = (uid: string) => async (dispatch: Dispatch) => {
+  dispatch(userAction.postFollow.started({ params: {} }));
+  const userAPI = new UserAPI();
+  try {
+    const res = await userAPI.postFollow(uid);
+    if (res.ok) {
+      dispatch(userAction.postFollow.done({ result: {}, params: {} }));
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.massage);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(userAction.postFollow.failed({ error, params: {} }));
+  }
+};
+
+export const fetchUnFollow = (uid: string) => async (dispatch: Dispatch) => {
+  dispatch(userAction.deleteFollow.started({ params: {} }));
+  const userAPI = new UserAPI();
+  try {
+    const res = await userAPI.deleteFollow(uid);
+    if (res.ok) {
+      dispatch(userAction.deleteFollow.done({ result: {}, params: {} }));
+    } else {
+      const result = (await res.json()) as ErrorResponse;
+      throw new Error(result.massage);
+    }
+  } catch (err) {
+    const error = err as Error;
+    dispatch(userAction.deleteFollow.failed({ error, params: {} }));
   }
 };
 

@@ -25,6 +25,7 @@ export default class UserAPI extends AuthorizedAPI {
     return fetch(`${this.reqUrl}/${uid}/follow`, {
       method: 'POST',
       headers: {
+        ...this.authHeader,
         'Content-Type': 'application/json; charset=utf-8',
       },
     });
@@ -34,6 +35,7 @@ export default class UserAPI extends AuthorizedAPI {
     return fetch(`${this.reqUrl}/${uid}/follow`, {
       method: 'DELETE',
       headers: {
+        ...this.authHeader,
         'Content-Type': 'application/json; charset=utf-8',
       },
     });

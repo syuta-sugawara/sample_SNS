@@ -166,7 +166,7 @@ const Wrapper = styled.article`
 `;
 
 const Label = styled.div`
-  padding: 0 20px;
+  padding: 0 65px;
   margin-bottom: 7px;
   span {
     font-size: 12px;

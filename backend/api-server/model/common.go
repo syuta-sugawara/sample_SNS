@@ -35,7 +35,7 @@ func (um *UserModel) UploadImage(f *multipart.FileHeader, userID string, key str
 	if err != nil {
 		return nil, err
 	}
-	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey + *extension
+	url := "https://teamo-image.s3-ap-northeast-1.amazonaws.com/" + objectKey
 	return &url, nil
 }
 

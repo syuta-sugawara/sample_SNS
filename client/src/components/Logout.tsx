@@ -1,11 +1,11 @@
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
-import STYLES from '../styles/const';
-import { useDispatch } from 'react-redux';
 import { asyncSignout } from '../store/auth/actions';
-import { useRouter } from 'next/router';
+import STYLES from '../styles/const';
 
 type Props = {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;

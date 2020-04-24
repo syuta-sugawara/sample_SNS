@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { fetchSignup } from '../store/auth/actions';
 import STYLES from '../styles/const';
 import { SignupType } from '../types/auth';
 import Button, { Variant } from './Button';
 import InputText, { Validation } from './InputText';
-import { fetchSignup } from '../store/auth/actions';
 
 const Signup: React.FC = () => {
   const [userId, setUserId] = useState<string>('');

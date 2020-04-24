@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import STYLES from '../styles/const';
 import { fetchPostTweet } from '../store/tweet/actions';
+import STYLES from '../styles/const';
 import { UserType } from '../types/user';
 import CloseIcon from './icons/CloseIcon';
 import Button, { Variant } from './Button';

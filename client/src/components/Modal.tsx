@@ -2,9 +2,9 @@ import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import STYLES from '../styles/const';
 import { RootState } from '../store';
 import modalAction from '../store/modal/actions';
+import STYLES from '../styles/const';
 
 const Modal: React.FC = () => {
   const popupRef = useRef<any>(null);

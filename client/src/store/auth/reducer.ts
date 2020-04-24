@@ -35,8 +35,18 @@ const authReducer = reducerWithInitialState(initialState)
     ...state,
     loading: true,
   }))
-  .case(authAction.signup.done, state => ({
+  .case(authAction.signup.done, (state, payload) => ({
     ...state,
+    ...payload.result.credentials,
+    currentUser: {
+      ...payload.result.currentUser,
+      iconUrl: !payload.result.currentUser.iconUrl
+        ? defaultIconUrl
+        : payload.result.currentUser.iconUrl,
+      headerUrl: !payload.result.currentUser.headerUrl
+        ? defaultHeaderUrl
+        : payload.result.currentUser.headerUrl,
+    },
     loading: false,
   }))
   .case(authAction.signup.failed, (state, payload) => ({

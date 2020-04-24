@@ -20,7 +20,9 @@ import { RootState } from '..';
 const actionCreator = actionCreatorFactory();
 
 const authAction = {
-  signup: actionCreator.async<{}, {}, Error>(ActionTypes.execSignup),
+  signup: actionCreator.async<{}, AuthResponseType, Error>(
+    ActionTypes.execSignup
+  ),
   signin: actionCreator.async<{}, AuthResponseType, Error>(
     ActionTypes.execSignin
   ),
@@ -79,13 +81,10 @@ export const fetchSignup = (data: SignupType, router: NextRouter) => async (
   try {
     const res = await authAPI.postSignup(data);
     if (res.ok) {
-      // lambdaでの実行なら以下のコードでいける
-      // const result = (await res.json()) as Pick<CredentialType, 'token'>;
-      // dispatch(
-      //   authAction.signup.done({ result: { token: result.token }, params: {} })
-      // );
-      // setLocalStorage(result);
+      const result = (await res.json()) as AuthResponseType;
+      dispatch(authAction.signup.done({ result, params: {} }));
       dispatch(modalAction.hide());
+      setLocalStorage(result.credentials);
       router.push('/home');
     } else {
       const result = (await res.json()) as ErrorResponse;

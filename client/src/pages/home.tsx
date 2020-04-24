@@ -10,16 +10,12 @@ import { fetchTweetList } from '../store/tweet/actions';
 import { RootState } from '../store';
 import STYLES from '../styles/const';
 import { TweetType } from '../types/tweet';
-// import { getTokenFromLocal } from '../store/auth/actions';
 
 const Home: NextPage = () => {
   const tweetList = useSelector((state: RootState) => state.tweet.results);
   const dispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    // たぶんこれやと `dispatch(fetchTweetList());` のときに間に合わん
-    // dispatch(getTokenFromLocal());
     dispatch(fetchTweetList());
   }, []);
 

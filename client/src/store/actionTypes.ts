@@ -9,6 +9,7 @@ export const ActionTypes = {
   postFollow: 'POST_FOLLOW',
   deleteFollow: 'DELETE_FOLLOW',
   getCurrentUser: 'GET_CURRENT_USER',
+  putCurrentUser: 'PUT_CURRENT_USER',
   getTokenFromLocal: 'GET_TOKEN_FROM_LOCAL',
   getTokenFromRemote: 'GET_TOKEN_FROM_REMOTE',
   execSignup: 'EXEC_SIGNUP',

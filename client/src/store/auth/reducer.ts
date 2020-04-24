@@ -135,6 +135,31 @@ const authReducer = reducerWithInitialState(initialState)
     ...state,
     loading: false,
     error: payload.error,
+  }))
+  // putUser
+  .case(authAction.putUser.started, state => ({
+    ...state,
+    loading: true,
+    error: undefined,
+  }))
+  .case(authAction.putUser.done, (state, payload) => ({
+    ...state,
+    currentUser: {
+      ...payload.result,
+      iconUrl: !payload.result.iconUrl
+        ? defaultIconUrl
+        : payload.result.iconUrl,
+      headerUrl: !payload.result.headerUrl
+        ? defaultHeaderUrl
+        : payload.result.headerUrl,
+    },
+    loading: false,
+    error: undefined,
+  }))
+  .case(authAction.putUser.failed, (state, payload) => ({
+    ...state,
+    loading: false,
+    error: payload.error,
   }));
 
 export default authReducer;

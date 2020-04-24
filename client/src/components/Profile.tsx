@@ -3,10 +3,11 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import Button, { Variant } from '../components/Button';
+import ProfileEdit from '../components/ProfileEdit';
+import modalAction from '../store/modal/actions';
 import { fetchFollow, fetchUnFollow } from '../store/user/actions';
 import STYLES from '../styles/const';
 import { UserType } from '../types/user';
-import { defaultHeaderUrl } from '../utils/image';
 
 type Props = {
   user: UserType;
@@ -18,8 +19,14 @@ const Profile: React.FC<Props> = props => {
   const { user, isMine, isFollow } = props;
   const dispatch = useDispatch();
 
+  const handleModalClose = () => {
+    dispatch(modalAction.hide());
+  };
+
+  const profileEdit = <ProfileEdit user={user} onClose={handleModalClose} />;
+
   const handleEditProfile = () => {
-    //todo: プロフィール編集コンポーネント出す
+    dispatch(modalAction.show({ children: profileEdit }));
   };
 
   const handleFollow = () => {
@@ -59,7 +66,7 @@ const Profile: React.FC<Props> = props => {
   return (
     <Wrapper>
       <Header>
-        <img src={defaultHeaderUrl} alt="" />
+        <img src={user.headerUrl} alt={`${user.screenName}のヘッダー画像`} />
       </Header>
       <Main>
         <MainHead>

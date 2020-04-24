@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-unfetch';
+
+import { PutCurrentUserType } from '../types/auth';
 import AuthorizedAPI from './common';
 
 export default class UserAPI extends AuthorizedAPI {
@@ -10,6 +12,20 @@ export default class UserAPI extends AuthorizedAPI {
 
   getCurrentUser = () => {
     return fetch(this.reqUrl, { headers: { ...this.authHeader } });
+  };
+
+  putCurrentUser = (data: PutCurrentUserType) => {
+    const formData = new FormData();
+    formData.append('screenName', data.screenName);
+    formData.append('comment', data.comment);
+    formData.append('iconImg', data.iconImg);
+    formData.append('headerImg', data.headerImg);
+    console.log(data);
+    return fetch(this.reqUrl, {
+      method: 'PUT',
+      headers: { ...this.authHeader },
+      body: formData,
+    });
   };
 
   getUser = (uid: string) => {

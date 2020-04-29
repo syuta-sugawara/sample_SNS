@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db:
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
+    volumes:
+     - ./backend/dynamodb/data:/data
+    command: -jar DynamoDBLocal.jar -dbPath /data -sharedDb
+
+  api:
+    build: ./backend/api-server
+    command: go run main.go
+    volumes:
+      - ./backend/api-server:/api-server
+    ports:
+      - 1323:8080
+    environment:
+      - DYNAMO_ENDPOINT=http://db:8000
+  
+  dynamodb-admin:
+    build:
+      context: ./backend/dynamodb-admin
+    command: dynamodb-admin
+    ports:
+      - 8001:8001
+    environment:
+      - DYNAMO_ENDPOINT=http://db:8000
+  
+  client:
+    build:
+      context: ./client
+    command: npm run dev
+    ports:
+      - 3000:3000
+    env_file: ./client/.env
+    volumes:
+      - ./client:/usr/src/app
+      - ./client/node_modules:/usr/src/app/node_modules 
+
+  

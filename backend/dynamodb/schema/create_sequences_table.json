@@ -1,0 +1,20 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "table",
+      "AttributeType": "S"
+    }
+  ],
+  "TableName": "Sequences",
+  "KeySchema": [
+    {
+      "AttributeName": "table",
+      "KeyType": "HASH"
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  }
+}

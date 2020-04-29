@@ -1,0 +1,3 @@
+FROM golang:latest
+WORKDIR /api-server
+RUN go get -u -t ...

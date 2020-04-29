@@ -1,0 +1,69 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development next",
+    "build": "NODE_ENV=production next build",
+    "deploy": "npm run build && next start",
+    "deploy:ssg": "npm run build && next export",
+    "storybook": "start-storybook -p 6006 -c .storybook",
+    "lint": "run-s lint:*",
+    "lint:ts": "eslint src --ext .ts,.tsx",
+    "lint:css": "stylelint './src/**/*.ts?(x)'",
+    "fix": "run-s fix:*",
+    "fix:ts": "eslint src --ext .ts,.tsx --fix",
+    "fix:css": "stylelint './src/**/*.ts?(x)' --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run fix"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.8.24",
+    "dotenv": "^8.2.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.3.4",
+    "next-redux-wrapper": "^5.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.1.0",
+    "typescript-fsa": "^3.0.0",
+    "typescript-fsa-reducers": "^1.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@storybook/react": "^5.3.18",
+    "@types/node": "^13.11.0",
+    "@types/react": "^16.9.32",
+    "@types/react-redux": "^7.1.7",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/styled-components": "^5.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-styled-components": "^1.10.7",
+    "babel-preset-react-app": "^9.1.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.4",
+    "stylelint": "^13.3.0",
+    "stylelint-config-recess-order": "^2.0.4",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-order": "^4.0.0",
+    "typescript": "^3.8.3"
+  }
+}
